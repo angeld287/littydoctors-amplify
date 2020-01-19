@@ -16,7 +16,7 @@ const TeamPage = () => {
           </p>
           <MDBRow>
             <MDBCol md="4" className="mb-md-0 mb-5">
-              <MDBAvatar
+              <img
                 tag="img"
                 src={aws_infraestructure_manager}
                 className="rounded z-depth-1-half img-fluid"
@@ -35,7 +35,7 @@ const TeamPage = () => {
             </MDBCol>
 
             <MDBCol md="4" className="mb-md-0 mb-5">
-              <MDBAvatar
+              <img
                 tag="img"
                 src={developer}
                 className="rounded z-depth-1-half img-fluid"
@@ -54,7 +54,7 @@ const TeamPage = () => {
             </MDBCol>
 
             <MDBCol md="4" className="mb-md-0 mb-5">
-              <MDBAvatar
+              <img
                 tag="img"
                 src={graphic_designer}
                 className="rounded z-depth-1-half img-fluid"
