@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { MDBCol, MDBRow, MDBModalFooter, MDBCard, MDBCardUp, MDBCardBody, MDBAvatar, MDBRotatingCard/* , MDBIcon */ } from "mdbreact";
 
 import image_back from '../../../../../../images/modern-blue-medical-background.jpg';
@@ -7,27 +7,17 @@ import { Storage } from "aws-amplify";
 import { S3Image } from 'aws-amplify-react';
 
 
-class UserInformation extends Component {
-state = {
-  flipped: false
-}
+const UserInformation = ({ company: company }) => {
+  const [ flipped, setFlipped ] = useState(false);
 
-
-
-handleFlipping = () => {
-  this.setState({ flipped: !this.state.flipped });
-}
-
-render() {
-
-  const {image} = this.props.childProps.state
+  const {image} = company
 
   const _image = (image !== null && image !== undefined)?(<S3Image imgKey={image} height="100" width="60" alt="" className="rounded-circle" />):(null);
 
   return (
     <MDBRow>
       <MDBCol style={{ minHeight: '26rem' }}>
-        <MDBRotatingCard flipped={this.state.flipped} className="text-center h-100 w-100">
+        <MDBRotatingCard flipped={flipped} className="text-center h-100 w-100">
           <MDBCard className="face front">
             <MDBCardUp>
               <img className="card-img-top" src={image_back} alt="" />
@@ -36,12 +26,8 @@ render() {
               {_image}
             </MDBAvatar>
             <MDBCardBody>
-              <h4 className="font-weight-bold mb-3">{ this.props.childProps.state.doctorname}</h4>
-              <p className="font-weight-bold blue-text">{this.props.childProps.state.speciality}</p>
-              {/* 
-              <a href="" className="rotate-btn" data-card="card-1" onClick={this.handleFlipping}>
-                <MDBIcon icon="redo" /> Click here to rotate
-              </a> */}
+              <h4 className="font-weight-bold mb-3">{ company.doctorname}</h4>
+              <p className="font-weight-bold blue-text">{company.speciality}</p>
             </MDBCardBody>
             <MDBModalFooter className="mx-5 pt-3 mb-1">
                 <a href="https://www.freepik.es/fotos-vectores-gratis/fondo">Vector de Fondo creado por Creative_hat - www.freepik.es</a>
@@ -79,10 +65,7 @@ render() {
                     <MDBIcon icon="linkedin" brand />
                   </a> */}
                 </li>
-              </ul>{/* 
-              <a href="" className="rotate-btn" data-card="card-1" onClick={this.handleFlipping}>
-                <MDBIcon icon="undo" /> Click here to rotate back
-              </a> */}
+              </ul>
             </MDBCardBody>
             <MDBModalFooter className="mx-5 pt-3 mb-1">
                 <a href="https://www.freepik.es/fotos-vectores-gratis/fondo">Vector de Fondo creado por Creative_hat - www.freepik.es</a>
@@ -91,8 +74,7 @@ render() {
         </MDBRotatingCard>
       </MDBCol>
     </MDBRow>
-    )
-  }
+    );
 }
 
 export default UserInformation;

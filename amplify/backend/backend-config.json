@@ -1,22 +1,30 @@
 {
 	"auth": {
-		"mdconsultasb9c2e32b": {
+		"littydoctors0f1e523f": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": []
 		}
 	},
 	"api": {
-		"mdconsultas": {
+		"littydoctors": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {
-				"securityType": "AMAZON_COGNITO_USER_POOLS"
+				"authConfig": {
+					"additionalAuthenticationProviders": [],
+					"defaultAuthentication": {
+						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
+						"userPoolConfig": {
+							"userPoolId": "authlittydoctors0f1e523f"
+						}
+					}
+				}
 			}
 		}
 	},
 	"storage": {
-		"mdconsultas": {
+		"littydoctorsS3": {
 			"service": "S3",
 			"providerPlugin": "awscloudformation"
 		}

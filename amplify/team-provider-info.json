@@ -1,39 +1,19 @@
 {
-    "prod": {
-        "awscloudformation": {
-            "AuthRoleName": "mdconsultas-prod-20191025080106-authRole",
-            "UnauthRoleArn": "arn:aws:iam::123686206419:role/mdconsultas-prod-20191025080106-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::123686206419:role/mdconsultas-prod-20191025080106-authRole",
-            "Region": "us-east-1",
-            "DeploymentBucketName": "mdconsultas-prod-20191025080106-deployment",
-            "UnauthRoleName": "mdconsultas-prod-20191025080106-unauthRole",
-            "StackName": "mdconsultas-prod-20191025080106",
-            "StackId": "arn:aws:cloudformation:us-east-1:123686206419:stack/mdconsultas-prod-20191025080106/206ad570-f71f-11e9-aaad-0ac7f938abd6"
-        },
-        "categories": {
-            "auth": {
-                "mdconsultasb9c2e32b": {
-                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"838590132942281\",\"client_secret\":\"d685cd2e73320fca59d78aa1bbcb866b\"},{\"ProviderName\":\"Google\",\"client_id\":\"1004779032464-pb8iee6o6e4lr3m9tp3p8vghorn9bdj3.apps.googleusercontent.com\",\"client_secret\":\"CZLfi7qmTP5f-fbLI8wp_mSb\"}]"
-                }
-            }
-        }
-    },
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "mdconsultas-dev-20191025090156-authRole",
-            "UnauthRoleArn": "arn:aws:iam::846928963573:role/mdconsultas-dev-20191025090156-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::846928963573:role/mdconsultas-dev-20191025090156-authRole",
+            "AuthRoleName": "amplify-littydoctors-dev-115546-authRole",
+            "UnauthRoleArn": "arn:aws:iam::846928963573:role/amplify-littydoctors-dev-115546-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::846928963573:role/amplify-littydoctors-dev-115546-authRole",
             "Region": "us-east-1",
-            "DeploymentBucketName": "mdconsultas-dev-20191025090156-deployment",
-            "UnauthRoleName": "mdconsultas-dev-20191025090156-unauthRole",
-            "StackName": "mdconsultas-dev-20191025090156",
-            "StackId": "arn:aws:cloudformation:us-east-1:846928963573:stack/mdconsultas-dev-20191025090156/9ff17ee0-f727-11e9-8807-0a4fdb0c1726"
+            "DeploymentBucketName": "amplify-littydoctors-dev-115546-deployment",
+            "UnauthRoleName": "amplify-littydoctors-dev-115546-unauthRole",
+            "StackName": "amplify-littydoctors-dev-115546",
+            "StackId": "arn:aws:cloudformation:us-east-1:846928963573:stack/amplify-littydoctors-dev-115546/a7286f70-41e6-11ea-96ca-0eac0ccc6c9d",
+            "AmplifyAppId": "d14dy4vpjc91gq"
         },
         "categories": {
             "auth": {
-                "mdconsultasb9c2e32b": {
-                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"838590132942281\",\"client_secret\":\"d685cd2e73320fca59d78aa1bbcb866b\"},{\"ProviderName\":\"Google\",\"client_id\":\"1004779032464-pb8iee6o6e4lr3m9tp3p8vghorn9bdj3.apps.googleusercontent.com\",\"client_secret\":\"CZLfi7qmTP5f-fbLI8wp_mSb\"}]"
-                }
+                "littydoctors0f1e523f": {}
             }
         }
     }

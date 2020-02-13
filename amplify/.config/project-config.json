@@ -1,6 +1,6 @@
 {
-    "projectName": "mdconsultas",
-    "version": "2.0",
+    "projectName": "littydoctors",
+    "version": "3.0",
     "frontend": "javascript",
     "javascript": {
         "framework": "react",

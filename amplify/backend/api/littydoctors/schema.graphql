@@ -1,0 +1,611 @@
+type ConsultingRoom 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+        { allow: groups, groups: ["secretary"], operations: [read] },
+        { allow: groups, groups: ["client"], operations: [read] }
+    ]) {
+    id: ID!
+    doctor: Doctor @connection
+    secretary: String!
+    location: Location @connection
+}
+
+type Location 
+    @model 
+    @auth(rules: [
+        { allow: owner },
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: groups, groups: ["client"], operations: [read] }
+    
+    ]){
+    id: ID!
+    name: String!
+}
+
+type Doctor 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["client"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String!
+    username: String!
+    email: String!
+    speciality: String!
+    sex: String!
+    consultingroom: ConsultingRoom @connection
+    image: String!
+}
+
+type Rejection 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field. 
+        { allow: owner },
+        
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "doctor", operations: [read] },
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    description: String
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String!
+}
+
+type Cancelation 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "doctor", operations: [read] },
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    description: String
+}
+
+type Notification 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "doctor", operations: [read] },
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    state: String
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String!
+}
+
+type Confirmation 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "doctor", operations: [read] },
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    description: String
+}
+
+type MedicalAppointment
+    @model(subscriptions: null)
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        
+        # Authorize the update mutation and both queries. Use `queries: null` to disable auth for queries.
+        { allow: owner, ownerField: "secretary", operations: [update, read] },
+        { allow: owner, ownerField: "doctorname", operations: [update, read] },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] }
+    ]) {
+    id: ID!
+    location: Location @connection
+    doctor: Doctor @connection
+    doctorname: String
+    patient: Patient @connection
+    rejection: [Rejection] @connection
+    cancelation: Cancelation @connection
+    notification: [Notification] @connection(sortField: "createdAt")
+    confirmation: Confirmation @connection
+    secretary: String
+    details: String
+    date_created: String
+    date_of_medical_appointment: String
+    state: State
+    position: Int
+    consult_cost: String
+    read_secretary: Boolean
+    read_doctor: Boolean
+    read_client: Boolean
+    createdAt: String
+}
+
+type Subscription {
+  onCreateMedicalAppointment(doctorname: String, secretary: String): MedicalAppointment @aws_subscribe(mutations: ["createMedicalAppointment"])
+  onUpdateMedicalAppointment(read_secretary: Boolean, read_doctor: Boolean, read_client: Boolean, doctorname: String, secretary: String): MedicalAppointment @aws_subscribe(mutations: ["updateMedicalAppointment"])
+}
+
+enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
+
+#Medical Consultation Process BackEnd definition
+
+type MedicalConsultation
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "doctorname", operations: [update, read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    doctor: Doctor @connection
+    patient: Patient @connection
+    postConsultationsActivity: PostConsultationsActivity @connection
+    medicalHistory: MedicalHistory @connection
+    doctorname: String
+    secretary: String
+    patientname: String
+    createdAt: String
+}
+
+type MedicalHistory
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "doctor", operations: [update, read] },
+        { allow: owner, ownerField: "patientname", operations: [read] },
+    ]) {
+    id: ID!
+    reason: String
+    patient: Patient @connection
+    physicalExploration: PhysicalExploration @connection
+    doctor: String
+    secretary: String
+    patientname: String
+}
+
+type Patient 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String!
+    username: String!
+    email: String!
+    phone: String!
+    phone_id: String
+    weight: String
+    height: String
+    size: String
+    age: String
+    birthdate: String
+    patientHistory: PatientHistory @connection
+}
+
+#Antecedentes del paciente
+type PatientHistory
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    nonPathologicalHistory: [NonPathologicalHistory] @connection
+    pathologicalHistory: PathologicalHistory @connection
+    familyHistory: [FamilyHistory] @connection
+    gynecoObstetricHistory: GynecoObstetricHistory @connection
+}
+
+type NonPathologicalHistory 
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    type: Category @connection
+    active: Boolean
+    frequency: String
+    comment: String
+}
+
+type PathologicalHistory
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    surgicalInterventions: [PathologicalHistorySurgicalInt] @connection(name: "phsi")
+    patientMedications: [PatientMedications] @connection(name: "pm")
+    patientAllergies: [PatientAllergies] @connection(name: "pa")
+}
+
+type FamilyHistory
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    relationship: Category @connection
+    alive: Boolean
+    diseases: [FamilyDetailsDiseases] @connection(name: "fdd")
+    comment: String
+}
+
+type FamilyDetailsDiseases @model(queries: null) {
+  id: ID!
+  family: FamilyHistory @connection(name: "fdd")
+  diseases: Disease @connection(name: "dfd")
+}
+
+type Disease
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    description: String
+    familyDetails: [FamilyDetailsDiseases] @connection(name: "dfd")
+}
+
+type GynecoObstetricHistory
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    menarche: String
+    sexual_development: String
+    menstrual_rhythm: String
+    sex_life: String
+    deliveries: String
+    abortions: String
+    caesarean_sections: String
+    contraceptive_method: String
+}
+
+type Allergy
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    description: String
+    patients: [PatientAllergies] @connection(name: "ap")
+}
+
+type PatientAllergies @model(queries: null) {
+  id: ID!
+  pathologicalHistory: PathologicalHistory @connection(name: "pa")
+  allergies: Allergy @connection(name: "ap")
+}
+
+type PatientMedications @model(queries: null) {
+  id: ID!
+  pathologicalHistory: PathologicalHistory @connection(name: "pm")
+  medications: Medicine @connection(name: "mp")
+}
+
+type Medicine
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    patients: [PatientMedications] @connection(name: "mp")
+    code: String
+    drug_concentration: String #500mg, 200mg, 50mg 
+    chemical_composition: String
+    #mp: [MedicalPrescriptionsMedications] @connection(name: "mmp")
+}
+
+type PostConsultationsActivity
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "doctor", operations: [update, read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    medicalpres: [MedicalPrescription] @connection
+    medicalAnalysis: [PostConsultActMedAnalysis] @connection(name: "pcama")
+    surgicalIntervention: [PostConsultActSurgicalInt] @connection(name: "pcasi")
+    doctor: String
+    secretary: String
+    patient: String
+}
+
+type MedicalPrescription
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "doctor", operations: [update, read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    date: String
+    frequency: String
+    duration: String
+    medications: Medicine @connection
+    comment: String
+    doctor: String
+    secretary: String
+    patient: String
+}
+
+""" type MedicalPrescriptionsMedications @model(queries: null) {
+  id: ID!
+  medicalPrescriptions: MedicalPrescription @connection(name: "mpm")
+  medications: Medicine @connection(name: "mmp")
+} """
+
+type PostConsultActMedAnalysis @model(queries: null) {
+  id: ID!
+  state: State # se colocara un estado que espesificara si el analisis se realizo o no
+  date: String
+  pcActivities: PostConsultationsActivity @connection(name: "pcama")
+  medicalAnalysis: MedicalAnalysis @connection(name: "mapca")
+}
+
+type MedicalAnalysis
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    medicalAnalysis: [PostConsultActMedAnalysis] @connection(name: "mapca")
+}
+
+type PostConsultActSurgicalInt @model(queries: null) {
+  id: ID!
+  state: State # se colocara un estado que espesificara si la sirugia se realizo o no
+  date: String
+  pcActivities: PostConsultationsActivity @connection(name: "pcasi")
+  surgicalIntervention: SurgicalIntervention @connection(name: "sipca")
+}
+
+type PathologicalHistorySurgicalInt @model(queries: null) {
+  id: ID!
+  date: String
+  pathologicalHistory: PathologicalHistory @connection(name: "phsi")
+  surgicalIntervention: SurgicalIntervention @connection(name: "siph")
+}
+
+type SurgicalIntervention
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    description: String
+    surgicalIntervention: [PostConsultActSurgicalInt] @connection(name: "sipca")
+    pathologicalHistory: [PathologicalHistorySurgicalInt] @connection(name: "siph")
+}
+
+type PhysicalExploration
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "doctor", operations: [update, read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    general_exploration: String
+    vitalsign: VitalSign @connection
+    regionalExploration: RegionalExploration @connection
+    doctor: String
+    secretary: String
+    patient: String
+}
+
+type VitalSign
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "doctor", operations: [update, read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    blood_pressure: String
+    breathing: String
+    pulse: String
+    temperature: String
+    doctor: String
+    secretary: String
+    patient: String
+}
+
+type RegionalExploration
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: owner, ownerField: "secretary", operations: [read] },
+        { allow: owner, ownerField: "doctor", operations: [update, read] },
+        { allow: owner, ownerField: "patient", operations: [read] },
+    ]) {
+    id: ID!
+    head: String
+    neck: String
+    thorax: String
+    abdomen: String
+    members: String
+    genitals: String
+    others: String
+    doctor: String
+    secretary: String
+    patient: String
+}
+
+type Category
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        { allow: groups, groups: ["admin"] }
+        { allow: groups, groups: ["doctor"], operations: [read] },
+        { allow: groups, groups: ["secretary"], operations: [read] },
+    ]) {
+    id: ID!
+    name: String
+    description: String
+    module: String
+}

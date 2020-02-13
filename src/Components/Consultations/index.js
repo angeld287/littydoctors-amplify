@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBBox, MDBBtn, MDBRow, MDBSpinner, MDBTypography, MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText } from "mdbreact";
 import { API, graphqlOperation } from 'aws-amplify';
-import { Link } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
+import Select from 'react-select'
 
 import useConsultations from './useConsultations';
 
@@ -18,11 +19,12 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 
-
-const Consultations = () => { 
-    const { loading, error, patients, setPatient, patient } = useConsultations();
+const Consultations = ({childProps: childProps}) => { 
+    const { createConsultation, loading, error, patients, setPatient, patient, redirectToProcess, autoCompleteLoading, 
+    loadingButton, searchPatient, newPatientName,  setNewPatientName} = useConsultations();
     const classes = useStyles();
     const theme = useTheme();
+    const preventDefault = event => event.preventDefault();
 
     if (loading) {
       return (
@@ -41,16 +43,14 @@ const Consultations = () => {
         <br/>
         <MDBTypography tag='h2'>Buscar Paciente para Consulta</MDBTypography>
         <br/>
-        <Autocomplete
-					required
-					id="patients"
-					options={patients}
-					getOptionLabel={option => option.name}
-					onChange={(event, newValue) => {setPatient(newValue)}}
-					renderInput={params => (
-						<TextField {...params} label="Buscar Paciente..." variant="outlined" fullWidth/>
-					)}
-				/>
+          <Select 
+            options={patients}
+            onChange={(newValue) => {setPatient(newValue);}}
+            onInputChange={v => setNewPatientName(v)}
+            noOptionsMessage={() => {
+              return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+            }}
+          />
         <br/>
         <br/>
         <Card className={classes.card}>
@@ -72,9 +72,9 @@ const Consultations = () => {
               </Typography>
             </CardContent>
             <div className={classes.controls}>  
-              <Link to={`consultations/process/patient`}>
-								  <MDBBtn className={classes.playIcon} color="indigo" >Crear Consulta Medica</MDBBtn>
-							</Link>
+              {/* redirectToProcess((patient != null ? patient.id : "N/A"), false) */}
+              {!loadingButton &&(<MDBBtn disabled={patient === null || patient.name === "N/A"} className={classes.playIcon} onClick={ e => {e.preventDefault(); createConsultation(childProps.state, patient)}} color="indigo" >Crear Consulta Medica</MDBBtn>)}
+              {loadingButton && <MDBSpinner small/>}
             </div>
           </div>
         </Card>
@@ -106,6 +106,11 @@ const useStyles = makeStyles(theme => ({
   playIcon: {
     height: 38,
     width: 400,
+  },
+  root: {
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
   },
 }));
 

@@ -27,9 +27,9 @@ class List extends Component {
         })
     }
     this.props.ActiveElement(item, i);
-    if (this.props.childProps.state.user_roll === 'company') {
-      if (item.read_company === false) {
-        this.props.updateMedicalAppointmentData({id: item.id, read_company: true}, "read"); 
+    if (this.props.childProps.state.user_roll === 'doctor') {
+      if (item.read_doctor === false) {
+        this.props.updateMedicalAppointmentData({id: item.id, read_doctor: true}, "read"); 
       }
     }else if (this.props.childProps.state.user_roll === 'secretary') {
       if (item.read_secretary === false) {
@@ -56,7 +56,7 @@ class List extends Component {
             {item.patient.name}    
           </td>
           <td bgcolor={(selectedItem === i) ? ("#4285F4") : ("#fff")} style={(selectedItem === i) ? ({color:"#fff"}) : ({color:"#000"})}>
-            {!((this.props.childProps.state.user_roll === 'company')?(item.read_company):((this.props.childProps.state.user_roll === 'secretary')?(item.read_secretary):( null ) )) && <MDBIcon icon="bell" size="1x" className="red-text" />}
+            {!((this.props.childProps.state.user_roll === 'doctor')?(item.read_doctor):((this.props.childProps.state.user_roll === 'secretary')?(item.read_secretary):( null ) )) && <MDBIcon icon="bell" size="1x" className="red-text" />}
           </td>
           <td bgcolor={(selectedItem === i) ? ("#4285F4") : ("#fff")} style={(selectedItem === i) ? ({color:"#fff", width: "80%"}) : ({color:"#000", width: "80%"})} >
             <small>{moment(item.date_of_medical_appointment).format('DD-MM')}   </small>

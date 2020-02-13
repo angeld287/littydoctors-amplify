@@ -95,7 +95,7 @@ class MedicalAppointmentsManagement extends Component {
       graphqlOperation(onUpdateMedicalAppointment, {
         read_client: true,
         read_secretary: false,
-        read_company: false,
+        read_doctor: false,
         doctorname: this.props.childProps.state.doctorusername,
         secretary: this.props.childProps.state.secretary,
       })
@@ -190,10 +190,10 @@ class MedicalAppointmentsManagement extends Component {
   updateFieldFromAppointments = (object, update) => {
     switch(update) {
         case 'read':
-            if (this.props.childProps.state.user_roll === 'company') {
-              const read_company = object.read_company
+            if (this.props.childProps.state.user_roll === 'doctor') {
+              const read_doctor = object.read_doctor
               this.setState({
-                appointments: this.state.appointments.map(el => (el.id === object.id ? Object.assign({}, el, { read_company }) : el))
+                appointments: this.state.appointments.map(el => (el.id === object.id ? Object.assign({}, el, { read_doctor }) : el))
               });
             }else if (this.props.childProps.state.user_roll === 'secretary') {
               const read_secretary = object.read_secretary

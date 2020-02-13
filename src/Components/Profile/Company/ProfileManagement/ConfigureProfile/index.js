@@ -22,7 +22,7 @@ import { Redirect } from 'react-router'
 //import PricingPlans from './PricingPlans'
 //import PaymentMethod from './PaymentMethod'
 
-import { createDoctor, createStripe, createConsultingRoom, createLocation, updateDoctor } from '../../../../../graphql/mutations';
+import { createDoctor, createConsultingRoom, createLocation, updateDoctor } from '../../../../../graphql/mutations';
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
@@ -80,9 +80,8 @@ class ConfigureProfile extends Component {
   }
 
   redirect = () => {
-      if((this.props.childProps.state.stripe_subscription_id !== 'undefined' && this.props.childProps.state.stripe_subscription_id !== undefined && this.props.childProps.state.stripe_subscription_id !== '' && 
-          this.props.childProps.state.stripe_subscription_id !== null) || (this.props.childProps.state.user_roll !== 'company' && this.props.childProps.state.user_roll !== '' && this.props.childProps.state.user_roll !== 'undefined' && this.props.childProps.state.user_roll !== undefined && this.props.childProps.state.user_roll !== null)){
-      
+      if((this.props.childProps.state.user_roll !== 'doctor' && this.props.childProps.state.user_roll !== '' && this.props.childProps.state.user_roll !== 'undefined' && this.props.childProps.state.user_roll !== undefined && this.props.childProps.state.user_roll !== null)
+          || (this.props.childProps.state.doctorname !== '' && this.props.childProps.state.doctorname !== 'undefined' && this.props.childProps.state.doctorname !== undefined && this.props.childProps.state.doctorname !== null)){
             this.setState({ redirect: true });
       }
   }
@@ -209,7 +208,17 @@ class ConfigureProfile extends Component {
 
   handleSubmission = () => {
     this.setState({ loading: true });
-    this.createCustomer()
+    Storage.put(this.state.username+".png", this.state.croppedImage, {
+        contentType: 'image/png'
+    })
+    .then (result =>{
+      this.setState({croppedImage: result.key})
+      this.insertUserProfileData();
+    })
+    .catch((err) => { // Error response
+        this.setState({ loading: false });
+        console.log(err);
+    });
   }
 
   createCustomer = () => {
@@ -250,14 +259,14 @@ class ConfigureProfile extends Component {
           var responseObject = JSON.parse(r.body);
           this.setState({ stripe_subscription_id: responseObject.stripeResponse.id });
           
-          Storage.put(this.state.username+".png", this.state.croppedImage, {
+          /* Storage.put(this.state.username+".png", this.state.croppedImage, {
               contentType: 'image/png'
           })
           .then (result =>{
             this.setState({croppedImage: result.key})
             this.insertUserProfileData();
-          })
-          .catch(err => console.log(err));
+          }) 
+          .catch(err => console.log(err));*/
       }).catch((err) => { // Error response
           this.setState({ loading: false });
           console.log(err);
@@ -293,15 +302,15 @@ class ConfigureProfile extends Component {
 
      API.graphql(graphqlOperation(createLocation, locationInsert)).then( data =>{
       this.setState({ consultingRoomLocationId: data.data.createLocation.id});
-      API.graphql(graphqlOperation(createStripe, stripeInsert)).then( data =>{
-        this.setState({ consultingRoomStripeId: data.data.createStripe.id});
+      //API.graphql(graphqlOperation(createStripe, stripeInsert)).then( data =>{
+        //this.setState({ consultingRoomStripeId: 'data.data.createStripe.id'});
         API.graphql(graphqlOperation(createDoctor, doctorInsert)).then( data =>{
           this.setState({ consultingRoomDoctorId: data.data.createDoctor.id});
             API.graphql(graphqlOperation(createConsultingRoom, {
               input:{
                 secretary: this.state.secretary,
                 consultingRoomDoctorId: this.state.consultingRoomDoctorId,
-                consultingRoomStripeId: this.state.consultingRoomStripeId,
+                //consultingRoomStripeId: this.state.consultingRoomStripeId,
                 consultingRoomLocationId: this.state.consultingRoomLocationId
               }
             })).then( data =>{
@@ -329,10 +338,10 @@ class ConfigureProfile extends Component {
           this.setState({ error: err, loading: false });
         });
 
-      }).catch( err => {
-        console.log(err);
-        this.setState({ error: err, loading: false });
-      });
+      //}).catch( err => {
+      //  console.log(err);
+      //  this.setState({ error: err, loading: false });
+      //});
     }).catch( err => {
       console.log(err);
       this.setState({ error: err, loading: false });
@@ -432,11 +441,11 @@ render() {
                   onLoad={url => console.log(url)}
                   onPick={data => console.log("data: ",data)}
                   /> 
-                  */}
+                  
                   <input
                       type="file" accept='image/*'
                       onChange={(e) => this.onChange(e)}
-                  />
+                  />*/}
             <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn>
           </MDBCol>)}
 
@@ -446,9 +455,8 @@ render() {
             <PricingPlans handleSetPlan={this.handleSetPlan}/>
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
             <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
-          </MDBCol>)*/}
-
-          {/*this.state.formActivePanel1 === 3 &&
+          </MDBCol>)
+          this.state.formActivePanel1 === 3 &&
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4"><strong>Payment Method</strong></h3>
             <PaymentMethod handleSetCard={this.handleSetCard}/>

@@ -52,7 +52,7 @@ class CompanySignUp extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          groupname: "company",
+          groupname: "doctor",
           UserPoolId: awsmobile.aws_user_pools_id,
           username: this.state.username
         })
@@ -149,7 +149,7 @@ class CompanySignUp extends Component {
                       <MDBRow>
                         <MDBCol>
                           <div className="text-center">
-                            <h3 className="dark-grey-text mb-5"><strong>Company Sign up</strong></h3>
+                            <h3 className="dark-grey-text mb-5"><strong>Doctor Sign up</strong></h3>
                           </div>
                           <MDBInput label="Your UserName" value={username} onChange={event => this.setState(updateByPropertyName("username", event.target.value)) } group type="text" validate error="wrong" success="right"/>
                           <MDBRow>

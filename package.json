@@ -13,6 +13,7 @@
     "bootstrap": "^4.3.1",
     "buffer": "^4.2.1",
     "compress.js": "^1.1.2",
+    "date-fns": "^2.0.0-beta.5",
     "graphql-tag": "^2.10.1",
     "jquery": "^1.9.1",
     "lodash": "^4.17.15",
@@ -25,12 +26,15 @@
     "react-easy-crop": "^1.14.0",
     "react-file-base64": "^1.0.3",
     "react-google-maps": "^9.4.5",
+    "react-hook-form": "3.28.15",
     "react-image-crop": "^8.2.1",
     "react-images-upload": "^1.2.7",
     "react-jss": "8.6.1",
     "react-places-autocomplete": "^7.2.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "2.1.8",
+    "react-select": "^3.0.8",
+    "sweetalert2": "^9.7.0",
     "typescript": "^3.3.4000"
   },
   "scripts": {

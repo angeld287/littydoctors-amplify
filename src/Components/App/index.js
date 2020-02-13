@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { MDBBox, MDBSpinner, MDBContainer } from "mdbreact";
+
 import {
   BrowserRouter as Router,
   Route
@@ -23,6 +25,7 @@ export default class App extends Component {
         error: false,
       },
       username: null,
+      loading: true
     };
 
     this._isMounted = false;
@@ -42,10 +45,11 @@ export default class App extends Component {
     Auth.currentSession().then(data => {
       const roll = data.accessToken.payload['cognito:groups'][0];
       this.setState({user_roll: roll})
-      if (roll === 'company') {
+      if (roll === 'doctor') {
         API.graphql(graphqlOperation(listConsultingRooms)).then( result =>{
             this.setState({
                 id: result.data.listConsultingRooms.items[0].id,
+                doctorid: result.data.listConsultingRooms.items[0].doctor.id,
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
                 speciality: result.data.listConsultingRooms.items[0].doctor.speciality,
@@ -53,11 +57,12 @@ export default class App extends Component {
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
                 secretary: result.data.listConsultingRooms.items[0].secretary,
-                stripe_source_token: result.data.listConsultingRooms.items[0].stripe.source_token,
-                stripe_plan_id: result.data.listConsultingRooms.items[0].stripe.plan_id,
-                stripe_plan_name: result.data.listConsultingRooms.items[0].stripe.plan_name,
-                stripe_customer_id: result.data.listConsultingRooms.items[0].stripe.customer_id,
-                stripe_subscription_id: result.data.listConsultingRooms.items[0].stripe.subscription_id,
+                loading: false
+                //stripe_source_token: result.data.listConsultingRooms.items[0].stripe.source_token,
+                //stripe_plan_id: result.data.listConsultingRooms.items[0].stripe.plan_id,
+                //stripe_plan_name: result.data.listConsultingRooms.items[0].stripe.plan_name,
+                //stripe_customer_id: result.data.listConsultingRooms.items[0].stripe.customer_id,
+                //stripe_subscription_id: result.data.listConsultingRooms.items[0].stripe.subscription_id,
             });
         }).catch( err => {
           this.setState({
@@ -76,6 +81,7 @@ export default class App extends Component {
         })).then( result =>{
             this.setState({
                 id: result.data.listConsultingRooms.items[0].id,
+                doctorid: result.data.listConsultingRooms.items[0].doctor.id,
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
                 speciality: result.data.listConsultingRooms.items[0].doctor.speciality,
@@ -83,6 +89,7 @@ export default class App extends Component {
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
                 secretary: result.data.listConsultingRooms.items[0].secretary,
+                loading: false
             });
         }).catch( err => {
           this.setState({
@@ -124,9 +131,18 @@ export default class App extends Component {
 
 
     return (
-      <div className="App">
-        <HeaderLinks childProps={childProps}/>
-        <Routes childProps={childProps} />
+      <div> 
+          {!this.state.loading &&
+            <div className="App">
+              <HeaderLinks childProps={childProps}/>
+              <Routes childProps={childProps} />
+            </div>
+          }
+          {this.state.loading &&
+            <MDBBox display="flex" justifyContent="center" className="mt-5">
+              <MDBSpinner big/>
+            </MDBBox>
+          }
       </div>
     );
   }

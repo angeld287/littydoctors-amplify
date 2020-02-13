@@ -119,3 +119,82 @@ export const listMedicalAppointments = `query listMedicalAppointments(
   }
 }
 `;
+
+export const getMedicalConsultation = /* GraphQL */ `
+  query GetMedicalConsultation($id: ID!) {
+    getMedicalConsultation(id: $id) {
+      id
+      patient {
+        id
+        name
+        username
+        email
+        phone
+        weight
+        height
+        birthdate
+        patientHistory {
+          id
+          nonPathologicalHistory {
+            items {
+              id
+              frequency
+              comment
+              type {
+                id
+                name
+              }
+              owner
+            }
+            nextToken
+          }
+          pathologicalHistory {
+            id
+            surgicalInterventions {
+              nextToken
+            }
+            patientMedications {
+              nextToken
+            }
+            patientAllergies {
+              nextToken
+            }
+          }
+          familyHistory {
+            items {
+              id
+              alive
+              comment
+              owner
+            }
+            nextToken
+          }
+        }
+      }
+      postConsultationsActivity {
+        id
+        medicalpres {
+          nextToken
+        }
+        medicalAnalysis {
+          nextToken
+        }
+        surgicalIntervention {
+          nextToken
+        }
+      }
+      medicalHistory {
+        id
+        reason
+        physicalExploration {
+          id
+          general_exploration
+          doctor
+          secretary
+          patient
+        }
+      }
+      createdAt
+    }
+  }
+`;

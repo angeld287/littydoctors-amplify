@@ -7,84 +7,23 @@ import { Auth } from "aws-amplify";
 import { API, graphqlOperation } from "aws-amplify";
 
 import { updateConsultingRoom } from '../../../../../../graphql/mutations';
+import useCompany from './useCompany'
 
-//import FancyComponent from '../../../../../GoogleMap/index.js';
+const CompanyInformation = ({ company: company }) => {
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
-});
 
-class CompanyInformation extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      secretary: this.props.childProps.state.secretary,
-      error: "",
-      userExist: true,
-      NoSecretary: (this.props.childProps.state.secretary === 'dummy'),
-      lat: null,
-      lng: null
-    };
-  }
+    const { NoSecretary, error, userExist, setSecretary, secretary, AddSecretary} = useCompany()
 
-  AddSecretary = () => {
-      Auth.signIn(this.state.secretary, 'FALSE_PASSWORD').then().catch(err => {
-        
-        this.setState({ 
-          error: err.message, 
-          userExist: (!(err.code === "UserNotFoundException")) && (err.code === "NotAuthorizedException")
-         });
 
-         // agregar secretaria al consultorio
-         if(this.state.userExist){
-          const UpdateConsultingR = {
-            input:{
-              id: this.props.childProps.state.id,
-              secretary: this.state.secretary,
-            }
-          }
-          API.graphql(graphqlOperation(updateConsultingRoom, UpdateConsultingR)).then( data =>{
-            this.setState({ 
-              NoSecretary: false, 
-            });
-          })
-         }
-      })
-  
-}
+    const _noSecretary = (company.secretary === 'dummy' && NoSecretary === true)
 
-  render() {
-
-    const {location, doctorname, speciality, stripe_subscription_id, email} = this.props.childProps.state
-    
-    const subscribed = (stripe_subscription_id !== 'undefined' &&
-    stripe_subscription_id !== undefined && 
-    stripe_subscription_id !== '' && 
-    stripe_subscription_id !== null) 
-
-    const {secretary, userExist, NoSecretary} = this.state
-
-    const data = String(location);
+    const data = String(company.location);
     const locationUrl = data.split(' ').join('%20');
     const mapUrl = "https://maps.google.com/maps?q="+locationUrl+"&t=&z=18&ie=UTF8&iwloc=&output=embed";
     
 
     return (
       <section className="my-5">
-        {!subscribed && 
-        <MDBRow>
-        <MDBCol lg="5" className="lg-0 mb-4">
-          <MDBCard>
-            <MDBCardBody>
-              <MDBBtn >
-                <Link to={"/subscribe"}>Complete las Imformaciones Requeridas</Link>
-              </MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-        </MDBRow>
-        }
-        {subscribed && 
         <MDBRow>
           <MDBCol lg="5" className="lg-0 mb-4">
             <MDBCard>
@@ -95,13 +34,14 @@ class CompanyInformation extends Component {
                   </h3>
                 </div>
                {
-                 NoSecretary && 
+                 _noSecretary && 
                  <div className="md-form">
                    <MDBCard>
                      <MDBCardBody>
                        <MDBInput
                          label="Secretaria"
-                         value={secretary} onChange={event => this.setState(updateByPropertyName("secretary", event.target.value))}
+                         value={secretary} 
+                         onChange={event => setSecretary(event.target.value)}
                          iconClass="grey-text"
                          type="text"
                          id="form-email"
@@ -110,19 +50,19 @@ class CompanyInformation extends Component {
                          digite el nombre de usuario de la secretaria
                        </p>
                        {userExist === false && <MDBAlert color="danger">Nombre de usuario no existe. Verifique el nombre e intente de nuevo</MDBAlert>}
-                       <MDBBtn onClick={() => this.AddSecretary()}>
+                       <MDBBtn onClick={() => AddSecretary(company)}>
                          Agregar Secretaria
                        </MDBBtn>
                      </MDBCardBody>
                    </MDBCard>
                  </div>
                }
-               {!NoSecretary &&
+               {!_noSecretary &&
                 <div>
                   <div className="md-form">
                     <MDBInput
                       icon="user-md"
-                      label={doctorname}
+                      label={company.doctorname}
                       iconClass="grey-text"
                       type="text"
                       disabled
@@ -132,7 +72,7 @@ class CompanyInformation extends Component {
                   <div className="md-form">
                     <MDBInput
                       icon="stethoscope"
-                      label={speciality}
+                      label={company.speciality}
                       iconClass="grey-text"
                       type="text"
                       disabled
@@ -142,7 +82,7 @@ class CompanyInformation extends Component {
                   <div className="md-form">
                     <MDBInput
                       icon="user-nurse"
-                      label={secretary}
+                      label={company.secretary}
                       iconClass="grey-text"
                       type="text"
                       disabled
@@ -152,7 +92,7 @@ class CompanyInformation extends Component {
                   <div className="md-form">
                     <MDBInput
                       icon="location-arrow"
-                      label={location}
+                      label={company.location}
                       iconClass="grey-text"
                       type="textarea"
                       disabled
@@ -196,14 +136,13 @@ class CompanyInformation extends Component {
                 <MDBBtn tag="a" floating color="blue" className="accent-1">
                   <MDBIcon icon="envelope" />
                 </MDBBtn>
-                <p>{email}</p>
+                <p>{company.email}</p>
               </MDBCol>
             </MDBRow>
           </MDBCol>
-        </MDBRow>}
+        </MDBRow>
       </section>
     );
-  }
 }
 
 export default CompanyInformation;
