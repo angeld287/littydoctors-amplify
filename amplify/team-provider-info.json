@@ -1,18 +1,19 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "medicalconsultations-dev-20190827215725-authRole",
-            "UnauthRoleArn": "arn:aws:iam::846928963573:role/medicalconsultations-dev-20190827215725-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::846928963573:role/medicalconsultations-dev-20190827215725-authRole",
+            "AuthRoleName": "amplify-littydoctors-dev-115546-authRole",
+            "UnauthRoleArn": "arn:aws:iam::846928963573:role/amplify-littydoctors-dev-115546-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::846928963573:role/amplify-littydoctors-dev-115546-authRole",
             "Region": "us-east-1",
-            "DeploymentBucketName": "medicalconsultations-dev-20190827215725-deployment",
-            "UnauthRoleName": "medicalconsultations-dev-20190827215725-unauthRole",
-            "StackName": "medicalconsultations-dev-20190827215725",
-            "StackId": "arn:aws:cloudformation:us-east-1:846928963573:stack/medicalconsultations-dev-20190827215725/2f0a4fe0-c937-11e9-9048-127a71eef55e"
+            "DeploymentBucketName": "amplify-littydoctors-dev-115546-deployment",
+            "UnauthRoleName": "amplify-littydoctors-dev-115546-unauthRole",
+            "StackName": "amplify-littydoctors-dev-115546",
+            "StackId": "arn:aws:cloudformation:us-east-1:846928963573:stack/amplify-littydoctors-dev-115546/a7286f70-41e6-11ea-96ca-0eac0ccc6c9d",
+            "AmplifyAppId": "d14dy4vpjc91gq"
         },
         "categories": {
             "auth": {
-                "medicalconsultationsace8ba69": {}
+                "littydoctors0f1e523f": {}
             }
         }
     }

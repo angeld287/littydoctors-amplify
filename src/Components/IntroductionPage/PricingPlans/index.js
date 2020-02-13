@@ -7,12 +7,10 @@ class PricingPlans extends Component {
         return (
             <section className="text-center my-5">
             <h2 className="h1-responsive font-weight-bold text-center my-5">
-              Our pricing plans
+              Presios de los Planes
             </h2>
             <p className="grey-text text-center w-responsive mx-auto mb-5">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit,
-              error amet numquam iure provident voluptate esse quasi, veritatis
-              totam voluptas nostrum quisquam eum porro a pariatur veniam.
+              
             </p>
             <MDBRow>
               <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
@@ -20,7 +18,7 @@ class PricingPlans extends Component {
                   <div className="price header white-text blue rounded-top">
                     <h2 className="number">10</h2>
                     <div className="version">
-                      <h5 className="mb-0">Basic</h5>
+                      <h5 className="mb-0">Basico</h5>
                     </div>
                   </div>
                   <MDBCardBody className="striped mb-1">
@@ -28,35 +26,35 @@ class PricingPlans extends Component {
                       <li>
                         <p className="mt-2">
                           <MDBIcon icon="check" className="green-text pr-2" />
-                          20 GB Of Storage
+                          Aplicacion Mobile
                         </p>
                       </li>
                       <li>
                         <p>
-                          <MDBIcon icon="check" className="green-text pr-2" />2 Email
-                          Accounts
-                        </p>
-                      </li>
-                      <li>
-                        <p>
-                          <MDBIcon icon="times" className="red-text pr-2" />
-                          24h Tech Support
+                          <MDBIcon icon="check" className="green-text pr-2" />
+                          Aplicacion Web
                         </p>
                       </li>
                       <li>
                         <p>
                           <MDBIcon icon="times" className="red-text pr-2" />
-                          300 GB Bandwidth
+                          Soporte Tecnico 24/7
                         </p>
                       </li>
                       <li>
                         <p>
                           <MDBIcon icon="times" className="red-text pr-2" />
-                          User Management{" "}
+                          Asistencia y Consultoria
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <MDBIcon icon="times" className="red-text pr-2" />
+                          Servicio de Reporteria
                         </p>
                       </li>
                     </ul>
-                        <MDBNavLink to="/subscribe"><MDBBtn color="blue">Buy now</MDBBtn></MDBNavLink>
+                        {/* <MDBNavLink to="/subscribe"><MDBBtn color="blue">Buy now</MDBBtn></MDBNavLink> */}
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>
@@ -73,35 +71,35 @@ class PricingPlans extends Component {
                       <li>
                         <p className="mt-2">
                           <MDBIcon icon="check" className="green-text pr-2" />
-                          20 GB Of Storage
-                        </p>
-                      </li>
-                      <li>
-                        <p>
-                          <MDBIcon icon="check" className="green-text pr-2" />4 Email
-                          Accounts
+                          Aplicacion Mobile
                         </p>
                       </li>
                       <li>
                         <p>
                           <MDBIcon icon="check" className="green-text pr-2" />
-                          24h Tech Support
+                          Aplicacion Web
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <MDBIcon icon="check" className="green-text pr-2" />
+                          Soporte Tecnico 24/7
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <MDBIcon icon="check" className="green-text pr-2" />
+                          Asistencia y Consultoria
                         </p>
                       </li>
                       <li>
                         <p>
                           <MDBIcon icon="times" className="red-text pr-2" />
-                          300 GB Bandwidth
-                        </p>
-                      </li>
-                      <li>
-                        <p>
-                          <MDBIcon icon="times" className="red-text pr-2" />
-                          User Management{" "}
+                          Servicio de Reporteria
                         </p>
                       </li>
                     </ul>
-                    <MDBBtn color="indigo">Buy now</MDBBtn>
+                    {/* <MDBBtn color="indigo">Buy now</MDBBtn> */}
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>
@@ -118,35 +116,35 @@ class PricingPlans extends Component {
                       <li>
                         <p className="mt-2">
                           <MDBIcon icon="check" className="green-text pr-2" />
-                          20 GB Of Storage
-                        </p>
-                      </li>
-                      <li>
-                        <p>
-                          <MDBIcon icon="check" className="green-text pr-2" />5 Email
-                          Accounts
+                          Aplicacion Mobile
                         </p>
                       </li>
                       <li>
                         <p>
                           <MDBIcon icon="check" className="green-text pr-2" />
-                          24h Tech Support
+                          Aplicacion Web
                         </p>
                       </li>
                       <li>
                         <p>
                           <MDBIcon icon="check" className="green-text pr-2" />
-                          300 GB Bandwidth
+                          Soporte Tecnico 24/7
                         </p>
                       </li>
                       <li>
                         <p>
                           <MDBIcon icon="check" className="green-text pr-2" />
-                          User Management{" "}
+                          Asistencia y Consultoria
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <MDBIcon icon="check" className="green-text pr-2" />
+                          Servicio de Reporteria
                         </p>
                       </li>
                     </ul>
-                    <MDBBtn color="deep-purple">Buy now</MDBBtn>
+                    {/* <MDBBtn color="deep-purple">Buy now</MDBBtn> */}
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>

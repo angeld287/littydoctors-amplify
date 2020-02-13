@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Auth } from "aws-amplify";
 
 
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCard, MDBCardBody, MDBModalFooter, MDBInput, MDBAlert } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCard, MDBCardBody, MDBInput, MDBAlert } from 'mdbreact';
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
@@ -27,9 +27,6 @@ class CustomrequireNewPassword extends Component {
     this.props.onStateChange('signUp',{});
   }
 
-  componentWillMount = () => {
-  }
-
   onSubmit = event => {
     const { email, password } = this.state;
 
@@ -41,7 +38,6 @@ class CustomrequireNewPassword extends Component {
           user.challengeName === "SOFTWARE_TOKEN_MFA"
         ) {
           this.changeState("confirmSignIn", user);
-          //console.log("test")
         } else if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
           this.changeState("requireNewPassword", user);
         } else if (user.challengeName === "MFA_SETUP") {

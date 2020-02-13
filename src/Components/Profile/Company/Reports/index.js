@@ -1,28 +1,12 @@
 import React from "react";
-import { Line, Bar } from "react-chartjs-2";
-import { MDBContainer, MDBSelect, MDBBtn } from "mdbreact";
+import { Bar } from "react-chartjs-2";
+import { MDBContainer, MDBBtn } from "mdbreact";
 
-//import { listMedicalConsultations } from './../../../../graphql/queries';
+import { listMedicalAppointmentReports } from './../../../../graphql/custom-queries';
 
 //import moment from 'moment';
 
 import { API, graphqlOperation } from 'aws-amplify';
-
-const listMedicalConsultations = `query ListMedicalConsultations(
-  $filter: ModelMedicalConsultationFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listMedicalConsultations(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      createdAt
-    }
-  }
-}`;
 
 class Reports extends React.Component {
   constructor(props) {
@@ -142,7 +126,7 @@ class Reports extends React.Component {
     const y = new Date().getFullYear();
     const fecha_desde = y +'-01-01T00:00:00.000';
     const fecha_hasta = y +'-12-31T00:00:00.000';
-    await API.graphql(graphqlOperation(listMedicalConsultations, {
+    await API.graphql(graphqlOperation(listMedicalAppointmentReports, {
       filter: {
         createdAt: {
           gt: fecha_desde, 
@@ -152,7 +136,7 @@ class Reports extends React.Component {
       limit: 100
     }))
     .then( result =>{
-      const list = result.data.listMedicalConsultations.items;
+      const list = result.data.listMedicalAppointments.items;
       let enero = list.filter(obj => {return obj.createdAt.includes(y+'-01')})
       let febrero = list.filter(obj => {return obj.createdAt.includes(y+'-02')})
       let marzo = list.filter(obj => {return obj.createdAt.includes(y+'-03')})

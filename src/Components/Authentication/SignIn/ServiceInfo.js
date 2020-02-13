@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {   MDBContainer, MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink, MDBIcon, MDBListGroup, MDBListGroupItem } from "mdbreact";
+import {   MDBContainer, MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink, MDBListGroup, MDBListGroupItem } from "mdbreact";
 
 class ServiceInfo extends Component {
   state = {

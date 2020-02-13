@@ -35,11 +35,7 @@ class ClientSignUp extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  componentWillMount = () => {
-  }
-
   toggle = () => {
-    console.log("Toggle Clic");
   }
 
   getYear = () => {
@@ -83,9 +79,8 @@ class ClientSignUp extends Component {
     const { username } = this.state;
 
     Auth.resendSignUp(username).then(() => {
-        console.log('code resent successfully');
     }).catch(e => {
-        console.log(e);
+        console.log('Error resending code: ', e);
     });
   };
 
@@ -97,8 +92,8 @@ class ClientSignUp extends Component {
         email_exist: false
       });
       Auth.signOut()
-        .then(data => console.log(data))
-        .catch(err => console.log(err));
+        .then()
+        .catch(err => console.log('Error logging out', err));
     }).catch(err => {
       if(err.code === 'UserNotFoundException' && err.message === 'User does not exist.'){
           Auth.signUp({
@@ -113,7 +108,6 @@ class ClientSignUp extends Component {
             //validationData: []  //optional
             })
             .then(data => {
-              //console.log(data)
               this.setState({
                 modal: !this.state.modal
               });

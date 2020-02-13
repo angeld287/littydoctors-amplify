@@ -14,10 +14,6 @@ class SubscriptionManagement extends Component {
     this.CancelSubscription = this.CancelSubscription.bind(this)
   }
 
-componentDidMount = () => {
-   //console.log(this.props.subscriptionData)
-}
-
 togglePills = tab => () => {
   if (this.state.activePills !== tab) {
   this.setState({
@@ -38,7 +34,6 @@ CancelSubscription = () => {
     }).then((r) => r.json()).then((r) => {
         var responseObject = JSON.parse(r.body);   
         this.setState({ subscriptionStatus: responseObject.stripeResponse.status }); 
-        console.log(this.state.subscriptionStatus); 
         this.forceUpdate()   
     }).catch((err) => { // Error response
         console.log(err);

@@ -62,14 +62,14 @@ class Cards extends Component {
           'Content-Type': 'application/json'
         } 
       }).then((r) => r.json()).then((r) => {
-          var responseObject = JSON.parse(r.body);
-          for (const [i, value] of this.state.user_cards_list.entries()) {
+          //var responseObject = JSON.parse(r.body);
+          /* for (const [i, value] of this.state.user_cards_list.entries()) {
             if(value.fingerprint === responseObject.stripeResponse.card.fingerprint){
                 console.log(i)
             }else{
                 console.log("no igual")
             }
-          }
+          } */
       }).catch((err) => { // Error response
           console.log(err);
       });

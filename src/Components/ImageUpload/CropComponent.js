@@ -98,6 +98,7 @@ class CropComponent extends Component {
       image: null,
     };
     
+    this._isMounted = false;
     this.handleDone = this.handleDone.bind(this);
     this.printPreview = this.printPreview.bind(this);
   }
@@ -169,13 +170,11 @@ class CropComponent extends Component {
       this.setState({
         srcFile: e.target.files[0]
       });
-      console.log(e.target.files[0]);
       reader.readAsDataURL(e.target.files[0]);
     }
   };
 
   onImageLoaded = async (image, pixelCrop) => {
-    console.log("image", image)
     this.setState({ 
       image: image
     });
@@ -206,8 +205,6 @@ class CropComponent extends Component {
     const canvas = document.createElement("canvas");
     canvas.width = pixelCrop.width;
     canvas.height = pixelCrop.height;
-
-    console.log(this.state.image, this.state.imgsrc, image)
 
     //const imageObj = new Image();
     //imageObj.src = image;
@@ -294,6 +291,7 @@ class CropComponent extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
       this.dragZone.current.addEventListener(
         eventName,
@@ -306,6 +304,7 @@ class CropComponent extends Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     this.dragZone.current.removeEventListener("drop", this.handleDrop);
     ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
       this.dragZone.current.removeEventListener(

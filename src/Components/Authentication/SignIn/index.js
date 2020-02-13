@@ -32,9 +32,6 @@ class CustomSignIn extends Component {
     this.props.onStateChange('signUp',{});
   }
 
-  componentWillMount = () => {
-  }
-
   onSubmit = event => {
     const { email, password } = this.state;
     this.setState({ loading: true });
@@ -46,7 +43,6 @@ class CustomSignIn extends Component {
           user.challengeName === "SOFTWARE_TOKEN_MFA"
         ) {
           this.changeState("confirmSignIn", user);
-          //console.log("test")
         } else if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
           this.props.onStateChange("requireNewPassword", user);
         } else if (user.challengeName === "MFA_SETUP") {
@@ -82,9 +78,9 @@ class CustomSignIn extends Component {
         { this.props.authState === 'signIn' && 
           <MDBContainer>
             <MDBRow>
-              <MDBCol md="10" lg="7" xl="7" className="mx-auto mt-3">
+              {/*<MDBCol md="10" lg="7" xl="7" className="mx-auto mt-3">
                 <ServiceInfo/>
-              </MDBCol>
+              </MDBCol> */}
               <MDBCol md="9" lg="7" xl="5" className="mx-auto mt-3">
                 <MDBCard>
                   <MDBCardBody className="mx-4">

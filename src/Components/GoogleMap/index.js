@@ -34,9 +34,12 @@ class FancyComponent extends React.PureComponent {
         lat: null,
         lng: null,
     };
+
+    this._isMounted = false;
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.delayedShowMarker()
     geocodeByAddress(this.props.childProps.state.location)
       .then(results => getLatLng(results[0]))
@@ -47,6 +50,10 @@ class FancyComponent extends React.PureComponent {
          });
       })
       .catch(error => console.error('Error', error));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   delayedShowMarker = () => {

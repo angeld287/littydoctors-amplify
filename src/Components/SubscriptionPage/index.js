@@ -47,9 +47,12 @@ class SubscriptionPage extends Component {
 
       this.handleSubmit = this.handleSubmit.bind(this);
       this.getYear = this.getYear.bind(this);
+
+      this._isMounted = false;
   }
 
   componentDidMount = () => {
+    this._isMounted = true;
     Auth.currentUserInfo()
       .then(data => {
         this.setState({
@@ -58,6 +61,10 @@ class SubscriptionPage extends Component {
         })
       })
       .catch(err => console.log('error: ', err))
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getYear = () => {
@@ -80,7 +87,6 @@ class SubscriptionPage extends Component {
         })
       }).then((r) => r.json()).then((r) => {
           var responseObject = JSON.parse(r.body);
-          //console.log(responseObject.stripeResponse.id, ' '+ this.state.email); 
           this.createCustomer(responseObject.stripeResponse.id);
       }).catch((err) => { // Error response
           console.log(err);
@@ -99,7 +105,6 @@ class SubscriptionPage extends Component {
           source: id
         })
       }).then((r) => r.json()).then((r) => {
-          //console.log('Response', r);
           var responseObject = JSON.parse(r.body);
           this.subscribeCustomer(responseObject.stripeResponse.id)
       }).catch((err) => { // Error response
@@ -118,9 +123,7 @@ class SubscriptionPage extends Component {
           plan: this.state.subscriptionPlan
         })
       }).then((r) => r.json()).then((r) => {
-          console.log(r);
           var responseObject = JSON.parse(r.body);
-          console.log(responseObject);
       }).catch((err) => { // Error response
           console.log(err);
       });

@@ -3,6 +3,10 @@ import { MDBMask, MDBRow, MDBCol, MDBBtn, MDBView, MDBContainer } from "mdbreact
 import "./IntroductionPage.css";
 
 import PricingPlans from './PricingPlans';
+import TeamPage from './Team';
+import ContactPage from './ContactUs';
+
+import iphones from './../../images/iphones.png';
 
 class IntroductionPage extends Component {
   state = {
@@ -72,23 +76,23 @@ class IntroductionPage extends Component {
               <MDBRow>
                 <div className="white-text text-center text-md-left col-md-6 mt-xl-5 mb-5">
                   <h1 className="h1-responsive font-weight-bold mt-sm-5">
-                    Make purchases with our app{" "}
+                    Litty Doctors{" "}
                   </h1>
                   <hr className="hr-light" />
                   <h6 className="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Rem repellendus quasi fuga nesciunt dolorum nulla magnam
-                    veniam sapiente, fugiat! Commodi sequi non animi ea dolor
-                    molestiae iste.
+                    Somos especialistas en desarrollo de aplicaciones mobiles y web 
+                    basadas en la automatizacion de los procesos de consultas medicas. 
+                    Nuestra mision es hacer que el doctor se siente comodo con el producto 
+                    que utliza. Nuestra vision es llevar el producto a todos los doctores 
+                    de republica dominicana.
                   </h6>
-                  <MDBBtn color="white">Download</MDBBtn>
-                  <MDBBtn outline color="white">
-                    Learn More
+                  <MDBBtn color="white">
+                    <a target="_blank" href="https://play.google.com/store/apps/details?id=com.aangelesmdconsultations">Aplicacion Mobile Android</a>
                   </MDBBtn>
                 </div>
                 <MDBCol md="6" xl="5" className="mt-xl-5">
                   <img
-                    src="https://mdbootstrap.com/img/Mockups/Transparent/Small/admin-new.png"
+                    src={iphones}
                     alt=""
                     className="img-fluid"
                   />
@@ -101,20 +105,23 @@ class IntroductionPage extends Component {
         <MDBContainer>
           <MDBRow className="py-5">
             <MDBCol md="12" className="text-center">
+              <h6>
+                <a target="_blank" href="https://www.freepik.es/fotos-vectores-gratis/fondo">Vector de Fondo creado por Creative_hat - www.freepik.es</a>
+              </h6>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                
               </p>
             </MDBCol>
           </MDBRow>
         </MDBContainer>
         <MDBContainer>
           <PricingPlans/>
+        </MDBContainer>
+        <MDBContainer>
+          <TeamPage/>
+        </MDBContainer>
+        <MDBContainer>
+          <ContactPage/>
         </MDBContainer>
       </div>
     );

@@ -1,35 +1,34 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBSpinner,
-  MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from "mdbreact";
+  MDBModal, MDBModalBody, MDBModalFooter } from "mdbreact";
 
 import { API, graphqlOperation } from "aws-amplify";
 
-import { Auth } from "aws-amplify";
+import { Storage } from "aws-amplify";
+
+//import { PhotoPicker, S3Image } from "aws-amplify-react";
 
 import CompanyProfile from './CompanyProfileReview'
 
 import Cropper from 'react-easy-crop'
 import getCroppedImg from '../../../../ImageUpload/cropImage'
 
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 import ImageUploader from 'react-images-upload';
 
 import { Redirect } from 'react-router'
 
-import PricingPlans from './PricingPlans'
-import PaymentMethod from './PaymentMethod'
+//import PricingPlans from './PricingPlans'
+//import PaymentMethod from './PaymentMethod'
 
-import { createDoctor, createStripe, createConsultingRoom, createLocation, updateDoctor } from '../../../../../graphql/mutations';
+import { createDoctor, createConsultingRoom, createLocation, updateDoctor } from '../../../../../graphql/mutations';
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
 });
 
-const Compress = require('compress.js')
+//const Compress = require('compress.js')
 
 // Se quitaron los pasos de que tienen que ver con subscrpcion y se comento la validacion de si el campo stripe_source_token esta completado
 // Tambien se configuraron los botones next y previous para los dos pasos restantes
@@ -65,22 +64,55 @@ class ConfigureProfile extends Component {
       modal: false,
       croppedImage: null,
       file: null,
+      previewSource: null,
+      key: null,
     }
 
     this.handleSetPlan = this.handleSetPlan.bind(this);
     this.handleSetCard = this.handleSetCard.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this._isMounted = false;
   }
 
   componentWillMount = () => {
-
-    if((this.props.childProps.state.stripe_subscription_id !== 'undefined' && this.props.childProps.state.stripe_subscription_id !== undefined && this.props.childProps.state.stripe_subscription_id !== '' && 
-        this.props.childProps.state.stripe_subscription_id !== null) || (this.props.childProps.state.user_roll !== 'company' && this.props.childProps.state.user_roll !== '' && this.props.childProps.state.user_roll !== 'undefined' && this.props.childProps.state.user_roll !== undefined && this.props.childProps.state.user_roll !== null)){
-     
-          this.setState({ redirect: true });
-    }
+    this._isMounted = true;
+    this.redirect();
   }
 
+  redirect = () => {
+      if((this.props.childProps.state.user_roll !== 'doctor' && this.props.childProps.state.user_roll !== '' && this.props.childProps.state.user_roll !== 'undefined' && this.props.childProps.state.user_roll !== undefined && this.props.childProps.state.user_roll !== null)
+          || (this.props.childProps.state.doctorname !== '' && this.props.childProps.state.doctorname !== 'undefined' && this.props.childProps.state.doctorname !== undefined && this.props.childProps.state.doctorname !== null)){
+            this.setState({ redirect: true });
+      }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  //upload S3 image
+  onChange(e) {
+      //const file = e.target.files[0];
+      /* Storage.put('example2.png', file, {
+          contentType: 'image/png'
+      })
+      .then (result => {
+         this.setState({croppedImage: result.key})
+         //console.log(result)
+      })
+      .catch(err => console.log(err));
+
+      let type = file.type;
+      Storage.put(this.state.username+'.'+type.replace("image/", ""), file, {
+          contentType: 'image/png'
+      })
+      .then (result =>{
+        this.setState({croppedImage: result.key})
+        //console.log(result.key)
+      })
+      .catch(err => console.log(err)); */
+  }
+  
   toggle = () => {
     this.setState({
       modal: !this.state.modal
@@ -111,7 +143,6 @@ class ConfigureProfile extends Component {
   }
 
   onCropComplete = (croppedArea, croppedAreaPixels) => {
-    //console.log(croppedArea, croppedAreaPixels)
     this.setState({ croppedAreaPixels })
   }
 
@@ -177,7 +208,17 @@ class ConfigureProfile extends Component {
 
   handleSubmission = () => {
     this.setState({ loading: true });
-    this.createCustomer()
+    Storage.put(this.state.username+".png", this.state.croppedImage, {
+        contentType: 'image/png'
+    })
+    .then (result =>{
+      this.setState({croppedImage: result.key})
+      this.insertUserProfileData();
+    })
+    .catch((err) => { // Error response
+        this.setState({ loading: false });
+        console.log(err);
+    });
   }
 
   createCustomer = () => {
@@ -217,7 +258,15 @@ class ConfigureProfile extends Component {
       }).then((r) => r.json()).then((r) => {
           var responseObject = JSON.parse(r.body);
           this.setState({ stripe_subscription_id: responseObject.stripeResponse.id });
-          this.insertUserProfileData();
+          
+          /* Storage.put(this.state.username+".png", this.state.croppedImage, {
+              contentType: 'image/png'
+          })
+          .then (result =>{
+            this.setState({croppedImage: result.key})
+            this.insertUserProfileData();
+          }) 
+          .catch(err => console.log(err));*/
       }).catch((err) => { // Error response
           this.setState({ loading: false });
           console.log(err);
@@ -253,15 +302,15 @@ class ConfigureProfile extends Component {
 
      API.graphql(graphqlOperation(createLocation, locationInsert)).then( data =>{
       this.setState({ consultingRoomLocationId: data.data.createLocation.id});
-      API.graphql(graphqlOperation(createStripe, stripeInsert)).then( data =>{
-        this.setState({ consultingRoomStripeId: data.data.createStripe.id});
+      //API.graphql(graphqlOperation(createStripe, stripeInsert)).then( data =>{
+        //this.setState({ consultingRoomStripeId: 'data.data.createStripe.id'});
         API.graphql(graphqlOperation(createDoctor, doctorInsert)).then( data =>{
           this.setState({ consultingRoomDoctorId: data.data.createDoctor.id});
             API.graphql(graphqlOperation(createConsultingRoom, {
               input:{
                 secretary: this.state.secretary,
                 consultingRoomDoctorId: this.state.consultingRoomDoctorId,
-                consultingRoomStripeId: this.state.consultingRoomStripeId,
+                //consultingRoomStripeId: this.state.consultingRoomStripeId,
                 consultingRoomLocationId: this.state.consultingRoomLocationId
               }
             })).then( data =>{
@@ -289,10 +338,10 @@ class ConfigureProfile extends Component {
           this.setState({ error: err, loading: false });
         });
 
-      }).catch( err => {
-        console.log(err);
-        this.setState({ error: err, loading: false });
-      });
+      //}).catch( err => {
+      //  console.log(err);
+      //  this.setState({ error: err, loading: false });
+      //});
     }).catch( err => {
       console.log(err);
       this.setState({ error: err, loading: false });
@@ -301,8 +350,8 @@ class ConfigureProfile extends Component {
 
 render() {
 
-  const { specialty, location, stripe_source_token, redirect, error, loading, name, croppedImage } = this.state
-  const image = (croppedImage !== null)?(<img src={croppedImage} height="200" width="200" className="img-fluid" alt="" />):(null);
+  const { specialty, location, redirect, error, loading, name, croppedImage } = this.state
+  //const image = (croppedImage !== null)?(<img src={croppedImage} height="200" width="200" className="img-fluid" alt="" />):(null);
   const complete = (!(location === '') && !(specialty === '') && !(croppedImage === null)/*  && !(stripe_source_token === '') */)
   const validation = (complete && (error === ''))
 
@@ -376,13 +425,27 @@ render() {
                   </div>
                 )}
               </PlacesAutocomplete>
-              <ImageUploader
+                <ImageUploader
                     withIcon={true}
                     buttonText='Agrege una Imagen de Perfil'
                     onChange={this.onDrop}
                     imgExtension={['.jpg', '.gif', '.png', '.gif']}
                     maxFileSize={5242880}
                 />
+
+                {/* 
+                <S3Image imgKey={key}/>
+                <PhotoPicker
+                  title="Priview PhotoPicker"
+                  preview="hidden"
+                  onLoad={url => console.log(url)}
+                  onPick={data => console.log("data: ",data)}
+                  /> 
+                  
+                  <input
+                      type="file" accept='image/*'
+                      onChange={(e) => this.onChange(e)}
+                  />*/}
             <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn>
           </MDBCol>)}
 
@@ -392,9 +455,8 @@ render() {
             <PricingPlans handleSetPlan={this.handleSetPlan}/>
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
             <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
-          </MDBCol>)*/}
-
-          {/*this.state.formActivePanel1 === 3 &&
+          </MDBCol>)
+          this.state.formActivePanel1 === 3 &&
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4"><strong>Payment Method</strong></h3>
             <PaymentMethod handleSetCard={this.handleSetCard}/>

@@ -24,9 +24,6 @@ class DoctorSearch extends Component {
   }
   
 
-  componentWillMount = () => {
-  }
-
   searchDoctor = () => {
     API.graphql(graphqlOperation(listDoctors, {
       filter:{
@@ -36,7 +33,6 @@ class DoctorSearch extends Component {
       }
     })).then( result =>{
         this.setState({ doctorList: result.data.listDoctors.items})
-       // console.log(this.state.doctorList)
     }).catch( err => {
     });
   }

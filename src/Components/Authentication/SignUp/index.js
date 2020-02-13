@@ -37,10 +37,6 @@ class CustomSignUp extends Component {
     }
   }
 
-  componentWillMount = () => {
-      
-  }
-
   render() {
     return (
       <div>

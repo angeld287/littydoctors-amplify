@@ -1,8 +1,5 @@
 import React, {Component} from "react";
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
-});
 
 // Se quitaron los pasos de que tienen que ver con subscrpcion y se comento la validacion de si el campo stripe_source_token esta completado
 // Tambien se configuraron los botones next y previous para los dos pasos restantes
