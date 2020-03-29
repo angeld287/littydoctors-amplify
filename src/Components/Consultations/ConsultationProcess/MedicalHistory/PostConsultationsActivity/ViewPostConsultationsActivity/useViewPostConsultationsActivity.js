@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { API, graphqlOperation } from 'aws-amplify';
+import { renderToString } from 'react-dom/server';
 import useForm from 'react-hook-form';
 import { listMedicalAnalysiss, listSurgicalInterventions, listMedicines } from '../../../../../../graphql/queries';
 import { createPostConsultActMedAnalysis, createMedicalPrescription, createPostConsultActSurgicalInt, createPostConsultationsActivity,
@@ -9,9 +9,15 @@ import { updateMedicalConsultationForPCAGlobal } from '../../../../../../graphql
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import Swal from 'sweetalert2';
 
+import { Template } from '../../../../../Reports/Prescriptions/Template_1';
+
+import moment from 'moment';
+
+import jspdf from 'jspdf';
+
 const useViewPostConsultationsActivity = (global, setGlobalData, setNew) => {
     const [ loading, setLoading ] = useState(false);
-    const [ loadingButton, setLoadingButton ] = useState(false);
+    const [ printLoading, setprintLoading ] = useState(false);
     const [ error, setError ] = useState(false);
     const [ edit, setEdit ] = useState(false);
     let { consultation, patient } = useParams();
@@ -35,6 +41,15 @@ const useViewPostConsultationsActivity = (global, setGlobalData, setNew) => {
         setModal(!modal);
         setEdit(false);
     };
+
+    const printPrescriptionPDF = () => {    
+        setprintLoading(true);
+        const string = renderToString(<Template/>);
+        var doc = new jspdf();
+        doc.fromHTML(string);
+        doc.save(moment(new Date()).format('YYMMDDHHmmSS')+"_Receta_Medica_"+(global.patient.name).replace(" ","_")+".pdf");
+        setprintLoading(false);
+    }
 
     const createdPrescriptions = () => {
         var formated = [];
@@ -107,7 +122,7 @@ const useViewPostConsultationsActivity = (global, setGlobalData, setNew) => {
     }
 
 
-    return { editObject, edit, toggle, table, loadingButton, editMedicalPrescription, removeMedicalPrescription, _createMedicalPrescription, setPrescriptionMedication, modal, setModal, items, register, loading, handleSubmit, formState, api, setMedicalAnalysis, setSurgicalIntervention };
+    return { editObject, edit, toggle, table, printLoading, printPrescriptionPDF, removeMedicalPrescription, _createMedicalPrescription, setPrescriptionMedication, modal, setModal, items, register, loading, handleSubmit, formState, api, setMedicalAnalysis, setSurgicalIntervention };
 };
 
 export default useViewPostConsultationsActivity;

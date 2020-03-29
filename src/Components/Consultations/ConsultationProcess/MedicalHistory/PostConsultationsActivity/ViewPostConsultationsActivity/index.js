@@ -21,7 +21,7 @@ const ViewPostConsultationsActivity = ({
     setEdit(true);
   }
 
-  const { table } = useViewPostConsultationsActivity(global, setGlobalData);
+  const { table, printLoading, printPrescriptionPDF } = useViewPostConsultationsActivity(global, setGlobalData);
 
   const [ loading, setloading ] = useState([]);
   const [ medicalanalysis, setMedicalanalysis ] = useState([]);
@@ -85,6 +85,10 @@ const ViewPostConsultationsActivity = ({
                     <MDBTableHead columns={table.columns} />
                     <MDBTableBody rows={table.rows} />
                   </MDBTable>
+                  <div className="text-left mt-2">
+                    {!printLoading && <MDBBtn className="btn btn-outline-red" disabled={false} onClick={printPrescriptionPDF}><MDBIcon size="2x" icon="print" className="red-text" /></MDBBtn>}
+                    {printLoading && <MDBSpinner small />}
+                  </div>
               </MDBContainer>
             </MDBCol>
             <MDBCol>
