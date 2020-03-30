@@ -16,6 +16,8 @@ import IntroductionPage from '../IntroductionPage';
 import ConsultationProcess from '../Consultations/ConsultationProcess';
 import Consultations from '../Consultations/index';
 
+import {Template} from '../Reports/Prescriptions/Template_1';
+
 export const Routes = ({ childProps }) => (
   <Switch>
     <Route exact path="/" render={() => <IntroductionPage/>} />
@@ -27,6 +29,7 @@ export const Routes = ({ childProps }) => (
     <ProtectedRouteCompany exact path="/reports" render={() => <Reports childProps={childProps}/>} props={childProps} />
     <Route exact path="/consultations" render={() => <Consultations childProps={childProps} />} />
     <Route exact path="/consultations/process/:consultation/:patient" render={() => <ConsultationProcess childProps={childProps} />} />
+    <Route exact path="/template" render={() => <Template />} />
   </Switch>
 );
 
