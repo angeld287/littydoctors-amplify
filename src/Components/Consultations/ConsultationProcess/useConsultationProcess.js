@@ -42,9 +42,11 @@ const useConsultationProcess = () => {
         const input = { 
             id: global.medicalConsultation.id,
             state: 'DONE',
+            finalizedAt: new Date(),
         };
         const cmh = await API.graphql(graphqlOperation(updateMedicalConsultation, {input: input} )).catch( e => { console.log(e); setLoadingButton(false); throw new SyntaxError("Error GraphQL");});
-        setLoadingButton(false)
+        window.location.href = "/consultations";
+        setLoadingButton(false);
     }
 
     const calculateAutofocus = () => {

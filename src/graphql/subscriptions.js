@@ -643,6 +643,8 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
       doctorname
       secretary
       patientname
+      finalizedAt
+      startedAt
       createdAt
       owner
     }
@@ -744,6 +746,8 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
       doctorname
       secretary
       patientname
+      finalizedAt
+      startedAt
       createdAt
       owner
     }
@@ -842,6 +846,8 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
       doctorname
       secretary
       patientname
+      finalizedAt
+      startedAt
       createdAt
       owner
     }

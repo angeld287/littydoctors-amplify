@@ -103,6 +103,7 @@ const useConsultations = () => {
                 patientname: _patient.username,
                 medicalConsultationMedicalHistoryId: cmh.data.createMedicalHistory.id,
                 state: 'IN_PROCESS',
+                startedAt: new Date(),
             };
         
         API.graphql(graphqlOperation(createMedicalConsultation, {input: input}))

@@ -188,6 +188,8 @@ type MedicalConsultation
     doctorname: String
     secretary: String
     patientname: String
+    finalizedAt: String
+    startedAt: String
     createdAt: String
 }
 

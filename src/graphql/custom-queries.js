@@ -353,3 +353,31 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
     }
   }
 `;
+
+export const listMedicalConsultations = /* GraphQL */ `
+  query ListMedicalConsultations(
+    $filter: ModelMedicalConsultationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMedicalConsultations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        patient {
+          id
+          name
+          username
+          phone
+        }
+        state
+        createdAt
+        startedAt
+        finalizedAt
+      }
+    }
+  }
+`;
