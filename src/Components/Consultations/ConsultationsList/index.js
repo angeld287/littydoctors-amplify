@@ -13,14 +13,14 @@ const ConsultationsList = ({childProps: childProps}) => {
       <MDBContainer>
             <br/>
             <br/>
-            <h2 tag='h2'>Lista de Consultas</h2>
+            <h2 tag='h2'>Consultas del Dia</h2>
             <br/>
             <br/>
         <MDBRow>
             <MDBCol md="8">
                 <MDBCard className="mt-2 mb-2 p-2">
                     <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Completadas</strong></h4>
-                    <MDBTable scrollY>
+                    <MDBTable >
                     <MDBTableHead columns={ctable.columns} />
                     <MDBTableBody rows={ctable.rows} />
                     </MDBTable>
@@ -28,8 +28,8 @@ const ConsultationsList = ({childProps: childProps}) => {
             </MDBCol>
             <MDBCol md="4">
                 <MDBCard className="mt-2 mb-2 p-2">
-                    <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>No Completadas</strong></h4>
-                    <MDBTable scrollY>
+                    <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Borrador</strong></h4>
+                    <MDBTable >
                     <MDBTableHead columns={itable.columns} />
                     <MDBTableBody rows={itable.rows} />
                     </MDBTable>
