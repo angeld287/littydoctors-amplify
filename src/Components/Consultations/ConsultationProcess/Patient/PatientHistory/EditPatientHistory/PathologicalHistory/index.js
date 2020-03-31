@@ -186,7 +186,7 @@ const PathologicalHistory = (
   if (loading) {
     return (
       <MDBContainer>
-        <MDBBox display="flex" justifyContent="center" className="mt-5">
+        <MDBBox display="flex" justifyContent="center" className="mt-5 mb-2">
           <MDBSpinner big />
         </MDBBox>
       </MDBContainer>

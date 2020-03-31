@@ -524,6 +524,8 @@ export const getMedicalConsultation = /* GraphQL */ `
       doctorname
       secretary
       patientname
+      finalizedAt
+      startedAt
       createdAt
       owner
     }
@@ -588,6 +590,8 @@ export const listMedicalConsultations = /* GraphQL */ `
         doctorname
         secretary
         patientname
+        finalizedAt
+        startedAt
         createdAt
         owner
       }
