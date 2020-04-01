@@ -94,6 +94,8 @@ const useConsultationProcess = () => {
                             patientHistory: patientHistory,
                             medicalConsultation: r.data.getMedicalConsultation,
                             pendingAnalysis: [],
+                            consultationsHistory: false,
+                            consultationsHistoryData: {},
                         });
                         setHasPatientHistory(r.data.getMedicalConsultation.patient.patientHistory !== null ? true : false);
                         setPatientData(r.data.getMedicalConsultation.patient);
