@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MDBContainer, MDBCollapse, MDBCard, MDBCardBody, MDBCollapseHeader } from "mdbreact";
+import { MDBContainer, MDBCollapse, MDBCard, MDBCardBody, MDBCollapseHeader, MDBRow } from "mdbreact";
 
 import CompanyInformation from './CompanyInformation'
 import UserInformation from './UserInformation'
@@ -9,6 +9,24 @@ const GeneralInformations = ({company: company}) => {
 
     return (
         <MDBContainer fluid>
+          <MDBRow className="m-4">
+            <MDBCard style={{width: '100%'}}>
+              <UserInformation company={company}/>
+            </MDBCard>
+          </MDBRow>
+          <MDBRow className="m-4">
+            <MDBCard style={{width: '100%'}}>
+             <CompanyInformation company={company}/>
+            </MDBCard>
+          </MDBRow>
+        </MDBContainer>
+      );
+}
+
+export default GeneralInformations;
+
+
+/*
           <MDBContainer className="md-accordion mt-5">
             <MDBCard className="mt-3">
               <MDBCollapseHeader onClick={event => {
@@ -42,8 +60,5 @@ const GeneralInformations = ({company: company}) => {
               </MDBCollapse>
             </MDBCard>
           </MDBContainer>
-        </MDBContainer>
-      );
-}
 
-export default GeneralInformations;
+*/

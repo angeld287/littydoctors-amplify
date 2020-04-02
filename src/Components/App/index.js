@@ -44,7 +44,7 @@ export default class App extends Component {
   GetCompanyUserProfile = () => {
     Auth.currentSession().then(data => {
       const roll = data.accessToken.payload['cognito:groups'][0];
-      this.setState({user_roll: roll})
+      this.setState({user_roll: roll, authState: { isLoggedIn: true }});
       if (roll === 'doctor') {
         API.graphql(graphqlOperation(listConsultingRooms)).then( result =>{
             this.setState({
@@ -57,7 +57,8 @@ export default class App extends Component {
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
                 secretary: result.data.listConsultingRooms.items[0].secretary,
-                loading: false
+                loading: false,
+                username: data.accessToken.payload.username,
                 //stripe_source_token: result.data.listConsultingRooms.items[0].stripe.source_token,
                 //stripe_plan_id: result.data.listConsultingRooms.items[0].stripe.plan_id,
                 //stripe_plan_name: result.data.listConsultingRooms.items[0].stripe.plan_name,
@@ -91,7 +92,8 @@ export default class App extends Component {
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
                 secretary: result.data.listConsultingRooms.items[0].secretary,
-                loading: false
+                loading: false,
+                username: data.accessToken.payload.username,
             });
         }).catch( err => {
           this.setState({

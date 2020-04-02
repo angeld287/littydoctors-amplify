@@ -41,9 +41,10 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                     const listmc = await API.graphql(graphqlOperation(listMedicalConsultationsForHistory, filtermc)).catch((err) => { console.log("Ocurrio un error: ",err); setLoadingHistory(false); setLoading(false); });   
                     const rows = [];
                     var number = 0;
-                    var items = listmc.data.listMedicalConsultations.items.sort((a,b) => { return new Date(b.createdAt) - new Date(a.createdAt)});
+                    var items = listmc.data.listMedicalConsultations.items.sort((a,b) => { return new Date(b.startedAt) - new Date(a.startedAt)});
+                    var medicalAnalysis = items[0].postConsultationsActivity !== null ? items[0].postConsultationsActivity.medicalAnalysis.items : null;
 
-                    if(items.length > 0){global.pendingAnalysis = items[0].postConsultationsActivity.medicalAnalysis.items};
+                    if(items.length > 0){global.pendingAnalysis = medicalAnalysis};
 
                     items.forEach(e => {
                         number = number + 1;
@@ -65,7 +66,8 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                         rows: rows
                     };
 
-                    if(items.length > 0){setAnalysisList(items[0].postConsultationsActivity.medicalAnalysis.items);}
+                    if(items.length > 0){setAnalysisList(medicalAnalysis);}
+
                     setData(data);
                     global.consultationsHistory = true;
                     global.consultationsHistoryData = data;
@@ -98,17 +100,20 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     const setAnalysisList = (items) => {
         const rowa = [];
         var number = 0;
-        items.sort().forEach(e => {
-            number = number + 1;
-            
-            var row = { 
-                        number: number, 
-                        name: e.medicalAnalysis.name, 
-                        //state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
-                        //actions: e.state === "INSERTED" ? (<Fragment><MDBBtn size="sm" onClick={(ev) => {ev.preventDefault(); setDone(e.id) }}>Entregado</MDBBtn></Fragment>) : "N/A"
-                    };
-            rowa.push(row);
-        });
+        if (items !== null) {
+            items.sort().forEach(e => {
+                number = number + 1;
+                
+                var row = { 
+                            number: number, 
+                            name: e.medicalAnalysis.name, 
+                            //state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
+                            //actions: e.state === "INSERTED" ? (<Fragment><MDBBtn size="sm" onClick={(ev) => {ev.preventDefault(); setDone(e.id) }}>Entregado</MDBBtn></Fragment>) : "N/A"
+                        };
+                rowa.push(row);
+            });
+        }
+       
 
         const adata = {
             columns: [

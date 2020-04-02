@@ -21,7 +21,16 @@ const CompanyUserProfile = () => {
 
     return (
       <MDBContainer fluid>
-        <MDBRow>
+        <GeneralInformations company={company}/>
+      </MDBContainer>
+    );
+}
+
+export default CompanyUserProfile;
+
+/* 
+
+        MDBRow>
           <MDBCol md="3">
             <MDBNav pills color="primary" className="flex-column">
               <MDBNavItem>
@@ -58,13 +67,8 @@ const CompanyUserProfile = () => {
             (typeof doctorname !== 'string') &&
             <Redirect to='/subscribe'/>
         }
-      </MDBContainer>
-    );
-}
 
-export default CompanyUserProfile;
-
-/* GetModulesList = () => {
+  GetModulesList = () => {
   API.graphql(graphqlOperation(listModules)).then( moduleResult =>{
     const moduleObjects = [];
     const dbmodules = moduleResult.data.listModules.items;

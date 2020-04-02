@@ -311,6 +311,8 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
         }
         state  
         createdAt 
+        startedAt
+        finalizedAt
         postConsultationsActivity {
           id
           medicalpres {
