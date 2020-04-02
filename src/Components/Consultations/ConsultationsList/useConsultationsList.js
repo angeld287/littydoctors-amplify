@@ -22,8 +22,8 @@ const useConsultationsList = () => {
                 const filetrLimit = {
                     filter: {
                       or: [
-                        {createdAt: {gt: String(moment(today).format('YYYY-MM-DDTHH:mm:ss.SSS'))}}, 
-                        {createdAt: {eq: String(moment(today).format('YYYY-MM-DDTHH:mm:ss.SSS'))}},
+                        {startedAt: {gt: String(moment(today).format('YYYY-MM-DDT00:00:00.000'))}}, 
+                        //{startedAt: {eq: String(moment(today).format('YYYY-MM-DDTHH:mm:ss.SSS'))}},
                       ]
                     },
                     limit: 400

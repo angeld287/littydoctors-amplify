@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import {listPatients} from './../../graphql/queries';
 import { createMedicalConsultation, createMedicalHistory } from '../../graphql/mutations';
 import { API, graphqlOperation } from 'aws-amplify';
-import { filterByValue } from '../../Functions/filterArray'
+import { filterByValue } from '../../Functions/filterArray';
+import moment from 'moment';
 
 
 const useConsultations = () => {
@@ -103,7 +104,7 @@ const useConsultations = () => {
                 patientname: _patient.username,
                 medicalConsultationMedicalHistoryId: cmh.data.createMedicalHistory.id,
                 state: 'IN_PROCESS',
-                startedAt: new Date(),
+                startedAt: String(moment(new Date).format('YYYY-MM-DDTHH:mm:ss.SSS')),
             };
         
         API.graphql(graphqlOperation(createMedicalConsultation, {input: input}))
