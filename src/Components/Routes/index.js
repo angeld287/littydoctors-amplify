@@ -10,7 +10,7 @@ import AuthComponent from '../Authentication/AuthComponent';
 import Profile from '../Profile';
 import ConfigureProfile from '../Profile/Company/ProfileManagement/ConfigureProfile';
 import MedicalAppointmentsManagement from '../MedicalAppointmentsManagement';
-import Reports from '../Profile/Company/Reports';
+import Reports from '../Reports';
 import Error from '../Error'
 import IntroductionPage from '../IntroductionPage';
 import ConsultationProcess from '../Consultations/ConsultationProcess';
