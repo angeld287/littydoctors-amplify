@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
          MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBDataTable } from "mdbreact";
+
+import Select from 'react-select';
 
 const EditPhysicalExploration = ({
     editPhysicalExploration: editPhysicalExploration,
@@ -9,6 +11,17 @@ const EditPhysicalExploration = ({
     setEditData: setEditData,
     setEdit: setEdit,
 }) => {
+  
+  const [ mm, setmm ] = useState(fields.blood_pressure.blood_pressure.match(/((.*?)\/[0-9]{1,3})/)[2]);
+  const [ hg, sethg ] = useState(fields.blood_pressure.blood_pressure.match(/([0-9]{1,3}\/(.*?) m)/)[2]);
+  const [ blood_pressure, setblood_pressure] = useState(fields.blood_pressure.blood_pressure);
+
+  var foo = new Array(500);
+  
+  const n = [];
+  for(var i = 0; i < foo.length; i++){
+    n.push({value: i, label: i});
+  }
 
   useEffect(() => {
       let didCancel = false;
@@ -24,6 +37,10 @@ const EditPhysicalExploration = ({
       };
   }, []);
 
+  
+  const imm = n.findIndex(v => v.value.toString() === mm);
+  const ihg = n.findIndex(v => v.value.toString() === hg);
+
   return (
     <MDBContainer>
           <div className="form-group">
@@ -38,31 +55,47 @@ const EditPhysicalExploration = ({
           <h6 className="text-center font-weight-bold pt-5 pb-3 mb-2"><strong>Signos Vitales</strong></h6>
           <MDBRow className="mb-3">
             <MDBCol>
-              <input value={fields.breathing.breathing} onChange={e => {
+              <input type="number" value={fields.breathing.breathing} onChange={e => {
                   e.preventDefault();
                   fields.breathing.setbreathing(e.target.value)
                 }}
-                name="breathing" placeholder="Respiracion" autoComplete="off" className="form-control" />
+                name="breathing" placeholder="Respiracion por Minuto" autoComplete="off" className="form-control" />
             </MDBCol>
             <MDBCol>
-              <input value={fields.pulse.pulse} onChange={e => {
+              <input type="number" value={fields.pulse.pulse} onChange={e => {
                   e.preventDefault();
                   fields.pulse.setpulse(e.target.value)
-                }}name="pulse" placeholder="Pulso" autoComplete="off" className="form-control" />
+                }}name="pulse" placeholder="Pulso (Latidos por Segundo)" autoComplete="off" className="form-control" />
             </MDBCol>
           </MDBRow>
           <MDBRow className="mb-3">
             <MDBCol>
-              <input value={fields.blood_pressure.blood_pressure} onChange={e => {
-                  e.preventDefault();
-                  fields.blood_pressure.setblood_pressure(e.target.value)
-                }}name="blood_pressure" placeholder="Presion de Sangre" autoComplete="off" className="form-control" />
+              <MDBRow>
+                <MDBCol md="5">
+                  <label htmlFor="blood_pressure">Presion de Sangre (mm/Hg):</label>
+                </MDBCol>
+                <MDBCol md="3">
+                  <Select placeholder="mm" defaultValue={n[imm]} options={n} onChange={ (v) => {
+                      setmm(v.value);
+                      fields.blood_pressure.setblood_pressure(v.value + "/" + hg + " mm/Hg")
+                      }}/>
+                </MDBCol>
+                <MDBCol md="0">
+                  <h1>/</h1>
+                </MDBCol>
+                <MDBCol md="3">
+                  <Select options={n} defaultValue={n[ihg]} placeholder="Hg" onChange={ (v) => {
+                      sethg(v.value);
+                      fields.blood_pressure.setblood_pressure(mm + "/" + v.value + " mm/Hg")
+                      }}/>
+                </MDBCol>
+              </MDBRow>
             </MDBCol>
             <MDBCol>
-              <input value={fields.temperature.temperature} onChange={e => {
+              <input type="number" value={fields.temperature.temperature} onChange={e => {
                   e.preventDefault();
                   fields.temperature.settemperature(e.target.value)
-                }}name="temperature" placeholder="Temperatura" autoComplete="off" className="form-control" />
+                }}name="temperature" placeholder="Temperatura (°F)" autoComplete="off" className="form-control" />
             </MDBCol>
           </MDBRow>
           <h6 className="text-center font-weight-bold pt-5 pb-3 mb-2"><strong>Exploracion Regional</strong></h6>

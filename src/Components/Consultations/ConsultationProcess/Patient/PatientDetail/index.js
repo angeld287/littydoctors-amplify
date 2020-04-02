@@ -83,7 +83,7 @@ const PatientDetails = (
 
         <MDBCol md="8">
           <MDBCard style={{ width: '100%' }}>
-            <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Razon de Consulta Medica</strong></h4>
+            <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Motivo de Consulta Medica</strong></h4>
             <div style={{marginRight: 30, marginLeft: 30}}>
               <MDBInput style={{overflowY:'scroll'}} type="textarea" label="Describa la razon de consulta" value={reason} rows="6" 
                 onChange={ e => 

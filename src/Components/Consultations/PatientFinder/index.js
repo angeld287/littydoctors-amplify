@@ -70,7 +70,7 @@ const PatientFinder = ({childProps: childProps}) => {
           </MDBCol>
           <MDBCol md="8">
             <MDBCard style={{ width: '100%' }}>
-              <h4 className="text-center font-weight-bold mt-3 mb-1"><strong>Razon de Consulta Medica</strong></h4>
+              <h4 className="text-center font-weight-bold mt-3 mb-1"><strong>Motivo de Consulta Medica</strong></h4>
               <div style={{marginLeft: 20, marginRight: 20}}>
                 <MDBInput type="textarea" rows="6" onChange={ e => {e.preventDefault(); setReasonAll(e.target.value);}}/>
               </div>

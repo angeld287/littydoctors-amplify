@@ -27,19 +27,47 @@ const ViewPhysicalExploration = ({
           <textarea value={physicalexploration.general_exploration === null ? "" : physicalexploration.general_exploration} disabled name="general_exploration" className="form-control" id="general_exploration" rows="7" ></textarea>
           <h6 className="text-center font-weight-bold pt-5 pb-3 mb-2"><strong>Signos Vitales</strong></h6>
           <MDBRow className="mb-3">
-            <MDBCol>
-              <input value={vs.breathing === null ? "" : vs.breathing} disabled name="breathing" placeholder="Respiracion" autoComplete="off" className="form-control" />
+            <MDBCol md="6">
+              <MDBRow>
+                <MDBCol md="4">
+                  <label>Repiracion por Min.</label>
+                </MDBCol>
+                <MDBCol md="8">
+                  <input value={vs.breathing === null ? "N/A" : vs.breathing +" Respiraciones por Min"} disabled name="breathing" placeholder="Respiracion" autoComplete="off" className="form-control" />
+                </MDBCol>
+              </MDBRow>
             </MDBCol>
-            <MDBCol>
-              <input value={vs.pulse === null ? "" : vs.pulse} disabled name="pulse" placeholder="Pulso" autoComplete="off" className="form-control" />
+            <MDBCol md="6">
+              <MDBRow>
+                <MDBCol md="4">
+                  <label>Pulso (Latidos/Seg)</label>
+                </MDBCol>
+                <MDBCol md="8">
+                  <input value={vs.pulse === null ? "N/A" : vs.pulse +" Latidos por Seg"} disabled name="pulse" placeholder="Pulso" autoComplete="off" className="form-control" />
+                </MDBCol>
+              </MDBRow>
             </MDBCol>
           </MDBRow>
           <MDBRow className="mb-3">
-            <MDBCol>
-              <input value={vs.blood_pressure === null ? "" : vs.blood_pressure} disabled name="blood_pressure" placeholder="Presion de Sangre" autoComplete="off" className="form-control" />
+            <MDBCol md="6">
+              <MDBRow>
+                <MDBCol md="4">
+                  <label>Presion de Sangre</label>
+                </MDBCol>
+                <MDBCol md="8">
+                  <input value={vs.blood_pressure === null ? "N/A" : vs.blood_pressure} disabled name="blood_pressure" placeholder="Presion de Sangre" autoComplete="off" className="form-control" />
+                </MDBCol>
+              </MDBRow>
             </MDBCol>
-            <MDBCol>
-              <input value={vs.temperature === null ? "" : vs.temperature} disabled name="temperature" placeholder="Temperatura" autoComplete="off" className="form-control" />
+            <MDBCol md="6">
+              <MDBRow>
+                <MDBCol md="4">
+                  <label>Temperatura (°F).</label>
+                </MDBCol>
+                <MDBCol md="8">
+                  <input value={vs.temperature === null ? "N/A" : vs.temperature+"°F"} disabled name="temperature" placeholder="Temperatura" autoComplete="off" className="form-control" />
+                </MDBCol>
+              </MDBRow>
             </MDBCol>
           </MDBRow>
           <h6 className="text-center font-weight-bold pt-5 pb-3 mb-2"><strong>Exploracion Regional</strong></h6>

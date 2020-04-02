@@ -34,10 +34,10 @@ const usePhysicalExploration = (global, setGlobalData) => {
         );
 
   //vs
-  const [ breathing, setbreathing ] = useState(vs === null ? "" : (vs.breathing === null ? "" : vs.breathing));
-  const [ pulse, setpulse ] = useState(vs === null ? "" : (vs.pulse === null ? "" : vs.pulse));
-  const [ blood_pressure, setblood_pressure ] = useState(vs === null ? "" : (vs.blood_pressure === null ? "" : vs.blood_pressure));
-  const [ temperature, settemperature ] = useState(vs === null ? "" : (vs.temperature === null ? "" : vs.temperature));
+  const [ breathing, setbreathing ] = useState(vs === null ? "0" : (vs.breathing === null ? "0" : vs.breathing));
+  const [ pulse, setpulse ] = useState(vs === null ? "0" : (vs.pulse === null ? "0" : vs.pulse));
+  const [ blood_pressure, setblood_pressure ] = useState(vs === null ? "0" : (vs.blood_pressure === null ? "0" : vs.blood_pressure));
+  const [ temperature, settemperature ] = useState(vs === null ? "0" : (vs.temperature === null ? "0" : vs.temperature));
 
   //re
   const [ head, sethead ] = useState(re === null ? "" : (re.head === null ? "" : re.head));
@@ -234,7 +234,8 @@ const usePhysicalExploration = (global, setGlobalData) => {
         error: error,
         register: register,
         handleSubmit: handleSubmit,
-        formState: formState
+        formState: formState,
+        setLoading: setLoading,
     }
 
     return { actions, errors, _new, _edit, setEdit, editLoading, fields, editPhysicalExploration, setEditData, loading};
