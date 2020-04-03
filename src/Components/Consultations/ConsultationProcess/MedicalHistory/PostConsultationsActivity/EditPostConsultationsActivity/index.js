@@ -27,11 +27,18 @@ const EditPostConsultationsActivity = ({
   const [ sioptions, setsioptions ] = useState([]);
 
 
+
   useEffect(() => {
-    setloading(true);
-    setViewObjects();
-    setOptions();
-    setloading(false);
+      let didCancel = false;
+      setloading(true);
+      setViewObjects();
+      setOptions();
+      setloading(false);
+
+      return () => {
+          didCancel = true;
+      };
+
   }, []);
 
 

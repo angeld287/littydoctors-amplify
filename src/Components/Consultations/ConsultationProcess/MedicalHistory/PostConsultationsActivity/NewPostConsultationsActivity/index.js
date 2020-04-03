@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, useEffect } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
          MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBDataTable, MDBModal } from "mdbreact";
 
@@ -15,6 +15,15 @@ const NewPostConsultationsActivity = ({
     api : api,
 }) => {
   const { editObject, edit, toggle, table, loadingButton, editMedicalPrescription, removeMedicalPrescription, _createMedicalPrescription, setPrescriptionMedication, modal, setModal, items, register, loading, handleSubmit, onSubmit, formState, setMedicalAnalysis, setSurgicalIntervention } = useNewPostConsultationsActivity(global, setGlobalData, setNew);
+  
+  useEffect(() => {
+      let didCancel = false;
+
+      return () => {
+          didCancel = true;
+      };
+
+  }, []);
 
   return (
     <MDBContainer>
