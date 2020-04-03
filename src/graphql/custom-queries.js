@@ -131,9 +131,20 @@ export const getMedicalConsultation = /* GraphQL */ `
         username
         email
         phone
+        phone_id
         weight
         height
+        size
+        age
+        sex
+        id_card
+        address
+        marital_status
         birthdate
+        religion {
+          id
+          name
+        }
         patientHistory {
           id
           nonPathologicalHistory {

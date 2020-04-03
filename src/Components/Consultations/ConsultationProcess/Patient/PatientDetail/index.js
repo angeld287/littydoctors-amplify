@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 
 import { MDBContainer, MDBRow, MDBCol, MDBTable, MDBTableBody, MDBTableHead, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
-         MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBDataTable } from "mdbreact";
+         MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBListGroup, MDBListGroupItem } from "mdbreact";
 import { API, graphqlOperation } from 'aws-amplify';
 
 import UsePatientDetails from './usePatientDetails';
@@ -27,6 +27,10 @@ const PatientDetails = (
   const { loadingHistory, data, lastMC, loading, analysis, loadingAnal } = UsePatientDetails(childProps, patientData, global, setGlobalData);
   const age = moment(new Date()).format('YYYY') - moment(patientData.birthdate).format('YYYY');
 
+  const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MAN' ? 'Casado' : 'Casada') :
+                          patientData.marital_status === "SINGLE" ? (patientData.sex === 'MAN' ? 'Soltero' : 'Soltera') :
+                          patientData.marital_status === "DIVORCED" ? (patientData.sex === 'MAN' ? 'Divorciado' : 'Divorciada') :
+                          patientData.marital_status === "WIDOWED" ? (patientData.sex === 'MAN' ? 'Viudo' : 'Viuda') : "N/A";
 
   const EditingReason = () => {  
     setEdit(true);
@@ -66,16 +70,24 @@ const PatientDetails = (
     </div>
   );
 
+  const location = String(patientData.address);
+  const locationUrl = location.split(' ').join('%20');
+  const mapUrl = "https://maps.google.com/maps?q="+locationUrl+"&t=&z=15&ie=UTF8&iwloc=&output=embed";
+
+
+  const userPicture = patientData.sex === "MAN" ? "https://icons-for-free.com/iconfiles/png/512/boy+guy+man+icon-1320166733913205010.png" :
+                      "https://i.ya-webdesign.com/images/girl-avatar-png.png";
+
   return (
     <div>
       <MDBRow>
         <MDBCol md="4">
           <MDBCard style={{ width: "22rem" }}>
-            <MDBCardImage className="img-fluid" src="https://www.morpht.com/sites/morpht/files/styles/landscape/public/dalibor-matura_1.jpg" waves />
+            <MDBCardImage className="img-fluid" src={userPicture} waves />
             <MDBCardBody>
               <MDBCardTitle>{patientData.name}</MDBCardTitle>
               <MDBCardText>
-                {age} años, Email: {patientData.email}, Telefono: {patientData.phone}
+                {patientData.username}
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
@@ -104,6 +116,34 @@ const PatientDetails = (
                   }
                   {loadingButton && <MDBSpinner small />}
 			    	</div>
+          </MDBCard>
+        </MDBCol>
+      </MDBRow>
+      <br/>
+      <MDBRow>
+        <MDBCol md="8">
+          <div id="map-container" className="rounded z-depth-1-half map-container" style={{ height: "400px" }}>
+            <iframe
+              src={mapUrl}
+              title="This is a unique title"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              style={{ border: 0 }}
+            />
+          </div>
+        </MDBCol>
+        <MDBCol md="3" className="m-1">
+          <MDBCard style={{ width: "100%" }}> 
+            <MDBListGroup style={{ width: "22rem" }}>
+              <MDBListGroupItem>Email: {patientData.email}</MDBListGroupItem>
+              <MDBListGroupItem>Telefono: {patientData.phone}</MDBListGroupItem>
+              <MDBListGroupItem>Edad: {age} años</MDBListGroupItem>
+              <MDBListGroupItem>Sexo: {patientData.sex === 'MAN' ? 'Hombre' : 'Mujer'}</MDBListGroupItem>
+              <MDBListGroupItem>Cedula: {patientData.id_card}</MDBListGroupItem>
+              <MDBListGroupItem>Religion: {patientData.religion.name}</MDBListGroupItem>
+              <MDBListGroupItem>Estado Civil: {marital_status}</MDBListGroupItem>
+            </MDBListGroup>
           </MDBCard>
         </MDBCol>
       </MDBRow>
