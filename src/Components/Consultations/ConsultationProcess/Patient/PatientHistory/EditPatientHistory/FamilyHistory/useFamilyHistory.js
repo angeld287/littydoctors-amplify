@@ -31,8 +31,8 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
         const fetch = async () => {            
             try {
 				const _diseases = await API.graphql(graphqlOperation(listDiseases, {limit: 400}));
-				const _category = await API.graphql(graphqlOperation(listCategorys, {limit: 400}, {filter: { module: { eq: "FamilyHistory"} }} ));                
-
+                const _category = await API.graphql(graphqlOperation(listCategorys, {filter: { module: { eq: "FamilyHistory"} }, limit: 400 }));    
+                
                 api = {
                     diseases: _diseases.data.listDiseases.items,
                     familytypes: _category.data.listCategorys.items,

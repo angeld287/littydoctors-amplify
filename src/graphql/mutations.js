@@ -451,6 +451,15 @@ export const createMedicalAppointment = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -547,6 +556,15 @@ export const updateMedicalAppointment = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -643,6 +661,15 @@ export const deleteMedicalAppointment = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -733,6 +760,15 @@ export const createMedicalConsultation = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -773,6 +809,10 @@ export const createMedicalConsultation = /* GraphQL */ `
           height
           size
           age
+          sex
+          id_card
+          address
+          marital_status
           birthdate
           createdAt
           owner
@@ -836,6 +876,15 @@ export const updateMedicalConsultation = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -876,6 +925,10 @@ export const updateMedicalConsultation = /* GraphQL */ `
           height
           size
           age
+          sex
+          id_card
+          address
+          marital_status
           birthdate
           createdAt
           owner
@@ -939,6 +992,15 @@ export const deleteMedicalConsultation = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -979,6 +1041,10 @@ export const deleteMedicalConsultation = /* GraphQL */ `
           height
           size
           age
+          sex
+          id_card
+          address
+          marital_status
           birthdate
           createdAt
           owner
@@ -1028,6 +1094,15 @@ export const createMedicalHistory = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -1100,6 +1175,15 @@ export const updateMedicalHistory = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -1172,6 +1256,15 @@ export const deleteMedicalHistory = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -1241,6 +1334,15 @@ export const createPatient = /* GraphQL */ `
       height
       size
       age
+      sex
+      id_card
+      religion {
+        id
+        name
+        owner
+      }
+      address
+      marital_status
       birthdate
       patientHistory {
         id
@@ -1292,6 +1394,15 @@ export const updatePatient = /* GraphQL */ `
       height
       size
       age
+      sex
+      id_card
+      religion {
+        id
+        name
+        owner
+      }
+      address
+      marital_status
       birthdate
       patientHistory {
         id
@@ -1343,6 +1454,15 @@ export const deletePatient = /* GraphQL */ `
       height
       size
       age
+      sex
+      id_card
+      religion {
+        id
+        name
+        owner
+      }
+      address
+      marital_status
       birthdate
       patientHistory {
         id
@@ -1374,6 +1494,42 @@ export const deletePatient = /* GraphQL */ `
         owner
       }
       createdAt
+      owner
+    }
+  }
+`;
+export const createReligion = /* GraphQL */ `
+  mutation CreateReligion(
+    $input: CreateReligionInput!
+    $condition: ModelReligionConditionInput
+  ) {
+    createReligion(input: $input, condition: $condition) {
+      id
+      name
+      owner
+    }
+  }
+`;
+export const updateReligion = /* GraphQL */ `
+  mutation UpdateReligion(
+    $input: UpdateReligionInput!
+    $condition: ModelReligionConditionInput
+  ) {
+    updateReligion(input: $input, condition: $condition) {
+      id
+      name
+      owner
+    }
+  }
+`;
+export const deleteReligion = /* GraphQL */ `
+  mutation DeleteReligion(
+    $input: DeleteReligionInput!
+    $condition: ModelReligionConditionInput
+  ) {
+    deleteReligion(input: $input, condition: $condition) {
+      id
+      name
       owner
     }
   }

@@ -163,6 +163,8 @@ type Subscription {
 }
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
+enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
+enum Sex { MAN WOMAN }
 
 #Medical Consultation Process BackEnd definition
 
@@ -238,10 +240,32 @@ type Patient
     height: String
     size: String
     age: String
+    sex: Sex
+    id_card: String
+    religion: Religion @connection
+    address: String
+    marital_status: MaritalStatus
     birthdate: String
     patientHistory: PatientHistory @connection
     createdAt: String
 }
+
+type Religion
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+}
+
 
 #Antecedentes del paciente
 type PatientHistory

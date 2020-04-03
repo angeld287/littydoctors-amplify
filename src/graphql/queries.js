@@ -298,6 +298,15 @@ export const getMedicalAppointment = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -395,6 +404,10 @@ export const listMedicalAppointments = /* GraphQL */ `
           height
           size
           age
+          sex
+          id_card
+          address
+          marital_status
           birthdate
           createdAt
           owner
@@ -461,6 +474,15 @@ export const getMedicalConsultation = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -501,6 +523,10 @@ export const getMedicalConsultation = /* GraphQL */ `
           height
           size
           age
+          sex
+          id_card
+          address
+          marital_status
           birthdate
           createdAt
           owner
@@ -565,6 +591,10 @@ export const listMedicalConsultations = /* GraphQL */ `
           height
           size
           age
+          sex
+          id_card
+          address
+          marital_status
           birthdate
           createdAt
           owner
@@ -615,6 +645,15 @@ export const getMedicalHistory = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -689,6 +728,10 @@ export const listMedicalHistorys = /* GraphQL */ `
           height
           size
           age
+          sex
+          id_card
+          address
+          marital_status
           birthdate
           createdAt
           owner
@@ -725,6 +768,15 @@ export const getPatient = /* GraphQL */ `
       height
       size
       age
+      sex
+      id_card
+      religion {
+        id
+        name
+        owner
+      }
+      address
+      marital_status
       birthdate
       patientHistory {
         id
@@ -778,6 +830,15 @@ export const listPatients = /* GraphQL */ `
         height
         size
         age
+        sex
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        marital_status
         birthdate
         patientHistory {
           id
@@ -785,6 +846,31 @@ export const listPatients = /* GraphQL */ `
           owner
         }
         createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getReligion = /* GraphQL */ `
+  query GetReligion($id: ID!) {
+    getReligion(id: $id) {
+      id
+      name
+      owner
+    }
+  }
+`;
+export const listReligions = /* GraphQL */ `
+  query ListReligions(
+    $filter: ModelReligionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReligions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
         owner
       }
       nextToken

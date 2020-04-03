@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getPatient } from '../../../graphql/queries';
 import { getMedicalConsultation } from '../../../graphql/custom-queries';
 import { updateMedicalConsultation } from '../../../graphql/mutations';
+import moment from 'moment';
 
 const useConsultationProcess = () => {
     const [ loading, setLoading ] = useState(true);
@@ -42,7 +43,7 @@ const useConsultationProcess = () => {
         const input = { 
             id: global.medicalConsultation.id,
             state: 'DONE',
-            finalizedAt: new Date(),
+            finalizedAt: String(moment(new Date).format('YYYY-MM-DDTHH:mm:ss.SSS')),
         };
         const cmh = await API.graphql(graphqlOperation(updateMedicalConsultation, {input: input} )).catch( e => { console.log(e); setLoadingButton(false); throw new SyntaxError("Error GraphQL");});
         window.location.href = "/consultations";

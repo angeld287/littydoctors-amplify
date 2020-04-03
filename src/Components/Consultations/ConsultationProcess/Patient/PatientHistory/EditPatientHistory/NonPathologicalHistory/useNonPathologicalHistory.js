@@ -19,7 +19,7 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
         const fetch = async () => {            
             try {
 
-				const _nonpath = await API.graphql(graphqlOperation(listCategorys, {limit: 400}, {filter: { or: [{module: {eq: "NonPathFrequency"}}, {module: {eq: "NonPathType"}}]}} ));                              
+				const _nonpath = await API.graphql(graphqlOperation(listCategorys, {filter: { or: [{module: {eq: "NonPathFrequency"}}, {module: {eq: "NonPathType"}}]}, limit: 400} )); 
 
                 api = {
                     nonpathfrequencies: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathFrequency"),
