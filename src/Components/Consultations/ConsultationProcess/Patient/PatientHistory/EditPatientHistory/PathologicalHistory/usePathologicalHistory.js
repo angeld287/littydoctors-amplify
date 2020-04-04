@@ -3,6 +3,8 @@ import Swal from 'sweetalert2';
 
 import { API, graphqlOperation } from 'aws-amplify';
 
+import TooltipButton from '../../../../../../TooltipButton';
+
 import { listMedicines, listCategorys, listAllergys, listSurgicalInterventions, listDiseases } from '../../../../../../../graphql/queries';
 import { createPatientMedications } from '../../../../../../../graphql/mutations';
 
@@ -152,10 +154,13 @@ const usePathologicalHistory = (setGlobalData, global) => {
           var formated = [];
           const items = data.items.sort((a,b) => { return new Date(b.createdAt) - new Date(a.createdAt)});
             items.forEach((item) => {
+                const delBtn = (<MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeMedication(item.id) }}> <MDBIcon icon="trash" size="2x"/></MDBBtn>);
+                const editBtn = (<MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openMedicationModalToEdit(item) }}><MDBIcon icon="edit" size="2x"/></MDBBtn>);
+                
               formated.push({
                   name: item.medications.name,
                   drug_concentration: item.drug_concentration,
-                  options: (<Fragment><MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeMedication(item.id) }}> <MDBIcon icon="trash" size="2x"/></MDBBtn><MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openMedicationModalToEdit(item) }}><MDBIcon icon="edit" size="2x"/></MDBBtn></Fragment>)
+                  options: (<Fragment><TooltipButton helperMessage={"Borrar"} component={delBtn} placement="top"/><TooltipButton helperMessage={"Editar"} component={editBtn} placement="top"/></Fragment>)
               });
             });
 
@@ -168,9 +173,9 @@ const usePathologicalHistory = (setGlobalData, global) => {
     };
 
     const removeMedication = async (id) => {
-        medicationActions.setlb_med(true);
           const result = await Swal.fire({ title: '¿Desea eliminar el elemento?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar'});
           if (result.value) {
+              medicationActions.setlb_med(true);
               const _items = global.patient.patientHistory.pathologicalHistory.patientMedications.items;
               
               API.graphql(graphqlOperation(deletePatientMedications, {input: {id: id}} ));

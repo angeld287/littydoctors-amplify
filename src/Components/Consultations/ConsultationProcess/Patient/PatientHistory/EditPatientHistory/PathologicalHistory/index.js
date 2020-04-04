@@ -16,6 +16,9 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 
+
+import TooltipButton from '../../../../../../TooltipButton';
+
 const PathologicalHistory = (
                       {
                         global: global,
@@ -192,6 +195,28 @@ const PathologicalHistory = (
       </MDBContainer>
     );
   }
+
+  const mdBtn = (<MDBBtn onClick={medicationActions.toggleMedication} disabled={medicationActions.loadingButton} className="btn btn-primary btn-sm">
+                  {!medicationActions.lb_med && <MDBIcon icon="plus" size="2x" />}
+                  {medicationActions.lb_med && 
+                    <div className="spinner-border spinner-border-sm" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  }
+                </MDBBtn>);
+
+  const saveBtn = (<MDBBtn onClick={editPathological} disabled={lb_editpath} className="btn btn-primary btn-sm">
+                  {!lb_editpath && <MDBIcon icon="save" size="2x"/>}
+                  {lb_editpath && 
+                    <div className="spinner-border spinner-border-sm" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  }
+                </MDBBtn>);
+
+  const cancelBtn = ( <MDBBtn onClick={editP} disabled={lb_editpath} className="btn btn-primary btn-sm">
+                    <MDBIcon icon="times" size="2x"/>
+                  </MDBBtn>);
   
   return (
     <MDBContainer>
@@ -200,14 +225,8 @@ const PathologicalHistory = (
             <label htmlFor="diseases" className="mt-2" >Medicamentos</label>
             <br/>
             <MDBContainer>
-              <MDBBtn onClick={medicationActions.toggleMedication} disabled={medicationActions.loadingButton} className="btn btn-primary btn-sm">
-                  {!medicationActions.lb_med && <MDBIcon icon="plus" size="2x" />}
-                  {medicationActions.lb_med && 
-                    <div className="spinner-border spinner-border-sm" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  }
-              </MDBBtn>
+              
+              <TooltipButton helperMessage={"Agregar Medicamento"} component={mdBtn} placement="right"/>
               <MDBDataTable
                 striped bordered searchLabel="Buscar"
                 responsiveSm={true} small hover entries={5}
@@ -245,17 +264,8 @@ const PathologicalHistory = (
         </MDBCol>
       </MDBRow>
       <MDBRow>
-        <MDBBtn onClick={editPathological} disabled={lb_editpath} className="btn btn-primary btn-sm">
-            {!lb_editpath && <MDBIcon icon="save" size="2x"/>}
-            {lb_editpath && 
-              <div className="spinner-border spinner-border-sm" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            }
-        </MDBBtn>
-        <MDBBtn onClick={editP} disabled={lb_editpath} className="btn btn-primary btn-sm">
-            <MDBIcon icon="times" size="2x"/>
-        </MDBBtn>
+        <TooltipButton helperMessage={"Guardar Cambios"} component={saveBtn} placement="top"/>
+        <TooltipButton helperMessage={"Cancelar Cambios"} component={cancelBtn} placement="top"/>
       </MDBRow>
     </MDBContainer>
   );

@@ -8,6 +8,7 @@ import Pathological from "./Pathological";
 import Family from "./Family";
 import PathologicalHistory from './EditPatientHistory/PathologicalHistory';
 
+import TooltipButton from '../../../../TooltipButton';
 
 const PatientHistory = ({
     global: global,
@@ -32,6 +33,16 @@ const PatientHistory = ({
     setEditPath(!editPath);
   }
 
+  const pbtn = (
+              <MDBBtn onClick={editP} disabled={editPath} className="btn btn-primary btn-sm">
+                  {!lb_editpath && <MDBIcon icon="edit" size="2x"/>}
+                  {lb_editpath && 
+                    <div className="spinner-border spinner-border-sm" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  }
+              </MDBBtn>
+  );
   
   return (
       <div>
@@ -44,14 +55,7 @@ const PatientHistory = ({
                 <br/>
                 {(hasPatientHistory && hasPathological) && !editPath &&
                   <MDBContainer>
-                    <MDBBtn onClick={editP} disabled={editPath} className="btn btn-primary btn-sm">
-                        {!lb_editpath && <MDBIcon icon="edit" size="2x"/>}
-                        {lb_editpath && 
-                          <div className="spinner-border spinner-border-sm" role="status">
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                        }
-                    </MDBBtn>
+                    <TooltipButton helperMessage={"Editar Antecedentes Patologicos"} component={pbtn} placement="top"/>
                     <Pathological data={global.patient.patientHistory.pathologicalHistory} pathological={patientHistory.pathologicalHistory}/>
                   </MDBContainer>
                 }

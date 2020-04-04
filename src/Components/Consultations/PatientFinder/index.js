@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBContainer, MDBBox, MDBBtn, MDBRow, MDBCol, MDBSpinner, MDBTypography, MDBCard, MDBInput, MDBCardBody, MDBCardTitle, MDBCardText } from "mdbreact";
+import { MDBContainer, MDBBox, MDBBtn, MDBRow, MDBCol, MDBSpinner, MDBPopover, MDBCard, MDBInput, MDBCardBody, MDBPopoverHeader, MDBPopoverBody } from "mdbreact";
 import { API, graphqlOperation } from 'aws-amplify';
 import Link from '@material-ui/core/Link';
 import Select from 'react-select'
@@ -25,6 +25,20 @@ const PatientFinder = ({childProps: childProps}) => {
     if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mb-2"><MDBSpinner big/></MDBBox></MDBContainer>);
     if (error) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mb-2"><h2>Ha ocurrido un error</h2></MDBBox></MDBContainer>);
 
+    const isActionValid = (patient === null || patient.name === "N/A") || (reason === "");
+    const Validbtn = (<MDBBtn  disabled={isActionValid} className={classes.playIcon} onClick={ e => {e.preventDefault(); createConsultation(childProps.state, patient, reason)}} color="indigo" >Crear Consulta Medica</MDBBtn>)
+    const Poperbtn = (<MDBPopover placement="right" popover clickable id="popper2" >
+                        <MDBBtn className={classes.playIcon} color="indigo" >Crear Consulta Medica</MDBBtn>
+                        <div>
+                          <MDBPopoverHeader className="danger-color"><p className="white-text"><b>Error de Validacion</b></p></MDBPopoverHeader>
+                          <MDBPopoverBody>
+                            <p className="red-text">Debe agregar el nombre del paciente en el campo "Buscar Paciente" y debe agregar un motivo de consulta.</p>
+                          </MDBPopoverBody>
+                        </div>
+                      </MDBPopover>);
+
+    const btn = !isActionValid ? Validbtn : Poperbtn;
+//peach-gradient
     return (
       <MDBContainer>
         <MDBRow>
@@ -82,8 +96,8 @@ const PatientFinder = ({childProps: childProps}) => {
             <br/>
             <div className={classes.controls}>  
               {/* redirectToProcess((patient != null ? patient.id : "N/A"), false) */}
-              {!loadingButton &&(<MDBBtn  disabled={(patient === null || patient.name === "N/A") || (reason === "")} 
-                                          className={classes.playIcon} onClick={ e => {e.preventDefault(); createConsultation(childProps.state, patient, reason)}} color="indigo" >Crear Consulta Medica</MDBBtn>)}
+              {!loadingButton && btn}
+
               {loadingButton && <MDBSpinner small/>}
             </div>
           </MDBCol>

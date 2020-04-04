@@ -22,6 +22,7 @@
     "query-string": "^6.4.0",
     "react": "^16.8.4",
     "react-apollo": "^2.5.4",
+    "react-bootstrap": "^1.0.0",
     "react-dom": "^16.8.4",
     "react-easy-crop": "^1.14.0",
     "react-file-base64": "^1.0.3",

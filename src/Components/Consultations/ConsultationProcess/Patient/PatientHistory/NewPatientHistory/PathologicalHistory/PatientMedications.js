@@ -83,8 +83,8 @@ const PatientMedications = ({
           <Select id="type" options={medications} defaultValue={medications[mindex]} onChange={ (v) => {setMedication(v)}} />
           <br/>
           <div className="form-group">
-            <label htmlFor="drug_concentration">Concentracion</label>
-            <input name="drug_concentration" className="form-control" id="drug_concentration" rows="3" value={drugConcentration} onChange={ (e) => {setDrugConcentration(e.target.value)}}></input>
+            <label htmlFor="drug_concentration">Concentracion (mL)</label>
+            <input type="number" name="drug_concentration" className="form-control" id="drug_concentration" rows="3" value={drugConcentration} onChange={ (e) => {setDrugConcentration(e.target.value)}}></input>
           </div>
         </MDBModalBody>
         <MDBModalFooter>

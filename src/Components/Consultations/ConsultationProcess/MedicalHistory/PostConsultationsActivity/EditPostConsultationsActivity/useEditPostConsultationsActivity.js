@@ -32,8 +32,16 @@ const useEditPostConsultationsActivity = (global, setGlobalData, _setEdit) => {
 
 
     useEffect(() => {
+        let didCancel = false;
+        
         createdPrescriptions();
+
+        return () => {
+            didCancel = true;
+        };
+
     }, []);
+    
 
     const toggle = () => {
         setModal(!modal);
