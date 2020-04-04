@@ -52,7 +52,7 @@ const PatientFinder = ({childProps: childProps}) => {
                 onChange={(newValue) => {setPatient(newValue);}}
                 onInputChange={v => setNewPatientName(v)}
                 noOptionsMessage={() => {
-                  return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+                  return <p>El paciente no existe...  <Link href={"/consultations/"+ childProps.state.speciality +"/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
                 }}
               />
             <br/>

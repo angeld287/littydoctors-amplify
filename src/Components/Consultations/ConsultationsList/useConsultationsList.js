@@ -5,7 +5,7 @@ import { MDBIcon, MDBBtn } from 'mdbreact';
 import moment from 'moment';
 
 
-const useConsultationsList = () => {
+const useConsultationsList = (childProps) => {
     const [ loading, setLoading ] = useState(true);
     const [ error, setError ] = useState(false);
     const [ consultations, setConsultations ] = useState([]);
@@ -88,7 +88,7 @@ const useConsultationsList = () => {
     }
 
     const redirectToConsultation = (consultation, patient) => {
-        window.location.href = "/consultations/process/"+consultation+"/"+patient;
+        window.location.href = "/consultations/"+ childProps.state.speciality +"/"+consultation+"/"+patient;
     }
 
     return { loading, consultations, error, ctable, itable };

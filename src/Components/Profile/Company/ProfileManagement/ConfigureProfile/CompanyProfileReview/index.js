@@ -3,7 +3,7 @@ import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBIcon, MDBInput, MDBAlert } fro
 
 class CompanyUserProfile extends Component {
     render(){
-      const { username, specialty, email, location, stripe_plan_name, croppedImage } = this.props.profileData
+      const { username, speciality, email, location, stripe_plan_name, croppedImage } = this.props.profileData
 
       const data = String(location);
       const locationUrl = data.split(' ').join('%20');
@@ -32,7 +32,7 @@ class CompanyUserProfile extends Component {
                       <div className="md-form">
                         <MDBInput
                           readOnly
-                          value={"Especialidad: " + specialty}
+                          value={"Especialidad: " + speciality}
                           iconClass="grey-text"
                           type="text"
                           id="form-email"

@@ -44,7 +44,7 @@ type Doctor
     name: String!
     username: String!
     email: String!
-    speciality: String!
+    speciality: Specialty @connection
     sex: String!
     consultingroom: ConsultingRoom @connection
     image: String!
@@ -251,6 +251,22 @@ type Patient
 }
 
 type Religion
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+}
+
+type Specialty
     @model 
     @auth(rules: [
         # Defaults to use the "owner" field.

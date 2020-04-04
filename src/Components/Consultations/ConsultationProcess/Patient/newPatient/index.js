@@ -4,6 +4,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MD
 import { API, graphqlOperation } from 'aws-amplify';
 import useNewPatient from './useNewPatient';
 import { createPatient } from '../../../../../graphql/mutations';
+import { listPatients } from '../../../../../graphql/queries';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
@@ -22,37 +23,59 @@ const NewPatient = (
 
   const { register, setBirthdate, handleSubmit, formState, birthdate, newPatient, errors, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange } = useNewPatient();
 
-  const onSubmit = (input) => {
+  const onSubmit = async (input) => {
+        _setLoading(true);
         
         var date = moment(new Date()).format('YYYY-MM-DD');
         var bdate = moment(birthdate).format('YYYY-MM-DD');
 
+        const filetrLimit = {
+          filter: {
+            or: [
+              {username: {eq: String(input.username) }}, 
+            ]
+          },
+          limit: 400
+        };
+
+        var patient = await API.graphql(graphqlOperation(listPatients, filetrLimit));
+
+
+        if(patient.data.listPatients.items.length !== 0){
+            Swal.fire('Nombre de Usuario Existente', 'Favor agregar otro nombre de usuario, dado que este ya existe', 'error');
+            _setLoading(false);
+            return
+        }
+
         if (bdate >= date) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Fecha de Nacimiento de forma Correcta', 'error');
+            _setLoading(false);
             return
         }
 
         if (fields.location.location === "") {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Direccion', 'error');
+            _setLoading(false);
             return
         }
 
         if (fields.marital_status.marital_status === "") {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Estado Civil', 'error');
+            _setLoading(false);
             return
         }
 
         if (fields.religion.religion === "") {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Religion', 'error');
+            _setLoading(false);
             return
         }
 
         if (fields.sex.sex === "") {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Sexo', 'error');
+            _setLoading(false);
             return
         }
-
-        _setLoading(true);
         
         input.birthdate = birthdate;
         input.address = fields.location.location;

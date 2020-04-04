@@ -4,7 +4,7 @@ import useConsultationsList from './useConsultationsList';
 
 const ConsultationsList = ({childProps: childProps}) => { 
 
-    const { loading, consultations, error, ctable, itable } = useConsultationsList();
+    const { loading, consultations, error, ctable, itable } = useConsultationsList(childProps);
 
     if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mb-2"><MDBSpinner big/></MDBBox></MDBContainer>);
     if (error) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mb-2"><h2>Ha ocurrido un error</h2></MDBBox></MDBContainer>);
