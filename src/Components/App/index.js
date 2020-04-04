@@ -45,9 +45,8 @@ export default class App extends Component {
       const roll = data.accessToken.payload['cognito:groups'][0];
       this.setState({user_roll: roll, authState: { isLoggedIn: true }});
       if (roll === 'doctor') {
-        API.graphql(graphqlOperation(listConsultingRooms)).then( result =>{
-          console.log(result.data.listConsultingRooms.items[0].doctor.speciality.name);
-          
+        API.graphql(graphqlOperation(listConsultingRooms)).then( async (result) =>{
+          if(result.data.listConsultingRooms.items.length > 0) {
             this.setState({
                 id: result.data.listConsultingRooms.items[0].id,
                 doctorid: result.data.listConsultingRooms.items[0].doctor.id,
@@ -61,6 +60,19 @@ export default class App extends Component {
                 loading: false,
                 username: data.accessToken.payload.username
             });
+          }else{
+            const user = await Auth.currentUserInfo();
+            
+            this.setState({
+              username: user.username,
+              email: user.attributes.email,
+              phonenumber: user.attributes.phone_number,
+              name: user.attributes.name,
+              loading: false,
+            })
+          }
+          
+           
         }).catch( err => {
           this.setState({
               error: true,
@@ -111,6 +123,7 @@ export default class App extends Component {
   handleUserSignIn = async () => {
     this.setState({ authState: { isLoggedIn: true } });
     const user = await Auth.currentUserInfo();
+    
     this.setState({
       username: user.username,
       email: user.attributes.email,

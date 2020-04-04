@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBSpinner,
-  MDBModal, MDBModalBody, MDBModalFooter } from "mdbreact";
+  MDBModal, MDBModalBody, MDBModalFooter, MDBBox } from "mdbreact";
 
 import { API, graphqlOperation } from "aws-amplify";
 
 import { Storage } from "aws-amplify";
+
+import Select from 'react-select'
 
 //import { PhotoPicker, S3Image } from "aws-amplify-react";
 
@@ -23,6 +25,7 @@ import { Redirect } from 'react-router'
 //import PaymentMethod from './PaymentMethod'
 
 import { createDoctor, createConsultingRoom, createLocation, updateDoctor } from '../../../../../graphql/mutations';
+import { listSpecialtys } from '../../../../../graphql/queries';
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
@@ -55,6 +58,7 @@ class ConfigureProfile extends Component {
       redirect: false,
       secretary: "dummy",
       loading: false,
+      pageLoading: true,
       error: "",
       pictures: [],
       image: null,
@@ -66,6 +70,9 @@ class ConfigureProfile extends Component {
       file: null,
       previewSource: null,
       key: null,
+      specialities: [],
+      speciality: "",
+      specialityName: "",
     }
 
     this.handleSetPlan = this.handleSetPlan.bind(this);
@@ -77,6 +84,7 @@ class ConfigureProfile extends Component {
   componentWillMount = () => {
     this._isMounted = true;
     this.redirect();
+    this.setSpecialityList();
   }
 
   redirect = () => {
@@ -245,6 +253,21 @@ class ConfigureProfile extends Component {
       });
   };
 
+  setspeciality = (e) => {
+    this.setState({speciality: e.value, specialityName: e.label})
+  }
+
+  setSpecialityList = async () => {
+
+      const _specialtys = await API.graphql(graphqlOperation(listSpecialtys, {limit: 400}));
+      const items = [];
+      _specialtys.data.listSpecialtys.items.forEach(e => {
+        var item = {value: e.id, label: e.name};
+        items.push(item);
+      });
+      this.setState({specialities: items, pageLoading: false});
+  }
+
   subscribeCustomer = () => {
     fetch('https://ugwnuazczk.execute-api.us-east-1.amazonaws.com/dev/subscription/create', {
         method: 'POST',
@@ -294,7 +317,7 @@ class ConfigureProfile extends Component {
         name: this.state.name, //this.state.name,
         email: this.state.email,
         username: this.state.username,
-        speciality: this.state.specialty,
+        doctorSpecialityId: this.state.speciality,
         sex: this.state.sex,
         image: this.state.croppedImage
       }
@@ -350,15 +373,15 @@ class ConfigureProfile extends Component {
 
 render() {
 
-  const { specialty, location, redirect, error, loading, name, croppedImage } = this.state
+  const { specialty, location, redirect, error, loading, name, croppedImage, specialities, pageLoading, specialityName } = this.state
   //const image = (croppedImage !== null)?(<img src={croppedImage} height="200" width="200" className="img-fluid" alt="" />):(null);
-  const complete = (!(location === '') && !(specialty === '') && !(croppedImage === null)/*  && !(stripe_source_token === '') */)
+  const complete = (!(location === '') && !(specialityName === '') && !(croppedImage === null)/*  && !(stripe_source_token === '') */)
   const validation = (complete && (error === ''))
 
   const profileData = {
       username: this.state.username,
       email: this.state.email,
-      specialty: this.state.specialty,
+      speciality: this.state.specialityName,
       location: this.state.location,
       stripe_customer_id: this.state.stripe_customer_id,
       stripe_subscription_id: this.state.stripe_subscription_id,
@@ -370,6 +393,14 @@ render() {
       error: error,
       croppedImage: croppedImage,
   }
+
+  const searchOptions = {
+    location: new window.google.maps.LatLng(19, -71),
+    radius: 2000,
+    types: ['establishment']
+  }
+
+  if (pageLoading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>)
 
   return (
     <MDBContainer>
@@ -386,11 +417,17 @@ render() {
             <h3 className="font-weight-bold pl-0 my-4">
               <strong>Informacion Basica</strong></h3>
             <MDBInput label="Nombre Completo" className="mt-4" value={name} onChange={event => this.setState(updateByPropertyName("name", event.target.value)) }/>
-            <MDBInput label="Especialidad" className="mt-4" autoFocus={this.calculateAutofocus(1)} value={specialty} onChange={event => this.setState(updateByPropertyName("specialty", event.target.value)) }/>
+            
+            
+            {/* <MDBInput label="Especialidad" className="mt-4" autoFocus={this.calculateAutofocus(1)} value={specialty} onChange={event => this.setState(updateByPropertyName("specialty", event.target.value)) }/> */}
+            
+            <Select id="speciality" placeholder="Epecialidad" options={specialities} onChange={ (v) => {this.setspeciality(v)}} />
+
               <PlacesAutocomplete
                 value={this.state.location}
                 onChange={this.handleChange}
                 onSelect={this.handleSelect}
+                searchOptions={searchOptions}
               >
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                   <div>
