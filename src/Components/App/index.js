@@ -11,10 +11,9 @@ import HeaderLinks from '../HeaderLinks';
 
 import {Routes, ProppedRoute, ProtectedRoute, ProtectedRouteCompany} from '../Routes';
 
-import { listConsultingRooms } from '../../graphql/queries';
-import { listConsultingRoomsSecretary } from '../../graphql/custom-queries';
+import { listConsultingRoomsSecretary, listConsultingRooms } from '../../graphql/custom-queries';
 
-import {API,graphqlOperation,Auth} from 'aws-amplify';
+import {API, graphqlOperation, Auth} from 'aws-amplify';
 
 export default class App extends Component {
   constructor(props){
@@ -47,30 +46,27 @@ export default class App extends Component {
       this.setState({user_roll: roll, authState: { isLoggedIn: true }});
       if (roll === 'doctor') {
         API.graphql(graphqlOperation(listConsultingRooms)).then( result =>{
+          console.log(result.data.listConsultingRooms.items[0].doctor.speciality.name);
+          
             this.setState({
                 id: result.data.listConsultingRooms.items[0].id,
                 doctorid: result.data.listConsultingRooms.items[0].doctor.id,
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
-                speciality: result.data.listConsultingRooms.items[0].doctor.speciality,
+                speciality: result.data.listConsultingRooms.items[0].doctor.speciality.name,
                 image: result.data.listConsultingRooms.items[0].doctor.image,
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
                 secretary: result.data.listConsultingRooms.items[0].secretary,
                 loading: false,
-                username: data.accessToken.payload.username,
-                //stripe_source_token: result.data.listConsultingRooms.items[0].stripe.source_token,
-                //stripe_plan_id: result.data.listConsultingRooms.items[0].stripe.plan_id,
-                //stripe_plan_name: result.data.listConsultingRooms.items[0].stripe.plan_name,
-                //stripe_customer_id: result.data.listConsultingRooms.items[0].stripe.customer_id,
-                //stripe_subscription_id: result.data.listConsultingRooms.items[0].stripe.subscription_id,
+                username: data.accessToken.payload.username
             });
         }).catch( err => {
           this.setState({
               error: true,
               loading: false,
           });
-          console.log('There was an error: ' + err);
+          console.log('There was an error: ', err);
 
         });
 
@@ -87,7 +83,7 @@ export default class App extends Component {
                 doctorid: result.data.listConsultingRooms.items[0].doctor.id,
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
-                speciality: result.data.listConsultingRooms.items[0].doctor.speciality,
+                speciality: result.data.listConsultingRooms.items[0].doctor.speciality.name,
                 image: result.data.listConsultingRooms.items[0].doctor.image,
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,

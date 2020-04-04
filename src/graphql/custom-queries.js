@@ -11,7 +11,10 @@ export const listConsultingRoomsSecretary = `query ListConsultingRooms(
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+        }
         sex
         image
       }
@@ -391,6 +394,41 @@ export const listMedicalConsultations = /* GraphQL */ `
         startedAt
         finalizedAt
       }
+    }
+  }
+`;
+
+export const listConsultingRooms = /* GraphQL */ `
+  query ListConsultingRooms(
+    $filter: ModelConsultingRoomFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listConsultingRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        doctor {
+          id
+          name
+          username
+          email
+          sex
+          image
+          owner
+          speciality {
+            id
+            name
+          }
+        }
+        secretary
+        location {
+          id
+          name
+          owner
+        }
+        owner
+      }
+      nextToken
     }
   }
 `;

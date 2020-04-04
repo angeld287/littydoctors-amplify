@@ -18,7 +18,11 @@ export const onCreateMedicalAppointment = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -132,7 +136,11 @@ export const onUpdateMedicalAppointment = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -229,7 +237,11 @@ export const onCreateConsultingRoom = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -258,7 +270,11 @@ export const onUpdateConsultingRoom = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -287,7 +303,11 @@ export const onDeleteConsultingRoom = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -341,7 +361,11 @@ export const onCreateDoctor = /* GraphQL */ `
       name
       username
       email
-      speciality
+      speciality {
+        id
+        name
+        owner
+      }
       sex
       consultingroom {
         id
@@ -350,7 +374,6 @@ export const onCreateDoctor = /* GraphQL */ `
           name
           username
           email
-          speciality
           sex
           image
           owner
@@ -375,7 +398,11 @@ export const onUpdateDoctor = /* GraphQL */ `
       name
       username
       email
-      speciality
+      speciality {
+        id
+        name
+        owner
+      }
       sex
       consultingroom {
         id
@@ -384,7 +411,6 @@ export const onUpdateDoctor = /* GraphQL */ `
           name
           username
           email
-          speciality
           sex
           image
           owner
@@ -409,7 +435,11 @@ export const onDeleteDoctor = /* GraphQL */ `
       name
       username
       email
-      speciality
+      speciality {
+        id
+        name
+        owner
+      }
       sex
       consultingroom {
         id
@@ -418,7 +448,6 @@ export const onDeleteDoctor = /* GraphQL */ `
           name
           username
           email
-          speciality
           sex
           image
           owner
@@ -577,7 +606,11 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -693,7 +726,11 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -806,7 +843,11 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+          owner
+        }
         sex
         consultingroom {
           id
@@ -1336,6 +1377,33 @@ export const onUpdateReligion = /* GraphQL */ `
 export const onDeleteReligion = /* GraphQL */ `
   subscription OnDeleteReligion($owner: String) {
     onDeleteReligion(owner: $owner) {
+      id
+      name
+      owner
+    }
+  }
+`;
+export const onCreateSpecialty = /* GraphQL */ `
+  subscription OnCreateSpecialty($owner: String) {
+    onCreateSpecialty(owner: $owner) {
+      id
+      name
+      owner
+    }
+  }
+`;
+export const onUpdateSpecialty = /* GraphQL */ `
+  subscription OnUpdateSpecialty($owner: String) {
+    onUpdateSpecialty(owner: $owner) {
+      id
+      name
+      owner
+    }
+  }
+`;
+export const onDeleteSpecialty = /* GraphQL */ `
+  subscription OnDeleteSpecialty($owner: String) {
+    onDeleteSpecialty(owner: $owner) {
       id
       name
       owner
