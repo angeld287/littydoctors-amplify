@@ -8,6 +8,8 @@ import useViewPostConsultationsActivity from './useViewPostConsultationsActivity
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 const ViewPostConsultationsActivity = ({
     global: global,
     setGlobalData: setGlobalData,
@@ -74,7 +76,7 @@ const ViewPostConsultationsActivity = ({
     setsioptions(_s);   
   }
 
-
+  const editBtn = (<MDBBtn className="btn btn-outline-blue" disabled={false} onClick={editData}><MDBIcon size="2x" icon="edit" className="blue-text" /></MDBBtn>);
   return (
     <MDBContainer>
           <MDBRow className="mb-3">
@@ -111,7 +113,7 @@ const ViewPostConsultationsActivity = ({
             </MDBCol>
           </MDBRow>
           <div className="text-center py-4 mt-3">
-              {!editLoading && <MDBBtn className="btn btn-outline-blue" disabled={false} onClick={editData}><MDBIcon size="2x" icon="edit" className="blue-text" /></MDBBtn>}
+              {!editLoading && <TooltipButton helperMessage={"Editar Actividad Post Consulta"} component={editBtn} placement="top"/>}
               {editLoading && <MDBSpinner small />}
 					</div>
     </MDBContainer>

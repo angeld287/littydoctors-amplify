@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import useEditPatientHistory from './EditPatientHistory/useEditPatientHistory';
 import NonPathologicalHistory from './EditPatientHistory/NonPathologicalHistory';
 
+import TooltipButton from '../../../../TooltipButton';
+
 
 const NonPathological = ({
     global: global,
@@ -27,9 +29,9 @@ const NonPathological = ({
   }, []);
 
   const removeNonPath = async (id) => {
-    nonPathActions.setlb_nonpath(true);
       const result = await Swal.fire({ title: '¿Desea eliminar el elemento?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar'});
       if (result.value) {
+          nonPathActions.setlb_nonpath(true);
           const _items = global.patient.patientHistory.nonPathologicalHistory.items;
           
           API.graphql(graphqlOperation(deleteNonPathologicalHistory, {input: {id: id}} ));
@@ -49,11 +51,13 @@ const NonPathological = ({
   const setList = () => {
     var formated = [];
     const items = data.items.sort((a,b) => { return new Date(b.createdAt) - new Date(a.createdAt)});
-        items.forEach((item) => {              
+        items.forEach((item) => {   
+          const delBtn = (<MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeNonPath(item.id) }}> <MDBIcon icon="trash" size="2x"/></MDBBtn>);
+          const editBtn = (<MDBBtn size="sm" onClick={(e) => {e.preventDefault(); nonPathActions.openNonPathModalToEdit(item) }}><MDBIcon icon="edit" size="2x"/></MDBBtn>);           
           formated.push({
             type: item.type.name,
             frequency: item.frequency,
-            options: (<Fragment><MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeNonPath(item.id) }}> <MDBIcon icon="trash" size="2x"/></MDBBtn><MDBBtn size="sm" onClick={(e) => {e.preventDefault(); nonPathActions.openNonPathModalToEdit(item) }}><MDBIcon icon="edit" size="2x"/></MDBBtn></Fragment>)
+            options: (<Fragment><TooltipButton helperMessage={"Editar"} component={editBtn} placement="top"/><TooltipButton helperMessage={"Borrar"} component={delBtn} placement="top"/></Fragment>)
           });
         });
 
@@ -65,20 +69,21 @@ const NonPathological = ({
     setTable(_nonpath);
 	};
 
-
-  
-  return (
-    <MDBContainer>
-        <br/>
-        <MDBContainer>
-          <MDBBtn onClick={nonPathActions.toggleNonPath} disabled={nonPathActions.loadingButton} className="btn btn-primary btn-sm">
+  const npbtn = (
+            <MDBBtn onClick={nonPathActions.toggleNonPath} disabled={nonPathActions.loadingButton} className="btn btn-primary btn-sm">
               {!nonPathActions.lb_nonpath && <MDBIcon icon="plus" size="2x" />}
               {nonPathActions.lb_nonpath && 
                 <div className="spinner-border spinner-border-sm" role="status">
                   <span className="sr-only">Loading...</span>
                 </div>
               }
-          </MDBBtn>
+          </MDBBtn>);
+  
+  return (
+    <MDBContainer>
+        <br/>
+        <MDBContainer>
+          <TooltipButton helperMessage={"Agregar Antecedentes no Patologicos"} component={npbtn} placement="right"/>
           <MDBDataTable
                 striped bordered searchLabel="Buscar"
                 responsiveSm={true} small hover entries={5}

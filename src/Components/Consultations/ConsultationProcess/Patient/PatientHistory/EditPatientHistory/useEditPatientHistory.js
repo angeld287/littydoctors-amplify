@@ -4,20 +4,13 @@ import { API, graphqlOperation } from 'aws-amplify';
 import useForm from 'react-hook-form';
 import { listMedicines, listCategorys, listAllergys, listSurgicalInterventions, listDiseases } from '../../../../../../graphql/queries';
 
-import { 
-        createPathologicalHistory, 
-        createFamilyHistory, 
-        createFamilyDetailsDiseases, 
-        createPatientMedications,
-        createPathologicalHistorySurgicalInt, 
-        createPatientAllergies,
-        createPatientHistory,
-        createNonPathologicalHistory,
-        updatePatient,
+import {
         deleteFamilyHistory,
     } from '../../../../../../graphql/mutations';
 
 import { updatePatientaddPatientHistory } from '../../../../../../graphql/custom-mutations';
+
+import TooltipButton from '../../../../../TooltipButton';
 
 import usePatientHistory from '../usePatientHistory';
 
@@ -65,22 +58,7 @@ const useEditPatientHistory = (global, setGlobalData, setList) => {
         const fetch = async () => {
             
             try {
-				/* const _medications = await API.graphql(graphqlOperation(listMedicines, {limit: 400}));
-				const _allergies = await API.graphql(graphqlOperation(listAllergys, {limit: 400}));
-				const _surgicalinterventions = await API.graphql(graphqlOperation(listSurgicalInterventions, {limit: 400}));
-				const _diseases = await API.graphql(graphqlOperation(listDiseases, {limit: 400}));
-				const _nonpath = await API.graphql(graphqlOperation(listCategorys, {filter: { or: [{module: {eq: "NonPathFrequency"}}, {module: {eq: "NonPathType"}}, {module: {eq: "FamilyHistory"}}]}} ));                
-
-                api = {
-					medications: _medications.data.listMedicines.items,
-                    allergies: _allergies.data.listAllergys.items,
-                    surgicalinterventions: _surgicalinterventions.data.listSurgicalInterventions.items,
-                    diseases: _diseases.data.listDiseases.items,
-                    nonpathfrequencies: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathFrequency"),
-                    nonpathtypes: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathType"),
-                    familytypes: _nonpath.data.listCategorys.items.filter(x => x.module === "FamilyHistory"),
-                }; */
-
+                
                 setApi(api);
                 createdFamily();
                 createdNonPath();
@@ -197,6 +175,9 @@ const useEditPatientHistory = (global, setGlobalData, setList) => {
     const createdFamily = () => {
 		var formated = [];
 		family.forEach((item) => {
+            const delBtn = (<MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeFamily(item.id)}}> <MDBIcon icon="trash" size="2x"/></MDBBtn>);
+            const editBtn = (<MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openFamilyModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn>);
+            
             var dItems = "";
 
             item.diseases.forEach((d) => {
@@ -206,7 +187,7 @@ const useEditPatientHistory = (global, setGlobalData, setList) => {
 			formated.push({
 				relationship: item.relationship.label,
 				diseases: dItems,
-				options: (<Fragment><MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeFamily(item.id)}}> <MDBIcon icon="trash" size="2x"/></MDBBtn><MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openFamilyModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn></Fragment>)
+				options: (<Fragment><TooltipButton helperMessage={"Editar"} component={editBtn} placement="top"/><TooltipButton helperMessage={"Borrar"} component={delBtn} placement="top"/></Fragment>)
 			});
 		});
         const familytable = {

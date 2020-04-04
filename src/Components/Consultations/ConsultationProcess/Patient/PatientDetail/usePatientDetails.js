@@ -24,8 +24,11 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
             
             try {
                 if (global.consultationsHistory !== true) {
+
                     setLoading(true);
                     setLoadingHistory(true);
+
+                    
 
                     const filtermc = {
                         filter: {
@@ -42,8 +45,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                     const rows = [];
                     var number = 0;
                     var items = listmc.data.listMedicalConsultations.items.sort((a,b) => { return new Date(b.startedAt) - new Date(a.startedAt)});
-                    var medicalAnalysis = items[0].postConsultationsActivity !== null ? items[0].postConsultationsActivity.medicalAnalysis.items : null;
-
+                    var medicalAnalysis = items.length > 0 ? items[0].postConsultationsActivity !== null ? items[0].postConsultationsActivity.medicalAnalysis.items : null : null;
                     if(items.length > 0){global.pendingAnalysis = medicalAnalysis};
 
                     items.forEach(e => {

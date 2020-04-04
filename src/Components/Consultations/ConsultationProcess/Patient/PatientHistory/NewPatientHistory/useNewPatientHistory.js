@@ -23,6 +23,8 @@ import usePatientHistory from '../usePatientHistory';
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import Swal from 'sweetalert2';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPatientHistory) => {
     const [ loading, setLoading ] = useState(false);
     const [ loadingButton, setLoadingButton ] = useState(false);
@@ -137,10 +139,12 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
     const createdNonPath = () => {
 		var formated = [];
 		nonPath.forEach((item) => {
+            const delBtn = (<MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeNonPath(item.id)}}> <MDBIcon icon="trash" size="2x"/></MDBBtn>);
+            const editBtn = (<MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openNonPathModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn>);
 			formated.push({
 				type: item.type.label,
 				frequency: item.frequency.label,
-				options: (<Fragment><MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeNonPath(item.id)}}> <MDBIcon icon="trash" size="2x"/></MDBBtn><MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openNonPathModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn></Fragment>)
+				options: (<Fragment><TooltipButton helperMessage={"Editar"} component={editBtn} placement="top"/><TooltipButton helperMessage={"Borrar"} component={delBtn} placement="top"/></Fragment>)
 			});
 		});
 
@@ -208,6 +212,9 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
     const createdFamily = () => {
 		var formated = [];
 		family.forEach((item) => {
+            const delBtn = (<MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeFamily(item.id)}}> <MDBIcon icon="trash" size="2x"/></MDBBtn>);
+            const editBtn = (<MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openFamilyModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn>);
+
             var dItems = "";
 
             item.diseases.forEach((d) => {
@@ -217,7 +224,7 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
 			formated.push({
 				relationship: item.relationship.label,
 				diseases: dItems,
-				options: (<Fragment><MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeFamily(item.id)}}> <MDBIcon icon="trash" size="2x"/></MDBBtn><MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openFamilyModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn></Fragment>)
+				options: (<Fragment><TooltipButton helperMessage={"Editar"} component={editBtn} placement="top"/><TooltipButton helperMessage={"Borrar"} component={delBtn} placement="top"/></Fragment>)
 			});
 		});
         const familytable = {
@@ -282,10 +289,13 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
     const createdMedication = () => {
 		var formated = [];
 		medication.forEach((item) => {
+            const delBtn = (<MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeMedication(item.id)}}><MDBIcon icon="trash" size="2x"/></MDBBtn>);
+            const editBtn = (<MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openMedicationModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn>);
+
 			formated.push({
 				medication: item.medication.label,
 				drug_concentration: item.drug_concentration,
-				options: (<Fragment><MDBBtn color="red" size="sm" onClick={(e) => {e.preventDefault(); removeMedication(item.id)}}><MDBIcon icon="trash" size="2x"/></MDBBtn><MDBBtn size="sm" onClick={(e) => {e.preventDefault(); openMedicationModalToEdit(item)}}><MDBIcon icon="edit" size="2x"/></MDBBtn></Fragment>)
+				options: (<Fragment><TooltipButton helperMessage={"Editar"} component={editBtn} placement="top"/><TooltipButton helperMessage={"Borrar"} component={delBtn} placement="top"/></Fragment>)
 			});
 		});
         const medicationtable = {

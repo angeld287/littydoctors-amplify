@@ -10,6 +10,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import EditMedicalPrescription from './EditMedicalPrescription';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 const EditPostConsultationsActivity = ({
       global: global,
       setGlobalData: setGlobalData,
@@ -62,6 +64,9 @@ const EditPostConsultationsActivity = ({
     setsioptions(_s);   
   }
 
+  const saveBtn = (<MDBBtn className="btn btn-outline-blue" disabled={false} onClick={editPCActivities}><MDBIcon size="2x" icon="save" className="blue-text" /></MDBBtn>);
+  const cancelBtn = (<MDBBtn className="btn btn-outline-blue" disabled={false} onClick={e => {e.preventDefault(); _setEdit(false);}}><MDBIcon size="2x" icon="times" className="blue-text" /></MDBBtn>);
+
   return (
     <MDBContainer>
           <h6 className="text-center font-weight-bold pt-5 pb-3 mb-2"><strong>Prescripciones Medicas</strong></h6>
@@ -103,8 +108,8 @@ const EditPostConsultationsActivity = ({
             </MDBCol>
           </MDBRow>
           <div className="text-center py-4 mt-3">
-              {!editLoading && <MDBBtn className="btn btn-outline-blue" disabled={false} onClick={editPCActivities}><MDBIcon size="2x" icon="save" className="blue-text" /></MDBBtn>}
-              {!editLoading && <MDBBtn className="btn btn-outline-blue" disabled={false} onClick={e => {e.preventDefault(); _setEdit(false);}}><MDBIcon size="2x" icon="times" className="blue-text" /></MDBBtn>}
+              {!editLoading && <TooltipButton helperMessage={"Guardar Cambios"} component={saveBtn} placement="top"/>}
+              {!editLoading && <TooltipButton helperMessage={"Cancelar Cambios"} component={cancelBtn} placement="top"/>}
               {editLoading && <MDBSpinner small />}
 					</div>
     </MDBContainer>

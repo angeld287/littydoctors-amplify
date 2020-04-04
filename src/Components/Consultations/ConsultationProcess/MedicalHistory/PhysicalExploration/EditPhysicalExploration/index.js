@@ -4,6 +4,8 @@ import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MD
 
 import Select from 'react-select';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 const EditPhysicalExploration = ({
     editPhysicalExploration: editPhysicalExploration,
     fields: fields,
@@ -12,8 +14,8 @@ const EditPhysicalExploration = ({
     setEdit: setEdit,
 }) => {
   
-  const [ mm, setmm ] = useState(fields.blood_pressure.blood_pressure.match(/((.*?)\/[0-9]{1,3})/)[2]);
-  const [ hg, sethg ] = useState(fields.blood_pressure.blood_pressure.match(/([0-9]{1,3}\/(.*?) m)/)[2]);
+  const [ mm, setmm ] = useState(0);
+  const [ hg, sethg ] = useState(0);
   const [ blood_pressure, setblood_pressure] = useState(fields.blood_pressure.blood_pressure);
 
   var foo = new Array(500);
@@ -28,6 +30,10 @@ const EditPhysicalExploration = ({
 
       const fetch = async () => {   
           setEditData();
+          const mm = fields.blood_pressure.blood_pressure.match(/((.*?)\/[0-9]{1,3})/) !== null ? fields.blood_pressure.blood_pressure.match(/((.*?)\/[0-9]{1,3})/)[2] : 0;
+          const hg = fields.blood_pressure.blood_pressure.match(/([0-9]{1,3}\/(.*?) m)/) !== null ? fields.blood_pressure.blood_pressure.match(/([0-9]{1,3}\/(.*?) m)/)[2] : 0;
+          setmm(mm);
+          sethg(hg);
       };
 
       fetch();
@@ -40,6 +46,9 @@ const EditPhysicalExploration = ({
   
   const imm = n.findIndex(v => v.value.toString() === mm);
   const ihg = n.findIndex(v => v.value.toString() === hg);
+
+  const savebtn = (<MDBBtn className="btn btn-outline-blue" onClick={editPhysicalExploration} ><MDBIcon icon="save" size="2x" /></MDBBtn>);
+  const cancelbtn = (<MDBBtn className="btn btn-outline-blue" onClick={e => {setEdit(false)}} ><MDBIcon icon="times" size="2x" /></MDBBtn>);
 
   return (
     <MDBContainer>
@@ -149,8 +158,8 @@ const EditPhysicalExploration = ({
               }}name="others"  className="form-control" id="others" rows="3" ></textarea>
           </div>
           <div className="text-center py-4 mt-3">
-              {!editLoading && <MDBBtn className="btn btn-outline-blue" onClick={editPhysicalExploration} ><MDBIcon icon="save" size="2x" /></MDBBtn>}
-              {!editLoading && <MDBBtn className="btn btn-outline-blue" onClick={e => {setEdit(false)}} ><MDBIcon icon="times" size="2x" /></MDBBtn>}
+              {!editLoading && <TooltipButton helperMessage={"Guardar Cambios"} component={savebtn} placement="top"/>}
+              {!editLoading && <TooltipButton helperMessage={"Cancelar Cambios"} component={cancelbtn} placement="top"/>}
               {editLoading && <MDBSpinner small />}
 					</div>
     </MDBContainer>

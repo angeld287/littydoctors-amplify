@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 
+import TooltipButton from '../../../../../../TooltipButton';
+
 const PathologicalHistory = (
                       {
                         setPatientMedications: setPatientMedications,
@@ -18,6 +20,10 @@ const PathologicalHistory = (
                       } 
                    ) => {
       const { alcohol, setAlcoholValue, smoking, setSmokingValue, drugs, setDrugsValue, immunizations, setImmunizationsValue } = usePathologicalHistory();
+
+      const AddBtn = (<MDBBtn onClick={medicationActions.toggleMedication} disabled={medicationActions.loadingButton} className="btn btn-primary btn-sm">
+                        <MDBIcon icon="plus" size="2x" />
+                      </MDBBtn>);
   return (
     <MDBContainer>
       <MDBRow className="mb-3">
@@ -50,9 +56,7 @@ const PathologicalHistory = (
         <MDBCol>
             <br/>
             <MDBContainer>
-              <MDBBtn onClick={medicationActions.toggleMedication} disabled={medicationActions.loadingButton} className="btn btn-primary btn-sm">
-                <MDBIcon icon="plus" size="2x" />
-              </MDBBtn>
+              <TooltipButton helperMessage={"Agregar Medicamento"} component={AddBtn} placement="right"/>
               <MDBDataTable
                 striped bordered searchLabel="Buscar"
                 responsiveSm={true} small hover entries={5}

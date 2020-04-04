@@ -34,14 +34,16 @@ const ConsultationProcess = ({childProps:childProps}) => {
 
   if (error) return <h2 className="text-center font-weight-bold pt-10 pb-2 mb-2">Ha ocurrido un error</h2>;
 
+  const cnpmessage = "Debe Crear Paciente";
+
   return (
     <MDBContainer>
         <h2 className="text-center font-weight-bold pt-4 pb-5 mb-2"><strong>Historia Clinica</strong></h2>
         <MDBStepper icon>
-          <MDBStep icon="user" stepName="Paciente" onClick={swapFormActive(1)}></MDBStep>
-          <MDBStep icon="folder-open" stepName="Antecedentes" onClick={swapFormActive(2)}></MDBStep>
-          <MDBStep icon="stethoscope" stepName="Examen Medico" onClick={swapFormActive(3)}></MDBStep>
-          <MDBStep icon="prescription-bottle-alt" stepName="Prescripciones y Estudios" onClick={swapFormActive(4)}></MDBStep>
+          <MDBStep icon="user" stepName={createNewPatient ? cnpmessage: "Paciente"} onClick={swapFormActive(1)}></MDBStep>
+          <MDBStep icon="folder-open" stepName={createNewPatient ? cnpmessage: "Antecedentes"} onClick={swapFormActive(2)}></MDBStep>
+          <MDBStep icon="stethoscope" stepName={createNewPatient ? cnpmessage: "Examen Medico"} onClick={swapFormActive(3)}></MDBStep>
+          <MDBStep icon="prescription-bottle-alt" stepName={createNewPatient ? cnpmessage: "Prescripciones y Estudios"} onClick={swapFormActive(4)}></MDBStep>
         </MDBStepper>
           <MDBRow>
             {formActivePanel === 1 &&

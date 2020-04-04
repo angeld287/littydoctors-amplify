@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 const NewPostConsultationsActivity = ({
     global: global,
     setGlobalData: setGlobalData,
@@ -24,6 +26,8 @@ const NewPostConsultationsActivity = ({
       };
 
   }, []);
+
+  const addBtn = (<MDBBtn className="btn btn-outline-blue" type="submit" disabled={formState.isSubmitting}><MDBIcon size="2x" icon="plus" className="blue-text" /></MDBBtn>);
 
   return (
     <MDBContainer>
@@ -84,7 +88,7 @@ const NewPostConsultationsActivity = ({
           </MDBCol>
         </MDBRow>
           <div className="text-center py-4 mt-3">
-              {!loading && <MDBBtn className="btn btn-outline-blue" type="submit" disabled={formState.isSubmitting}><MDBIcon size="2x" icon="plus" className="blue-text" /></MDBBtn>}
+              {!loading && <TooltipButton helperMessage={"Crear Actividades Post Consulta"} component={addBtn} placement="top"/>}
               {loading && <MDBSpinner small />}
 					</div>
       </form>

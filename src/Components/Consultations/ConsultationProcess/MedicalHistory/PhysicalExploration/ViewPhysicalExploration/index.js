@@ -4,6 +4,8 @@ import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MD
 
 import usePhysicalExploration from '../usePhysicalExploration';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 const ViewPhysicalExploration = ({
     global: global,
     setEdit: setEdit,
@@ -18,6 +20,8 @@ const ViewPhysicalExploration = ({
 
   const vs = physicalexploration.vitalsign;
   const re = physicalexploration.regionalExploration;
+
+  const editBtn = (<MDBBtn className="btn btn-outline-blue" disabled={false} onClick={editData}><MDBIcon icon="edit" size="2x" /></MDBBtn>);
 
   return (
     <MDBContainer>
@@ -100,7 +104,7 @@ const ViewPhysicalExploration = ({
             <textarea value={re.others === null ? "" : re.others} disabled name="others"  className="form-control" id="others" rows="3" ></textarea>
           </div>
           <div className="text-center py-4 mt-3">
-              {!editLoading && <MDBBtn className="btn btn-outline-blue" disabled={false} onClick={editData}><MDBIcon icon="edit" size="2x" /></MDBBtn>}
+              {!editLoading && <TooltipButton helperMessage={"Editar Exploracion Fisica"} component={editBtn} placement="top"/>}
               {editLoading && <MDBSpinner small />}
 					</div>
     </MDBContainer>

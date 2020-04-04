@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState } from 'react';
 
 import { MDBContainer, MDBRow, MDBCol, MDBTable, MDBTableBody, MDBTableHead, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
          MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBListGroup, MDBListGroupItem } from "mdbreact";
@@ -8,6 +8,8 @@ import UsePatientDetails from './usePatientDetails';
 import { updateMedicalHistory } from '../../../../../graphql/mutations';
 import moment from 'moment';
 import Swal from 'sweetalert2';
+
+import TooltipButton from '../../../../TooltipButton';
 
 const PatientDetails = (
                       {
@@ -59,14 +61,18 @@ const PatientDetails = (
   }
 
   if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>)
-  
+
+  const editBtn = (<MDBBtn className="btn btn-outline-blue" onClick={EditingReason} disabled={reason === ""}><MDBIcon icon="edit" size="2x" /></MDBBtn>);
+  const addBtn = (<MDBBtn className="btn btn-outline-blue" onClick={addReason} disabled={reason === "N/A"  && reason === ""}><MDBIcon icon="plus" size="2x" /></MDBBtn>);
+  const saveBtn = (<MDBBtn className="btn btn-outline-blue" onClick={saveReason} disabled={reason === ""}><MDBIcon icon="save" size="2x" /></MDBBtn>);
+  const cancelBtn = (<MDBBtn className="btn btn-outline-blue" onClick={ e => {e.preventDefault(); setEdit(false);}} disabled={reason === ""}><MDBIcon icon="times" size="2x" /></MDBBtn>);
 
   const Buttons = (
     <div>
-      {withoutReason &&<MDBBtn className="btn btn-outline-blue" onClick={addReason} disabled={reason === "N/A"  && reason === ""}><MDBIcon icon="plus" size="2x" /></MDBBtn>}
-      {(!withoutReason && !edit) &&<MDBBtn className="btn btn-outline-blue" onClick={EditingReason} disabled={reason === ""}><MDBIcon icon="edit" size="2x" /></MDBBtn>}
-      {(!withoutReason && edit) &&<MDBBtn className="btn btn-outline-blue" onClick={saveReason} disabled={reason === ""}><MDBIcon icon="save" size="2x" /></MDBBtn>}
-      {(!withoutReason && edit) &&<MDBBtn className="btn btn-outline-blue" onClick={ e => {e.preventDefault(); setEdit(false);}} disabled={reason === ""}><MDBIcon icon="times" size="2x" /></MDBBtn>}
+      {withoutReason && <TooltipButton component={addBtn} helperMessage={"Agregar Motivo"} placement="top"/>}
+      {(!withoutReason && !edit) && <TooltipButton component={editBtn} helperMessage={"Editar Motivo"} placement="top"/>}
+      {(!withoutReason && edit) && <TooltipButton component={saveBtn} helperMessage={"Guardar Motivo"} placement="top"/>}
+      {(!withoutReason && edit) && <TooltipButton component={cancelBtn} helperMessage={"Cancelar Edicion"} placement="top"/>}
     </div>
   );
 

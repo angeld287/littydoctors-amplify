@@ -4,6 +4,8 @@ import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MD
 
 import usePhysicalExploration from '../usePhysicalExploration';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 import Select from 'react-select';
 
 const NewPhysicalExploration = ({
@@ -24,6 +26,8 @@ const NewPhysicalExploration = ({
   }
 
   const isDisable = !((mm === "" && hg === "") || (mm !== "" && hg !== ""))
+
+  const addBtn = ( <MDBBtn className="btn btn-outline-blue" type="submit" disabled={actions.formState.isSubmitting || isDisable}><MDBIcon icon="plus" size="2x" /></MDBBtn>);
 
   return (
     <MDBContainer>
@@ -99,7 +103,7 @@ const NewPhysicalExploration = ({
             <textarea name="others"  className="form-control" id="others" rows="3" ref={actions.register}></textarea>
           </div>
           <div className="text-center py-4 mt-3">
-              {!actions.loading && <MDBBtn className="btn btn-outline-blue" type="submit" disabled={actions.formState.isSubmitting || isDisable}><MDBIcon icon="plus" size="2x" /></MDBBtn>}
+              {!actions.loading && <TooltipButton helperMessage={"Crear Exploracion Fisica"} component={addBtn} placement="top"/>}
               {actions.loading && <MDBSpinner small />}
 					</div>
       </form>

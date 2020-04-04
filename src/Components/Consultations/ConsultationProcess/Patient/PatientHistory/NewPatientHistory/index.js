@@ -7,6 +7,8 @@ import NonPathologicalHistory from './NonPathologicalHistory';
 import PathologicalHistory from './PathologicalHistory';
 import FamilyHistory from './FamilyHistory';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 
 
 const NewPatientHistory = ({
@@ -43,6 +45,15 @@ const NewPatientHistory = ({
     );
   }
 
+  const nopathAddBtn = (<MDBBtn onClick={nonPathActions.toggleNonPath} disabled={loadingButton} className="btn btn-primary btn-sm">
+                          <MDBIcon icon="plus" size="2x" />
+                        </MDBBtn>);
+ 
+
+  const familyAddBtn = (<MDBBtn onClick={familyActions.toggleFamily} disabled={loadingButton} className="btn btn-primary btn-sm">
+                          <MDBIcon icon="plus" size="2x" />
+                        </MDBBtn>);
+
   return (
       <form onSubmit={handleSubmit(onSubmit)}>
         <h5 className="font-weight-bold pl-0 my-4">
@@ -73,9 +84,7 @@ const NewPatientHistory = ({
               <MDBCard>
                 <br/>
                 <MDBContainer>
-                  <MDBBtn onClick={nonPathActions.toggleNonPath} disabled={loadingButton} className="btn btn-primary btn-sm">
-                    <MDBIcon icon="plus" size="2x" />
-                  </MDBBtn>
+                  <TooltipButton helperMessage={"Agregar Antecendente No Patologico"} component={nopathAddBtn} placement="right"/>
                   <MDBDataTable
                     striped bordered searchLabel="Buscar"
                     responsiveSm={true} small hover entries={5}
@@ -106,9 +115,7 @@ const NewPatientHistory = ({
               <MDBCard>
                 <br/>
                 <MDBContainer>
-                  <MDBBtn onClick={familyActions.toggleFamily} disabled={loadingButton} className="btn btn-primary btn-sm">
-                    <MDBIcon icon="plus" size="2x" />
-                  </MDBBtn>
+                  <TooltipButton helperMessage={"Agregar Antecendente Familiar"} component={familyAddBtn} placement="right"/>
                   <MDBDataTable
                     striped bordered searchLabel="Buscar"
                     responsiveSm={true} small hover entries={5}
@@ -132,7 +139,7 @@ const NewPatientHistory = ({
         </MDBRow>
         <br/>
         <div className="text-center py-4 mt-3">
-                  {!loadingButton && <MDBBtn className="btn btn-outline-blue" type="submit" disabled={formState.isSubmitting}>Agregar</MDBBtn>}
+                  {!loadingButton && <MDBBtn className="btn btn-outline-blue" type="submit" disabled={formState.isSubmitting}>Crear Antecedentes</MDBBtn>}
                   {loadingButton && <MDBSpinner small />}
 				</div>
       </form>
