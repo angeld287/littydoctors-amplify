@@ -3,7 +3,9 @@ import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MD
          MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBDataTable,
          MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from "mdbreact";
 
-import Select from 'react-select'
+import Select from 'react-select';
+import Swal from 'sweetalert2';
+
 const uuidv1 = require('uuid/v1');
 
 const FamilyHistory = ({
@@ -16,9 +18,10 @@ const FamilyHistory = ({
 }) => {
 
   const [ id, setId ] = useState("");
-  const [ relationship, setRelationship ] = useState({});
+  const [ relationship, setRelationship ] = useState([]);
   const [ diseases, setDiseases ] = useState([]);
   const [ comment, setComment ] = useState("");
+  const [ alive, setAlive ] = useState(true);
 
   const _diseases = [];
   api.diseases.forEach(element => {
@@ -40,12 +43,67 @@ const FamilyHistory = ({
           setComment(familyEditObject.comment);
         }else{
           setId("");
-          setRelationship({});          
+          setRelationship([]);          
           setDiseases([]);
           setComment("");
-          
         }
   }, []);
+
+  const save = (create) => {
+    if(diseases === null){
+      Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'Favor completar el campo enfermedades',
+            showConfirmButton: false,
+            timer: 1500
+      });
+      return
+    }
+
+    if ((relationship.length < 1) || (diseases.length < 1)) {
+        //Swal.fire('Campo Obligatorio', 'Favor completar el campo Lugar de Evento', 'error');
+        Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Favor completar los campos paretesco y enfermedades',
+              showConfirmButton: false,
+              timer: 1500
+        });
+        return
+    }
+
+    if (create) {
+       createFamily({
+           id: uuidv1(),
+           date: new Date(),
+           diseases: diseases,
+           relationship: relationship,
+           comment: comment,
+           doctor: "String",
+           secretary: "String",
+           patient: "String",
+           alive: alive,
+       });
+       toggleFamily();
+    }else{
+      editFamily({
+          id: id,
+          date: new Date(),
+          diseases: diseases,
+          relationship: relationship,
+          comment: comment,
+          doctor: "String",
+          secretary: "String",
+          patient: "String",
+          alive: alive,
+      });
+      toggleFamily();
+    }
+
+  }
+
+  const setAliveD = () => { setAlive(!alive); }
 
   const rindex = !edit ? null : relationships.findIndex(v => v.value === familyEditObject.relationship.value);
   const dlist = !edit ? null : familyEditObject.diseases;
@@ -60,8 +118,8 @@ const FamilyHistory = ({
             </MDBCol>
             <MDBCol md="4" >
               <div className="custom-control custom-checkbox">
-                  <label className="custom-control-label" htmlFor="brother_alive">Con vida?</label>
-                  <input name="brother_alive" id="brother_alive" type="checkbox" className="custom-control-input"/>
+                  <MDBInput label="Con vida?" type="checkbox" id="alive" checked={alive} onChange={setAliveD}
+                  />
               </div>
             </MDBCol>
           </MDBRow>
@@ -75,39 +133,10 @@ const FamilyHistory = ({
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={toggleFamily}>Cancelar</MDBBtn>
-
-          {!edit &&
-            <MDBBtn color="primary" onClick={(e) => {
-                e.preventDefault();
-                createFamily({
-                    id: uuidv1(),
-                    date: new Date(),
-                    diseases: diseases,
-                    relationship: relationship,
-                    comment: comment,
-                    doctor: "String",
-                    secretary: "String",
-                    patient: "String",
-                });
-                toggleFamily();
-            }}>Crear</MDBBtn>
-          }
-          {edit &&
-            <MDBBtn color="primary" onClick={(e) => {
-                e.preventDefault();                
-                editFamily({
-                    id: id,
-                    date: new Date(),
-                    diseases: diseases,
-                    relationship: relationship,
-                    comment: comment,
-                    doctor: "String",
-                    secretary: "String",
-                    patient: "String",
-                });
-                toggleFamily();
-            }}>Guardar Cambios</MDBBtn>
-          }
+          <MDBBtn color="primary" onClick={(e) => {
+            e.preventDefault();
+            save(!edit);
+          }}>{edit ? "Guardar Cambios" : "Crear"}</MDBBtn>
         </MDBModalFooter>
     </MDBContainer>
   );

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import {listPatients} from './../../graphql/queries';
-import { createMedicalConsultation } from '../../graphql/mutations';
+import { createMedicalConsultation, createMedicalHistory } from '../../graphql/mutations';
 import { API, graphqlOperation } from 'aws-amplify';
-import { filterByValue } from '../../Functions/filterArray'
+import { filterByValue } from '../../Functions/filterArray';
+import moment from 'moment';
 
 
 const useConsultations = () => {
@@ -14,6 +15,7 @@ const useConsultations = () => {
     const [ autoCompleteLoading, setAutoCompleteLoading ] = useState(false);
     const [ newPatient, setNewPatient ] = useState(false);
     const [ newPatientName, setNewPatientName ] = useState("");
+    const [ reason, setReason ] = useState("");
 
 
     useEffect(() => {
@@ -31,7 +33,7 @@ const useConsultations = () => {
 
             try {
                 
-                var patientsApi = await API.graphql(graphqlOperation(listPatients));
+                var patientsApi = await API.graphql(graphqlOperation(listPatients, {limit: 500}));
                 
                 if(patientsApi.data.listPatients.items.length > 0){
                     patientsApi.data.listPatients.items.forEach(element => {
@@ -87,20 +89,36 @@ const useConsultations = () => {
         }
     }
 
-    const createConsultation = (state, _patient) => {
+    const createConsultation = async (state, _patient, _reason) => {       
         setLoadingButton(true);
-        API.graphql(graphqlOperation(createMedicalConsultation, {input: { medicalConsultationDoctorId: state.doctorid, medicalConsultationPatientId: _patient.id, doctorname: state.doctorusername, secretary: state.secretary, patientname: _patient.username }}))
+        const mhinput = {};
+        mhinput.reason = reason === null || reason === "" ? "N/A" : reason;
+        mhinput.medicalHistoryPatientId = _patient.id;
+        const cmh = await API.graphql(graphqlOperation(createMedicalHistory, {input: mhinput} )).catch( e => { console.log(e); setLoadingButton(false); throw new SyntaxError("Error GraphQL");});
+        
+        const input = { 
+                medicalConsultationDoctorId: state.doctorid, 
+                medicalConsultationPatientId: _patient.id, 
+                doctorname: state.doctorusername, 
+                secretary: state.secretary, 
+                patientname: _patient.username,
+                medicalConsultationMedicalHistoryId: cmh.data.createMedicalHistory.id,
+                state: 'IN_PROCESS',
+                startedAt: String(moment(new Date).format('YYYY-MM-DDTHH:mm:ss.SSS')),
+            };
+        
+        API.graphql(graphqlOperation(createMedicalConsultation, {input: input}))
         .then((r) => {
             var consultationid = r.data.createMedicalConsultation.id
             setLoadingButton(false);
-            window.location.href = "/consultations/process/"+consultationid+"/"+_patient.id;
+            window.location.href = "/consultations/"+ state.speciality +"/"+ consultationid +"/"+ _patient.id;
         }).catch((err) => { 
             console.log("Ocurrio un error al crear la consulta medica: ",err);
             setLoadingButton(false);
         });
     }
 
-    return { createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName};
+    return { createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName, setReason, reason};
 };
 
 export default useConsultations;

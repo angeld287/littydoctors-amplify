@@ -4,6 +4,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MD
          MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from "mdbreact";
 
 import Select from 'react-select'
+import Swal from 'sweetalert2';
 const uuidv1 = require('uuid/v1');
 
 const NonPathologicalHistory = ({
@@ -16,8 +17,8 @@ const NonPathologicalHistory = ({
 }) => {
 
   const [ id, setId ] = useState("");
-  const [ type, setType ] = useState("");
-  const [ frequency, setFrequency ] = useState("");
+  const [ type, setType ] = useState([]);
+  const [ frequency, setFrequency ] = useState([]);
   const [ duration, setDuration ] = useState("");
   const [ comment, setComment ] = useState("");
 
@@ -48,6 +49,46 @@ const NonPathologicalHistory = ({
         }
   }, []);
 
+  const save = (create) => {
+    if ((frequency.length < 1) || (type.length < 1)) {
+        //Swal.fire('Campo Obligatorio', 'Favor completar el campo Lugar de Evento', 'error');
+        Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Favor completar los campos categoria y frecuencia',
+              showConfirmButton: false,
+              timer: 1500
+        });
+        return
+    }
+    if (create) {
+       createNonPath({
+           id: uuidv1(),
+           date: new Date(),
+           frequency: frequency,
+           type: type,
+           comment: comment,
+           doctor: "String",
+           secretary: "String",
+           patient: "String",
+       });
+       toggleNonPath();
+    }else{
+      editNonPath({
+          id: id,
+          date: new Date(),
+          frequency: frequency,
+          type: type,
+          comment: comment,
+          doctor: "String",
+          secretary: "String",
+          patient: "String",
+      });
+      toggleNonPath();
+    }
+
+  }
+
   const tindex = !edit ? null : types.findIndex(v => v.value === nonPathEditObject.type.value);
   const findex = !edit ? null : frequencies.findIndex(v => v.value === nonPathEditObject.frequency.value);
   return (
@@ -65,39 +106,10 @@ const NonPathologicalHistory = ({
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={toggleNonPath}>Cancelar</MDBBtn>
-
-          {!edit &&
-            <MDBBtn color="primary" onClick={(e) => {
-                e.preventDefault();
-                createNonPath({
-                    id: uuidv1(),
-                    date: new Date(),
-                    frequency: frequency,
-                    type: type,
-                    comment: comment,
-                    doctor: "String",
-                    secretary: "String",
-                    patient: "String",
-                });
-                toggleNonPath();
-            }}>Crear</MDBBtn>
-          }
-          {edit &&
-            <MDBBtn color="primary" onClick={(e) => {
-                e.preventDefault();
-                editNonPath({
-                    id: id,
-                    date: new Date(),
-                    frequency: frequency,
-                    type: type,
-                    comment: comment,
-                    doctor: "String",
-                    secretary: "String",
-                    patient: "String",
-                });
-                toggleNonPath();
-            }}>Guardar Cambios</MDBBtn>
-          }
+          <MDBBtn color="primary" onClick={(e) => {
+            e.preventDefault();
+            save(!edit);
+          }}>{edit ? "Guardar Cambios" : "Crear"}</MDBBtn>
         </MDBModalFooter>
     </MDBContainer>
   );

@@ -8,14 +8,16 @@ import useConsultations from '../useConsultations';
 import useConsultationProcess from './useConsultationProcess';
 import PatientDetails from './Patient/PatientDetail';
 import NewPatient from './Patient/newPatient';
-import NewPhysicalExploration from './MedicalHistory/NewPhysicalExploration';
+import PhysicalExploration from './MedicalHistory/PhysicalExploration';
 import NewPatientHistory from './Patient/PatientHistory/NewPatientHistory';
-import NewPostConsultationsActivity from './MedicalHistory/NewPostConsultationsActivity';
+import PatientHistory from './Patient/PatientHistory';
+import PostConsultationsActivity from './MedicalHistory/PostConsultationsActivity';
 
 
 const ConsultationProcess = ({childProps:childProps}) => {
   const { consultationObject, error, loading, swapFormActive, handleNextPrevClick, handleSubmission, calculateAutofocus, selectedDate, setSelectedDate, setCreateNewPatient, patientData,
-          formActivePanelChanged, setFormActivePanelChanged, formActivePanel, setFormActivePanel, createNewPatient, createNewPatientName, setGlobalData, global } = useConsultationProcess();
+          formActivePanelChanged, setFormActivePanelChanged, formActivePanel, setFormActivePanel, createNewPatient, createNewPatientName, setGlobalData, global,
+          setHasPatientHistory, hasPatientHistory, patientHistory, setPatientHistory, _reason, loadingButton } = useConsultationProcess();
 
   const { createConsultation } = useConsultations();
   
@@ -32,14 +34,16 @@ const ConsultationProcess = ({childProps:childProps}) => {
 
   if (error) return <h2 className="text-center font-weight-bold pt-10 pb-2 mb-2">Ha ocurrido un error</h2>;
 
+  const cnpmessage = "Debe Crear Paciente";
+
   return (
     <MDBContainer>
         <h2 className="text-center font-weight-bold pt-4 pb-5 mb-2"><strong>Historia Clinica</strong></h2>
         <MDBStepper icon>
-          <MDBStep icon="user" stepName="Paciente" onClick={swapFormActive(1)}></MDBStep>
-          <MDBStep icon="folder-open" stepName="Antecedentes" onClick={swapFormActive(2)}></MDBStep>
-          <MDBStep icon="stethoscope" stepName="Examen Medico" onClick={swapFormActive(3)}></MDBStep>
-          <MDBStep icon="prescription-bottle-alt" stepName="Prescripciones y Estudios" onClick={swapFormActive(4)}></MDBStep>
+          <MDBStep icon="user" stepName={createNewPatient ? cnpmessage: "Paciente"} onClick={swapFormActive(1)}></MDBStep>
+          <MDBStep icon="folder-open" stepName={createNewPatient ? cnpmessage: "Antecedentes"} onClick={swapFormActive(2)}></MDBStep>
+          <MDBStep icon="stethoscope" stepName={createNewPatient ? cnpmessage: "Examen Medico"} onClick={swapFormActive(3)}></MDBStep>
+          <MDBStep icon="prescription-bottle-alt" stepName={createNewPatient ? cnpmessage: "Prescripciones y Estudios"} onClick={swapFormActive(4)}></MDBStep>
         </MDBStepper>
           <MDBRow>
             {formActivePanel === 1 &&
@@ -64,55 +68,57 @@ const ConsultationProcess = ({childProps:childProps}) => {
                         createConsultation={createConsultation} 
                         setCreateNewPatient={setCreateNewPatient} 
                         name={createNewPatientName}
+                        reason={_reason}
                         childProps={childProps}
                       />
                     )
                   }
                 </MDBCol>
                 <br/>
-                <MDBBtn color="mdb-color" rounded className="float-right" onClick={handleNextPrevClick(2)}>next</MDBBtn>
+                <MDBBtn color="mdb-color" rounded className="float-right" onClick={handleNextPrevClick(2)}>Siguiente</MDBBtn>
               </MDBCol>)}
 
             {formActivePanel === 2 &&
               <MDBCol md="12">
-                  <NewPatientHistory
-                      patientData={patientData}
-                      childProps={childProps}
-                      global={global}
-                      setGlobalData={setGlobalData}
-                  />
+                  {global.patient.patientHistory === null && 
+                    <NewPatientHistory patientData={patientData} childProps={childProps} global={global} setGlobalData={setGlobalData} setHasPatientHistory={setHasPatientHistory} setPatientHistory={setPatientHistory}/>}
+                  {!(global.patient.patientHistory === null) && 
+                    <PatientHistory patientData={patientData} childProps={childProps} global={global} setGlobalData={setGlobalData} patientHistory={patientHistory}/>}
                 <br/>
-                <MDBBtn color="mdb-color" rounded className="float-left" onClick={handleNextPrevClick(1)}>previous</MDBBtn>
-                <MDBBtn color="mdb-color" rounded className="float-right" onClick={handleNextPrevClick(3)}>next</MDBBtn>
+                <MDBBtn color="mdb-color" rounded className="float-left" onClick={handleNextPrevClick(1)}>Anterior</MDBBtn>
+                <MDBBtn color="mdb-color" rounded className="float-right" onClick={handleNextPrevClick(3)}>Siguiente</MDBBtn>
               </MDBCol>
             }
 
             {formActivePanel == 3 &&
             (<MDBCol md="12">
               <h3 className="font-weight-bold pl-0 my-4"><strong>Exploracion Fisica</strong></h3>
-                <NewPhysicalExploration
+                <PhysicalExploration
                   patientData={patientData}
                   childProps={childProps}
                   global={global}
                   setGlobalData={setGlobalData}
                 />
               <br/>
-              <MDBBtn color="mdb-color" rounded className="float-left" onClick={handleNextPrevClick(2)}>previous</MDBBtn>
-              <MDBBtn color="mdb-color" rounded className="float-right" onClick={handleNextPrevClick(4)}>next</MDBBtn>
+              <MDBBtn color="mdb-color" rounded className="float-left" onClick={handleNextPrevClick(2)}>Anterior</MDBBtn>
+              <MDBBtn color="mdb-color" rounded className="float-right" onClick={handleNextPrevClick(4)}>Siguiente</MDBBtn>
             </MDBCol>)}
 
             {formActivePanel == 4 &&
             (<MDBCol md="12">
               <h3 className="font-weight-bold pl-0 my-4"><strong>Prescripciones y Estudios</strong></h3>
-                <NewPostConsultationsActivity
+                <PostConsultationsActivity
                   patientData={patientData}
                   childProps={childProps}
                   global={global}
                   setGlobalData={setGlobalData}
                 />
               <br/>
-              <MDBBtn color="mdb-color" rounded className="float-left" onClick={handleNextPrevClick(3)}>previous</MDBBtn>
-              <MDBBtn color="success" rounded className="float-right" onClick={handleSubmission}>submit</MDBBtn>
+              <MDBBtn color="mdb-color" rounded className="float-left" onClick={handleNextPrevClick(3)}>Anterior</MDBBtn>
+              <MDBBtn color="success" rounded className="float-right" onClick={handleSubmission}>
+                { !loadingButton && "Finalizar"}
+                { loadingButton && <MDBSpinner small/>}
+              </MDBBtn>
             </MDBCol>)}
           </MDBRow>
       </MDBContainer>

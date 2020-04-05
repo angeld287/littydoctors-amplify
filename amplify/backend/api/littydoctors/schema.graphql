@@ -44,7 +44,7 @@ type Doctor
     name: String!
     username: String!
     email: String!
-    speciality: String!
+    speciality: Specialty @connection
     sex: String!
     consultingroom: ConsultingRoom @connection
     image: String!
@@ -163,6 +163,8 @@ type Subscription {
 }
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
+enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
+enum Sex { MAN WOMAN }
 
 #Medical Consultation Process BackEnd definition
 
@@ -184,9 +186,12 @@ type MedicalConsultation
     patient: Patient @connection
     postConsultationsActivity: PostConsultationsActivity @connection
     medicalHistory: MedicalHistory @connection
+    state: State
     doctorname: String
     secretary: String
     patientname: String
+    finalizedAt: String
+    startedAt: String
     createdAt: String
 }
 
@@ -210,6 +215,7 @@ type MedicalHistory
     doctor: String
     secretary: String
     patientname: String
+    createdAt: String
 }
 
 type Patient 
@@ -234,9 +240,48 @@ type Patient
     height: String
     size: String
     age: String
+    sex: Sex
+    id_card: String
+    religion: Religion @connection
+    address: String
+    marital_status: MaritalStatus
     birthdate: String
     patientHistory: PatientHistory @connection
+    createdAt: String
 }
+
+type Religion
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+}
+
+type Specialty
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+}
+
 
 #Antecedentes del paciente
 type PatientHistory
@@ -256,6 +301,7 @@ type PatientHistory
     pathologicalHistory: PathologicalHistory @connection
     familyHistory: [FamilyHistory] @connection
     gynecoObstetricHistory: GynecoObstetricHistory @connection
+    createdAt: String
 }
 
 type NonPathologicalHistory 
@@ -275,6 +321,7 @@ type NonPathologicalHistory
     active: Boolean
     frequency: String
     comment: String
+    createdAt: String
 }
 
 type PathologicalHistory
@@ -293,6 +340,7 @@ type PathologicalHistory
     surgicalInterventions: [PathologicalHistorySurgicalInt] @connection(name: "phsi")
     patientMedications: [PatientMedications] @connection(name: "pm")
     patientAllergies: [PatientAllergies] @connection(name: "pa")
+    createdAt: String
 }
 
 type FamilyHistory
@@ -312,12 +360,14 @@ type FamilyHistory
     alive: Boolean
     diseases: [FamilyDetailsDiseases] @connection(name: "fdd")
     comment: String
+    createdAt: String
 }
 
 type FamilyDetailsDiseases @model(queries: null) {
   id: ID!
   family: FamilyHistory @connection(name: "fdd")
   diseases: Disease @connection(name: "dfd")
+  createdAt: String
 }
 
 type Disease
@@ -336,6 +386,7 @@ type Disease
     name: String
     description: String
     familyDetails: [FamilyDetailsDiseases] @connection(name: "dfd")
+    createdAt: String
 }
 
 type GynecoObstetricHistory
@@ -359,6 +410,7 @@ type GynecoObstetricHistory
     abortions: String
     caesarean_sections: String
     contraceptive_method: String
+    createdAt: String
 }
 
 type Allergy
@@ -377,22 +429,26 @@ type Allergy
     name: String
     description: String
     patients: [PatientAllergies] @connection(name: "ap")
+    createdAt: String
 }
 
 type PatientAllergies @model(queries: null) {
   id: ID!
   pathologicalHistory: PathologicalHistory @connection(name: "pa")
   allergies: Allergy @connection(name: "ap")
+  createdAt: String
 }
 
 type PatientMedications @model(queries: null) {
   id: ID!
   pathologicalHistory: PathologicalHistory @connection(name: "pm")
   medications: Medicine @connection(name: "mp")
+  drug_concentration: String
+  createdAt: String
 }
 
 type Medicine
-    @model 
+    @model
     @auth(rules: [
         # Defaults to use the "owner" field.
         { allow: owner },
@@ -410,6 +466,7 @@ type Medicine
     drug_concentration: String #500mg, 200mg, 50mg 
     chemical_composition: String
     #mp: [MedicalPrescriptionsMedications] @connection(name: "mmp")
+    createdAt: String
 }
 
 type PostConsultationsActivity
@@ -432,6 +489,7 @@ type PostConsultationsActivity
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 type MedicalPrescription
@@ -456,6 +514,7 @@ type MedicalPrescription
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 """ type MedicalPrescriptionsMedications @model(queries: null) {
@@ -470,6 +529,7 @@ type PostConsultActMedAnalysis @model(queries: null) {
   date: String
   pcActivities: PostConsultationsActivity @connection(name: "pcama")
   medicalAnalysis: MedicalAnalysis @connection(name: "mapca")
+  createdAt: String
 }
 
 type MedicalAnalysis
@@ -488,6 +548,7 @@ type MedicalAnalysis
     name: String
     code: String
     medicalAnalysis: [PostConsultActMedAnalysis] @connection(name: "mapca")
+    createdAt: String
 }
 
 type PostConsultActSurgicalInt @model(queries: null) {
@@ -496,6 +557,7 @@ type PostConsultActSurgicalInt @model(queries: null) {
   date: String
   pcActivities: PostConsultationsActivity @connection(name: "pcasi")
   surgicalIntervention: SurgicalIntervention @connection(name: "sipca")
+  createdAt: String
 }
 
 type PathologicalHistorySurgicalInt @model(queries: null) {
@@ -503,6 +565,7 @@ type PathologicalHistorySurgicalInt @model(queries: null) {
   date: String
   pathologicalHistory: PathologicalHistory @connection(name: "phsi")
   surgicalIntervention: SurgicalIntervention @connection(name: "siph")
+  createdAt: String
 }
 
 type SurgicalIntervention
@@ -522,6 +585,7 @@ type SurgicalIntervention
     description: String
     surgicalIntervention: [PostConsultActSurgicalInt] @connection(name: "sipca")
     pathologicalHistory: [PathologicalHistorySurgicalInt] @connection(name: "siph")
+    createdAt: String
 }
 
 type PhysicalExploration
@@ -544,6 +608,7 @@ type PhysicalExploration
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 type VitalSign
@@ -567,6 +632,7 @@ type VitalSign
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 type RegionalExploration
@@ -593,9 +659,10 @@ type RegionalExploration
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
-type Category
+type Category 
     @model 
     @auth(rules: [
         # Defaults to use the "owner" field.
@@ -608,4 +675,5 @@ type Category
     name: String
     description: String
     module: String
+    createdAt: String
 }

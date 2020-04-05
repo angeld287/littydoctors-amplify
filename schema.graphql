@@ -392,7 +392,7 @@ type PatientMedications @model(queries: null) {
 }
 
 type Medicine
-    @model 
+    @model
     @auth(rules: [
         # Defaults to use the "owner" field.
         { allow: owner },
@@ -601,7 +601,7 @@ type Category
         # Defaults to use the "owner" field.
         { allow: owner },
         { allow: groups, groups: ["admin"] }
-        { allow: groups, groups: ["priest"], operations: [read] },
+        { allow: groups, groups: ["doctor"], operations: [read] },
         { allow: groups, groups: ["secretary"], operations: [read] },
     ]) {
     id: ID!

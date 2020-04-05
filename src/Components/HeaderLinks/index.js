@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 
 
@@ -9,15 +9,17 @@ import {
   MDBDropdown, MDBDropdownToggle, MDBIcon, MDBDropdownMenu, MDBDropdownItem
   } from "mdbreact";
 
-export default class HeaderLinks extends Component {
+const HeaderLinks = ({childProps: childProps}) => {
+      useEffect(() => {
+          
+      }, []);
 
-  handlesignOut = () => {
-    Auth.signOut().then(d => {
-      window.location.reload()
-    });
-  }
+    const handlesignOut = () => {
+      Auth.signOut().then(d => {
+        window.location.reload()
+      });
+    }
 
-  render() {
     return (
       <MDBNavbar color="indigo" dark expand="md">
             <MDBCollapse id="navbarCollapse3" /* isOpen={this.state.isOpen} */ navbar>
@@ -25,14 +27,12 @@ export default class HeaderLinks extends Component {
                 <MDBNavItem active>
                   <MDBNavLink to="/"><img className="card-img-top" src={logo} style={{height: 20, width: 25}} alt="" />  Litty Doctors</MDBNavLink>
                 </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink to="/consultations">Consultas Medicas</MDBNavLink>
-                </MDBNavItem>
-                {(this.props.childProps.state.user_roll === 'secretary' || this.props.childProps.state.user_roll === 'doctor') && <MDBNavItem ><MDBNavLink to="/medicalappointmentsmanagement">Citas</MDBNavLink></MDBNavItem>}
-                {this.props.childProps.state.user_roll === 'doctor' && <MDBNavItem ><MDBNavLink to="/reports">Reportes</MDBNavLink></MDBNavItem>}
+                {childProps.state.user_roll === 'doctor' && <MDBNavItem><MDBNavLink to="/consultations">Consultas Medicas</MDBNavLink></MDBNavItem>}
+                {/* {(this.props.childProps.state.user_roll === 'secretary' || this.props.childProps.state.user_roll === 'doctor') && <MDBNavItem ><MDBNavLink to="/medicalappointmentsmanagement">Citas</MDBNavLink></MDBNavItem>} */}
+                {childProps.state.user_roll === 'doctor' && <MDBNavItem ><MDBNavLink to="/reports">Reportes</MDBNavLink></MDBNavItem>}
               </MDBNavbarNav>
-              {!this.props.childProps.isLoggedIn &&<MDBNavbarNav right><MDBNavItem><MDBNavLink to="/profile">LogIn</MDBNavLink></MDBNavItem></MDBNavbarNav>}
-              {this.props.childProps.isLoggedIn &&
+              {!childProps.isLoggedIn &&<MDBNavbarNav right><MDBNavItem><MDBNavLink to="/profile">LogIn</MDBNavLink></MDBNavItem></MDBNavbarNav>}
+              {childProps.isLoggedIn &&
               <MDBNavbarNav right>
                 <MDBNavItem>
                     <MDBDropdown>
@@ -40,17 +40,18 @@ export default class HeaderLinks extends Component {
                         <MDBIcon icon="user" />
                       </MDBDropdownToggle>
                       <MDBDropdownMenu className="dropdown-default" right>
-                        <MDBDropdownItem onClick={this.handlesignOut}>LogOut</MDBDropdownItem>
+                        <MDBDropdownItem onClick={handlesignOut}>LogOut</MDBDropdownItem>
                       </MDBDropdownMenu>
                     </MDBDropdown> 
                 </MDBNavItem>
                 <MDBNavItem>
-                  <MDBNavLink to="/profile">{this.props.childProps.state.username}</MDBNavLink>
+                  <MDBNavLink to="/profile">{childProps.state.username}</MDBNavLink>
                 </MDBNavItem>
               </MDBNavbarNav>
               }
             </MDBCollapse>
       </MDBNavbar>
     );
-  }
 }
+
+export default HeaderLinks;

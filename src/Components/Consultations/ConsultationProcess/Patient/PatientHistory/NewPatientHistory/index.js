@@ -7,15 +7,52 @@ import NonPathologicalHistory from './NonPathologicalHistory';
 import PathologicalHistory from './PathologicalHistory';
 import FamilyHistory from './FamilyHistory';
 
+import TooltipButton from '../../../../../TooltipButton';
+
 
 
 const NewPatientHistory = ({
     global: global,
-    setGlobalData: setGlobalData
+    setGlobalData: setGlobalData,
+    setHasPatientHistory:  setHasPatientHistory,
+    setPatientHistory: setPatientHistory,
 }) => {
-  const { nonPathModal, toggleNonPath, api, setPatientMedications, setPatientSurgicalInterventions, register, onSubmit, setPatientAllergies, nonPathTable,
-          loadingButton, handleSubmit, formState, errors, edit, nonPathEditObject, createNonPath, editNonPath, toggleFamily, familyModal,
-          familyTable, createFamily, removeFamily, editFamily, familyEditObject } = useNewPatientHistory(global, setGlobalData);
+  const { 
+    onSubmit, 
+    handleSubmit, 
+    formState, 
+    register, 
+    errors, 
+    api, 
+    edit, 
+    loadingButton, 
+    setPatientAllergies, 
+    setPatientMedications, 
+    setPatientSurgicalInterventions, 
+    nonPathActions,
+    familyActions,
+    medicationActions,
+    loading,
+  } = useNewPatientHistory(global, setGlobalData, setHasPatientHistory, setPatientHistory);
+
+  if (loading) {
+    return (
+      <MDBContainer>
+        <MDBBox display="flex" justifyContent="center" className="mt-5">
+          <MDBSpinner big/>
+        </MDBBox>
+      </MDBContainer>
+    );
+  }
+
+  const nopathAddBtn = (<MDBBtn onClick={nonPathActions.toggleNonPath} disabled={loadingButton} className="btn btn-primary btn-sm">
+                          <MDBIcon icon="plus" size="2x" />
+                        </MDBBtn>);
+ 
+
+  const familyAddBtn = (<MDBBtn onClick={familyActions.toggleFamily} disabled={loadingButton} className="btn btn-primary btn-sm">
+                          <MDBIcon icon="plus" size="2x" />
+                        </MDBBtn>);
 
   return (
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -33,6 +70,7 @@ const NewPatientHistory = ({
                   api={api}
                   register={register}
                   errors={errors}
+                  medicationActions={medicationActions}
                 />
               </MDBCard>
             </MDBCol>
@@ -46,25 +84,23 @@ const NewPatientHistory = ({
               <MDBCard>
                 <br/>
                 <MDBContainer>
-                  <MDBBtn onClick={toggleNonPath} disabled={loadingButton} className="btn btn-primary btn-sm">
-                      Crear Antecedente No Patológicos
-                  </MDBBtn>
+                  <TooltipButton helperMessage={"Agregar Antecendente No Patologico"} component={nopathAddBtn} placement="right"/>
                   <MDBDataTable
                     striped bordered searchLabel="Buscar"
                     responsiveSm={true} small hover entries={5}
-                    btn={true} data={nonPathTable} noRecordsFoundLabel="No se han encontrado datos"
+                    btn={true} data={nonPathActions.nonPathTable} noRecordsFoundLabel="No se han encontrado datos"
                     entriesLabel="Cantidad" entriesOptions={[ 5, 10 ]} infoLabel={[ '', '-', 'de', 'registros' ]}
                     paginationLabel={[ 'Anterior', 'Siguiente' ]} noBottomColumns={true}
                   />
                 </MDBContainer>
-                <MDBModal isOpen={nonPathModal} toggle={toggleNonPath} size="lg">
+                <MDBModal isOpen={nonPathActions.nonPathModal} toggle={nonPathActions.toggleNonPath} size="lg">
                   <NonPathologicalHistory
-                    toggleNonPath={toggleNonPath}
+                    toggleNonPath={nonPathActions.toggleNonPath}
                     api={api}
-                    createNonPath={createNonPath}
-                    editNonPath={editNonPath}
+                    createNonPath={nonPathActions.createNonPath}
+                    editNonPath={nonPathActions.editNonPath}
                     edit={edit}
-                    nonPathEditObject={nonPathEditObject}
+                    nonPathEditObject={nonPathActions.nonPathEditObject}
                   />
                 </MDBModal>
               </MDBCard>
@@ -79,25 +115,23 @@ const NewPatientHistory = ({
               <MDBCard>
                 <br/>
                 <MDBContainer>
-                  <MDBBtn onClick={toggleFamily} disabled={loadingButton} className="btn btn-primary btn-sm">
-                      Crear Antecedente Familiares
-                  </MDBBtn>
+                  <TooltipButton helperMessage={"Agregar Antecendente Familiar"} component={familyAddBtn} placement="right"/>
                   <MDBDataTable
                     striped bordered searchLabel="Buscar"
                     responsiveSm={true} small hover entries={5}
-                    btn={true} data={familyTable} noRecordsFoundLabel="No se han encontrado datos"
+                    btn={true} data={familyActions.familyTable} noRecordsFoundLabel="No se han encontrado datos"
                     entriesLabel="Cantidad" entriesOptions={[ 5, 10 ]} infoLabel={[ '', '-', 'de', 'registros' ]}
                     paginationLabel={[ 'Anterior', 'Siguiente' ]} noBottomColumns={true}
                   />
                 </MDBContainer>
-                <MDBModal isOpen={familyModal} toggle={toggleFamily} size="lg">
+                <MDBModal isOpen={familyActions.familyModal} toggle={familyActions.toggleFamily} size="lg">
                   <FamilyHistory 
-                    toggleFamily={toggleFamily}
+                    toggleFamily={familyActions.toggleFamily}
                     api={api}
-                    createFamily={createFamily}
-                    editFamily={editFamily}
+                    createFamily={familyActions.createFamily}
+                    editFamily={familyActions.editFamily}
                     edit={edit}
-                    familyEditObject={familyEditObject}
+                    familyEditObject={familyActions.familyEditObject}
                   />
                 </MDBModal>
               </MDBCard>
@@ -105,7 +139,7 @@ const NewPatientHistory = ({
         </MDBRow>
         <br/>
         <div className="text-center py-4 mt-3">
-                  {!loadingButton && <MDBBtn className="btn btn-outline-blue" type="submit" disabled={formState.isSubmitting}>Agregar</MDBBtn>}
+                  {!loadingButton && <MDBBtn className="btn btn-outline-blue" type="submit" disabled={formState.isSubmitting}>Crear Antecedentes</MDBBtn>}
                   {loadingButton && <MDBSpinner small />}
 				</div>
       </form>

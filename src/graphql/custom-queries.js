@@ -11,7 +11,10 @@ export const listConsultingRoomsSecretary = `query ListConsultingRooms(
         name
         username
         email
-        speciality
+        speciality {
+          id
+          name
+        }
         sex
         image
       }
@@ -124,15 +127,27 @@ export const getMedicalConsultation = /* GraphQL */ `
   query GetMedicalConsultation($id: ID!) {
     getMedicalConsultation(id: $id) {
       id
+      state
       patient {
         id
         name
         username
         email
         phone
+        phone_id
         weight
         height
+        size
+        age
+        sex
+        id_card
+        address
+        marital_status
         birthdate
+        religion {
+          id
+          name
+        }
         patientHistory {
           id
           nonPathologicalHistory {
@@ -145,19 +160,44 @@ export const getMedicalConsultation = /* GraphQL */ `
                 name
               }
               owner
+              createdAt
             }
             nextToken
           }
           pathologicalHistory {
             id
             surgicalInterventions {
-              nextToken
+              items {
+                id
+                surgicalIntervention {
+                  id
+                  name
+                  description
+                }
+                createdAt
+              }
             }
             patientMedications {
-              nextToken
+              items {
+                id
+                medications {
+                  id
+                  name
+                }
+                createdAt
+                drug_concentration
+              }
             }
             patientAllergies {
-              nextToken
+              items {
+                id
+                allergies {
+                  id
+                  name
+                  description
+                }
+                createdAt
+              }
             }
           }
           familyHistory {
@@ -165,7 +205,21 @@ export const getMedicalConsultation = /* GraphQL */ `
               id
               alive
               comment
-              owner
+              createdAt
+              diseases {
+                items {
+                  id
+                  diseases {
+                    id
+                    name
+                  }
+                }
+                nextToken
+              }
+              relationship {
+                id
+                name
+              }
             }
             nextToken
           }
@@ -174,13 +228,40 @@ export const getMedicalConsultation = /* GraphQL */ `
       postConsultationsActivity {
         id
         medicalpres {
-          nextToken
+          items {
+            id
+            date
+            frequency
+            duration
+            comment
+            createdAt
+            medications {
+              id
+              name
+            }
+          }
         }
         medicalAnalysis {
-          nextToken
+          items {
+            id
+            state
+            date
+            medicalAnalysis{
+              id
+              name
+            }
+          }
         }
         surgicalIntervention {
-          nextToken
+          items {
+            id
+            state
+            date
+            surgicalIntervention{
+              id
+              name
+            }
+          }
         }
       }
       medicalHistory {
@@ -189,12 +270,165 @@ export const getMedicalConsultation = /* GraphQL */ `
         physicalExploration {
           id
           general_exploration
+          vitalsign {
+              id
+              blood_pressure
+              breathing
+              pulse
+              temperature
+              doctor
+              secretary
+              patient
+              owner
+          }
+          regionalExploration {
+              id
+              head
+              neck
+              thorax
+              abdomen
+              members
+              genitals
+              others
+              doctor
+              secretary
+              patient
+              owner
+            }
           doctor
           secretary
           patient
         }
       }
       createdAt
+    }
+  }
+`;
+
+
+export const listMedicalConsultationsForHistory = /* GraphQL */ `
+  query ListMedicalConsultations(
+    $filter: ModelMedicalConsultationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMedicalConsultations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        medicalHistory {
+          id
+          reason
+        }
+        state  
+        createdAt 
+        startedAt
+        finalizedAt
+        postConsultationsActivity {
+          id
+          medicalpres {
+            items {
+              id
+              date
+              frequency
+              duration
+              comment
+              medications {
+                id
+                name
+              }
+            }
+          }
+          medicalAnalysis {
+            items {
+              id
+              state
+              date
+              medicalAnalysis{
+                id
+                name
+              }
+            }
+          }
+          surgicalIntervention {
+            items {
+              id
+              state
+              date
+              surgicalIntervention{
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const listMedicalConsultations = /* GraphQL */ `
+  query ListMedicalConsultations(
+    $filter: ModelMedicalConsultationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMedicalConsultations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        patient {
+          id
+          name
+          username
+          phone
+        }
+        state
+        createdAt
+        startedAt
+        finalizedAt
+      }
+    }
+  }
+`;
+
+export const listConsultingRooms = /* GraphQL */ `
+  query ListConsultingRooms(
+    $filter: ModelConsultingRoomFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listConsultingRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        doctor {
+          id
+          name
+          username
+          email
+          sex
+          image
+          owner
+          speciality {
+            id
+            name
+          }
+        }
+        secretary
+        location {
+          id
+          name
+          owner
+        }
+        owner
+      }
+      nextToken
     }
   }
 `;
