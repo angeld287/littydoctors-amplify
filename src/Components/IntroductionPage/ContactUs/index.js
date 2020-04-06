@@ -16,7 +16,7 @@ const ContactPage = () => {
               <MDBBtn tag="a" floating color="blue" className="accent-1">
                 <MDBIcon fab icon="instagram" />
               </MDBBtn>
-              <p>@mdconsultasrd</p>
+              <p>@littydoctors</p>
             </MDBCol>
             <MDBCol md="4">
               <MDBBtn tag="a" floating color="blue" className="accent-1">
@@ -28,7 +28,7 @@ const ContactPage = () => {
               <MDBBtn tag="a" floating color="blue" className="accent-1">
                 <MDBIcon icon="envelope" />
               </MDBBtn>
-              <p>mdconsultasrd@gmail.com</p>
+              <p>littydoctors@gmail.com</p>
             </MDBCol>
         </MDBRow>
         <br/>
