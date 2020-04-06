@@ -16,5 +16,23 @@
                 "littydoctors0f1e523f": {}
             }
         }
+    },
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-littydoctors-prod-00459-authRole",
+            "UnauthRoleArn": "arn:aws:iam::123686206419:role/amplify-littydoctors-prod-00459-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::123686206419:role/amplify-littydoctors-prod-00459-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-littydoctors-prod-00459-deployment",
+            "UnauthRoleName": "amplify-littydoctors-prod-00459-unauthRole",
+            "StackName": "amplify-littydoctors-prod-00459",
+            "StackId": "arn:aws:cloudformation:us-east-1:123686206419:stack/amplify-littydoctors-prod-00459/95c06a80-76f2-11ea-9c24-1246411399d1",
+            "AmplifyAppId": "d1ut0jto20tioa"
+        },
+        "categories": {
+            "auth": {
+                "littydoctors0f1e523f": {}
+            }
+        }
     }
 }
