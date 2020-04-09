@@ -95,10 +95,10 @@ const usePathologicalHistory = (setGlobalData, global) => {
     const createMedication = async (o) => {
 
         setlb_med(true);
-        const _items = global.patient.patientHistory.pathologicalHistory.patientMedications.items;
+        const _items = global.patient.patientHistory.items[0].pathologicalHistory.patientMedications.items;
         
         const input = {
-            patientMedicationsPathologicalHistoryId: global.patient.patientHistory.pathologicalHistory.id,
+            patientMedicationsPathologicalHistoryId: global.patient.patientHistory.items[0].pathologicalHistory.id,
             patientMedicationsMedicationsId: o.medication.value,
             drug_concentration: o.drug_concentration
         };
@@ -106,7 +106,7 @@ const usePathologicalHistory = (setGlobalData, global) => {
 
         const _patientMedications = medications.data.createPatientMedications;
         _items.push(_patientMedications);
-        global.patient.patientHistory.pathologicalHistory.patientMedications.items = _items;
+        global.patient.patientHistory.items[0].pathologicalHistory.patientMedications.items = _items;
         setGlobalData(global);
         
         setTimeout(() => {  
@@ -126,7 +126,7 @@ const usePathologicalHistory = (setGlobalData, global) => {
         medicationActions.setlb_med(true);
         const objectToEdit = {}
         
-        const _items = global.patient.patientHistory.pathologicalHistory.patientMedications.items;
+        const _items = global.patient.patientHistory.items[0].pathologicalHistory.patientMedications.items;
         objectToEdit.id = o.id;
         
         const item = _items[_items.findIndex(v => v.id === o.id)];
@@ -139,7 +139,7 @@ const usePathologicalHistory = (setGlobalData, global) => {
         _items.splice(_items.findIndex(v => v.id === o.id), 1);
         _items.push(medications.data.updatePatientMedications);
         
-        global.patient.patientHistory.pathologicalHistory.patientMedications.items = _items;
+        global.patient.patientHistory.items[0].pathologicalHistory.patientMedications.items = _items;
 
         setGlobalData(global);
         
@@ -150,7 +150,7 @@ const usePathologicalHistory = (setGlobalData, global) => {
     }
 
     const setMedicationsList = () => {
-      const data = global.patient.patientHistory.pathologicalHistory.patientMedications;
+      const data = global.patient.patientHistory.items[0].pathologicalHistory.patientMedications;
           var formated = [];
           const items = data.items.sort((a,b) => { return new Date(b.createdAt) - new Date(a.createdAt)});
             items.forEach((item) => {
@@ -176,12 +176,12 @@ const usePathologicalHistory = (setGlobalData, global) => {
           const result = await Swal.fire({ title: '¿Desea eliminar el elemento?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar'});
           if (result.value) {
               medicationActions.setlb_med(true);
-              const _items = global.patient.patientHistory.pathologicalHistory.patientMedications.items;
+              const _items = global.patient.patientHistory.items[0].pathologicalHistory.patientMedications.items;
               
               API.graphql(graphqlOperation(deletePatientMedications, {input: {id: id}} ));
               _items.splice(_items.findIndex(v => v.id === id), 1);
     
-              global.patient.patientHistory.pathologicalHistory.patientMedications.items = _items;
+              global.patient.patientHistory.items[0].pathologicalHistory.patientMedications.items = _items;
     
               setGlobalData(global);
               

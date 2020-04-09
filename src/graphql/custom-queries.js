@@ -149,79 +149,81 @@ export const getMedicalConsultation = /* GraphQL */ `
           name
         }
         patientHistory {
-          id
-          nonPathologicalHistory {
-            items {
-              id
-              frequency
-              comment
-              type {
-                id
-                name
-              }
-              owner
-              createdAt
-            }
-            nextToken
-          }
-          pathologicalHistory {
+          items {
             id
-            surgicalInterventions {
+            nonPathologicalHistory {
               items {
                 id
-                surgicalIntervention {
-                  id
-                  name
-                  description
-                }
-                createdAt
-              }
-            }
-            patientMedications {
-              items {
-                id
-                medications {
+                frequency
+                comment
+                type {
                   id
                   name
                 }
-                createdAt
-                drug_concentration
-              }
-            }
-            patientAllergies {
-              items {
-                id
-                allergies {
-                  id
-                  name
-                  description
-                }
+                owner
                 createdAt
               }
+              nextToken
             }
-          }
-          familyHistory {
-            items {
+            pathologicalHistory {
               id
-              alive
-              comment
-              createdAt
-              diseases {
+              surgicalInterventions {
                 items {
                   id
-                  diseases {
+                  surgicalIntervention {
+                    id
+                    name
+                    description
+                  }
+                  createdAt
+                }
+              }
+              patientMedications {
+                items {
+                  id
+                  medications {
                     id
                     name
                   }
+                  createdAt
+                  drug_concentration
                 }
-                nextToken
               }
-              relationship {
-                id
-                name
+              patientAllergies {
+                items {
+                  id
+                  allergies {
+                    id
+                    name
+                    description
+                  }
+                  createdAt
+                }
               }
             }
-            nextToken
+            familyHistory {
+              items {
+                id
+                alive
+                comment
+                createdAt
+                diseases {
+                  items {
+                    id
+                    diseases {
+                      id
+                      name
+                    }
+                  }
+                  nextToken
+                }
+                relationship {
+                  id
+                  name
+                }
+              }
+              nextToken
+            }
           }
         }
       }
@@ -429,6 +431,110 @@ export const listConsultingRooms = /* GraphQL */ `
         owner
       }
       nextToken
+    }
+  }
+`;
+
+export const getPatientForGlobal = /* GraphQL */ `
+  query GetPatient($id: ID!) {
+    getPatient(id: $id) {
+      id
+      name
+      username
+      email
+      phone
+      phone_id
+      weight
+      height
+      size
+      age
+      sex
+      id_card
+      address
+      marital_status
+      birthdate
+      religion {
+        id
+        name
+      }
+      patientHistory {
+        items {
+          id
+          nonPathologicalHistory {
+            items {
+              id
+              frequency
+              comment
+              type {
+                id
+                name
+              }
+              owner
+              createdAt
+            }
+            nextToken
+          }
+          pathologicalHistory {
+            id
+            surgicalInterventions {
+              items {
+                id
+                surgicalIntervention {
+                  id
+                  name
+                  description
+                }
+                createdAt
+              }
+            }
+            patientMedications {
+              items {
+                id
+                medications {
+                  id
+                  name
+                }
+                createdAt
+                drug_concentration
+              }
+            }
+            patientAllergies {
+              items {
+                id
+                allergies {
+                  id
+                  name
+                  description
+                }
+                createdAt
+              }
+            }
+          }
+          familyHistory {
+            items {
+              id
+              alive
+              comment
+              createdAt
+              diseases {
+                items {
+                  id
+                  diseases {
+                    id
+                    name
+                  }
+                }
+                nextToken
+              }
+              relationship {
+                id
+                name
+              }
+            }
+            nextToken
+          }
+        }
+      }
     }
   }
 `;
