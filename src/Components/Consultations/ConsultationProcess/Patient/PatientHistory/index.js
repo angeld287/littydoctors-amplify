@@ -23,10 +23,10 @@ const PatientHistory = ({
 
 	if (global.patient.patientHistory === null || global.patient.patientHistory === undefined) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>)
   
-  const hasPatientHistory = (global.patient.patientHistory !== null && global.patient.patientHistory !== undefined);
-  const hasPathological = (global.patient.patientHistory.pathologicalHistory !== null && global.patient.patientHistory.pathologicalHistory !== undefined);
-  const hasNonPathological = (global.patient.patientHistory.nonPathologicalHistory !== null && global.patient.patientHistory.nonPathologicalHistory !== undefined);
-  const hasFamilyHistory = (global.patient.patientHistory.familyHistory !== null && global.patient.patientHistory.familyHistory !== undefined);
+  const hasPatientHistory = (global.patient.patientHistory.items.length !== 0);
+  const hasPathological = (hasPatientHistory === true ? global.patient.patientHistory.items[0].pathologicalHistory !== undefined : false);
+  const hasNonPathological = (hasPatientHistory === true ? global.patient.patientHistory.items[0].nonPathologicalHistory !== undefined : false);
+  const hasFamilyHistory = (hasPatientHistory === true ? global.patient.patientHistory.items[0].familyHistory !== undefined : false);
 
 
   const editP = () =>{
@@ -56,7 +56,7 @@ const PatientHistory = ({
                 {(hasPatientHistory && hasPathological) && !editPath &&
                   <MDBContainer>
                     <TooltipButton helperMessage={"Editar Antecedentes Patologicos"} component={pbtn} placement="top"/>
-                    <Pathological data={global.patient.patientHistory.pathologicalHistory} pathological={patientHistory.pathologicalHistory}/>
+                    <Pathological data={global.patient.patientHistory.items[0].pathologicalHistory} pathological={patientHistory.pathologicalHistory}/>
                   </MDBContainer>
                 }
                 {(hasPatientHistory && hasPathological) && editPath &&

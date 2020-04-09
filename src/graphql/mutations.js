@@ -487,9 +487,7 @@ export const createMedicalAppointment = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -596,9 +594,7 @@ export const updateMedicalAppointment = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -705,9 +701,7 @@ export const deleteMedicalAppointment = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -808,9 +802,7 @@ export const createMedicalConsultation = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -928,9 +920,7 @@ export const updateMedicalConsultation = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1048,9 +1038,7 @@ export const deleteMedicalConsultation = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1150,9 +1138,7 @@ export const createMedicalHistory = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1231,9 +1217,7 @@ export const updateMedicalHistory = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1312,9 +1296,7 @@ export const deleteMedicalHistory = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1390,33 +1372,12 @@ export const createPatient = /* GraphQL */ `
       marital_status
       birthdate
       patientHistory {
-        id
-        nonPathologicalHistory {
-          nextToken
-        }
-        pathologicalHistory {
+        items {
           id
           createdAt
           owner
         }
-        familyHistory {
-          nextToken
-        }
-        gynecoObstetricHistory {
-          id
-          menarche
-          sexual_development
-          menstrual_rhythm
-          sex_life
-          deliveries
-          abortions
-          caesarean_sections
-          contraceptive_method
-          createdAt
-          owner
-        }
-        createdAt
-        owner
+        nextToken
       }
       createdAt
       owner
@@ -1450,33 +1411,12 @@ export const updatePatient = /* GraphQL */ `
       marital_status
       birthdate
       patientHistory {
-        id
-        nonPathologicalHistory {
-          nextToken
-        }
-        pathologicalHistory {
+        items {
           id
           createdAt
           owner
         }
-        familyHistory {
-          nextToken
-        }
-        gynecoObstetricHistory {
-          id
-          menarche
-          sexual_development
-          menstrual_rhythm
-          sex_life
-          deliveries
-          abortions
-          caesarean_sections
-          contraceptive_method
-          createdAt
-          owner
-        }
-        createdAt
-        owner
+        nextToken
       }
       createdAt
       owner
@@ -1510,33 +1450,12 @@ export const deletePatient = /* GraphQL */ `
       marital_status
       birthdate
       patientHistory {
-        id
-        nonPathologicalHistory {
-          nextToken
-        }
-        pathologicalHistory {
+        items {
           id
           createdAt
           owner
         }
-        familyHistory {
-          nextToken
-        }
-        gynecoObstetricHistory {
-          id
-          menarche
-          sexual_development
-          menstrual_rhythm
-          sex_life
-          deliveries
-          abortions
-          caesarean_sections
-          contraceptive_method
-          createdAt
-          owner
-        }
-        createdAt
-        owner
+        nextToken
       }
       createdAt
       owner

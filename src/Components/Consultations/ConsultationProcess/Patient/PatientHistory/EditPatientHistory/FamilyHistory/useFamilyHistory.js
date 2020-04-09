@@ -60,13 +60,13 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
 
     const createFamily = async (o) => {
         familyActions.setlb_family(true);
-        const _items = global.patient.patientHistory.familyHistory.items;
+        const _items = global.patient.patientHistory.items[0].familyHistory.items;
         
         const input = {};
 
         input.alive = o.alive;
         if(o.comment !== ""){input.comment = o.comment;}
-        input.patientHistoryFamilyHistoryId = global.patient.patientHistory.id;
+        input.patientHistoryFamilyHistoryId = global.patient.patientHistory.items[0].id;
         input.familyHistoryRelationshipId = o.relationship.value;
 
         const cfamilyh = await API.graphql(graphqlOperation(createFamilyHistoryForGlobal, {input: input} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); familyActions.setlb_family(false); });
@@ -89,7 +89,7 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
 
         _items.push(_familyHistory);
         
-        global.patient.patientHistory.familyHistory.items = _items;
+        global.patient.patientHistory.items[0].familyHistory.items = _items;
 
         setGlobalData(global);
         
@@ -104,12 +104,12 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
         familyActions.setlb_family(true);
         const result = await Swal.fire({ title: '¿Desea eliminar el elemento?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar'});
         if (result.value) {
-            const _items = global.patient.patientHistory.familyHistory.items;
+            const _items = global.patient.patientHistory.items[0].familyHistory.items;
             
             API.graphql(graphqlOperation(deleteFamilyHistory, {input: {id: id}} ));
             _items.splice(_items.findIndex(v => v.id === id), 1);
 
-            global.patient.patientHistory.familyHistory.items = _items;
+            global.patient.patientHistory.items[0].familyHistory.items = _items;
 
             setGlobalData(global);
 
@@ -130,7 +130,7 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
         familyActions.setlb_family(true);
         const objectToEdit = {}
         
-        const _items = global.patient.patientHistory.familyHistory.items;
+        const _items = global.patient.patientHistory.items[0].familyHistory.items;
         objectToEdit.id = o.id;
         
 
@@ -176,7 +176,7 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
         _items.splice(_items.findIndex(v => v.id === o.id), 1);
         _items.push(ufamilyh.data.updateFamilyHistory);
         
-        global.patient.patientHistory.familyHistory.items = _items;
+        global.patient.patientHistory.items[0].familyHistory.items = _items;
 
         setGlobalData(global);
         

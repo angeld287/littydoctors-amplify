@@ -246,7 +246,7 @@ type Patient
     address: String
     marital_status: MaritalStatus
     birthdate: String
-    patientHistory: PatientHistory @connection
+    patientHistory: [PatientHistory] @connection
     createdAt: String
 }
 
@@ -289,12 +289,6 @@ type PatientHistory
     @auth(rules: [
         # Defaults to use the "owner" field.
         { allow: owner },
-
-        # Admin users can access any operation.
-        { allow: groups, groups: ["admin"] },
-
-        { allow: groups, groups: ["doctor"], operations: [update, read] }
-        { allow: groups, groups: ["secretary"], operations: [read] }
     ]) {
     id: ID!
     nonPathologicalHistory: [NonPathologicalHistory] @connection

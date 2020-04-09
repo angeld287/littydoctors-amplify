@@ -49,21 +49,21 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
     const createNonPath = async (o) => {
 
         nonPathActions.setlb_nonpath(true);
-        const _items = global.patient.patientHistory.nonPathologicalHistory.items;
+        const _items = global.patient.patientHistory.items[0].nonPathologicalHistory.items;
         
         const input = {};
 
         input.active = o.active;
         input.frequency = o.frequency.label;
         if(o.comment !== ""){input.comment = o.comment;}
-        input.patientHistoryNonPathologicalHistoryId = global.patient.patientHistory.id;
+        input.patientHistoryNonPathologicalHistoryId = global.patient.patientHistory.items[0].id;
         input.nonPathologicalHistoryTypeId = o.type.value;
 
         const cnonpath = await API.graphql(graphqlOperation(createNonPathologicalHistoryForGlobal, {input: input} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); nonPathActions.setlb_nonpath(false); });
         
         const _nonpathHistory = cnonpath.data.createNonPathologicalHistory;
         _items.push(_nonpathHistory);
-        global.patient.patientHistory.nonPathologicalHistory.items = _items;
+        global.patient.patientHistory.items[0].nonPathologicalHistory.items = _items;
         setGlobalData(global);
         
         setTimeout(() => {  
@@ -76,7 +76,7 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
         nonPathActions.setlb_nonpath(true);
         const objectToEdit = {}
         
-        const _items = global.patient.patientHistory.nonPathologicalHistory.items;
+        const _items = global.patient.patientHistory.items[0].nonPathologicalHistory.items;
         objectToEdit.id = o.id;
         
         const item = _items[_items.findIndex(v => v.id === o.id)];
@@ -96,7 +96,7 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
         _items.splice(_items.findIndex(v => v.id === o.id), 1);
         _items.push(unonPath.data.updateNonPathologicalHistory);
         
-        global.patient.patientHistory.nonPathologicalHistory.items = _items;
+        global.patient.patientHistory.items[0].nonPathologicalHistory.items = _items;
 
         setGlobalData(global);
         

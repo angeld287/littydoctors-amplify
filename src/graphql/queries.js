@@ -323,9 +323,7 @@ export const getMedicalAppointment = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -502,9 +500,7 @@ export const getMedicalConsultation = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -672,9 +668,7 @@ export const getMedicalHistory = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -795,33 +789,12 @@ export const getPatient = /* GraphQL */ `
       marital_status
       birthdate
       patientHistory {
-        id
-        nonPathologicalHistory {
-          nextToken
-        }
-        pathologicalHistory {
+        items {
           id
           createdAt
           owner
         }
-        familyHistory {
-          nextToken
-        }
-        gynecoObstetricHistory {
-          id
-          menarche
-          sexual_development
-          menstrual_rhythm
-          sex_life
-          deliveries
-          abortions
-          caesarean_sections
-          contraceptive_method
-          createdAt
-          owner
-        }
-        createdAt
-        owner
+        nextToken
       }
       createdAt
       owner
@@ -857,9 +830,7 @@ export const listPatients = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
