@@ -20,7 +20,7 @@ const NonPathological = ({
   
   const [ table, setTable ] = useState([]);
   const { nonPathActions, api, edit } = useEditPatientHistory(global, setGlobalData, setList);
-  const data = global.patient.patientHistory.nonPathologicalHistory;
+  const data = global.patient.patientHistory.items[0].nonPathologicalHistory;
 
   useEffect(() => {
     if (data.items !== undefined && data.items !== null) {

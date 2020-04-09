@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBIcon, MDBBox,
          MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBSpinner } from "mdbreact";
 import moment from 'moment';
@@ -20,7 +20,6 @@ const ConsultationProcess = ({childProps:childProps}) => {
           setHasPatientHistory, hasPatientHistory, patientHistory, setPatientHistory, _reason, loadingButton } = useConsultationProcess();
 
   const { createConsultation } = useConsultations();
-  
 
   if (loading) {
       return (
@@ -80,9 +79,9 @@ const ConsultationProcess = ({childProps:childProps}) => {
 
             {formActivePanel === 2 &&
               <MDBCol md="12">
-                  {global.patient.patientHistory === null && 
+                  {global.patient.patientHistory.items.length === 0 && 
                     <NewPatientHistory patientData={patientData} childProps={childProps} global={global} setGlobalData={setGlobalData} setHasPatientHistory={setHasPatientHistory} setPatientHistory={setPatientHistory}/>}
-                  {!(global.patient.patientHistory === null) && 
+                  {global.patient.patientHistory.items.length !== 0 && 
                     <PatientHistory patientData={patientData} childProps={childProps} global={global} setGlobalData={setGlobalData} patientHistory={patientHistory}/>}
                 <br/>
                 <MDBBtn color="mdb-color" rounded className="float-left" onClick={handleNextPrevClick(1)}>Anterior</MDBBtn>

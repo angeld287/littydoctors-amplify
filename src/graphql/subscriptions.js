@@ -55,9 +55,7 @@ export const onCreateMedicalAppointment = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -173,9 +171,7 @@ export const onUpdateMedicalAppointment = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -642,9 +638,7 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -762,9 +756,7 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -879,9 +871,7 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -978,9 +968,7 @@ export const onCreateMedicalHistory = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1056,9 +1044,7 @@ export const onUpdateMedicalHistory = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1134,9 +1120,7 @@ export const onDeleteMedicalHistory = /* GraphQL */ `
         marital_status
         birthdate
         patientHistory {
-          id
-          createdAt
-          owner
+          nextToken
         }
         createdAt
         owner
@@ -1209,33 +1193,12 @@ export const onCreatePatient = /* GraphQL */ `
       marital_status
       birthdate
       patientHistory {
-        id
-        nonPathologicalHistory {
-          nextToken
-        }
-        pathologicalHistory {
+        items {
           id
           createdAt
           owner
         }
-        familyHistory {
-          nextToken
-        }
-        gynecoObstetricHistory {
-          id
-          menarche
-          sexual_development
-          menstrual_rhythm
-          sex_life
-          deliveries
-          abortions
-          caesarean_sections
-          contraceptive_method
-          createdAt
-          owner
-        }
-        createdAt
-        owner
+        nextToken
       }
       createdAt
       owner
@@ -1266,33 +1229,12 @@ export const onUpdatePatient = /* GraphQL */ `
       marital_status
       birthdate
       patientHistory {
-        id
-        nonPathologicalHistory {
-          nextToken
-        }
-        pathologicalHistory {
+        items {
           id
           createdAt
           owner
         }
-        familyHistory {
-          nextToken
-        }
-        gynecoObstetricHistory {
-          id
-          menarche
-          sexual_development
-          menstrual_rhythm
-          sex_life
-          deliveries
-          abortions
-          caesarean_sections
-          contraceptive_method
-          createdAt
-          owner
-        }
-        createdAt
-        owner
+        nextToken
       }
       createdAt
       owner
@@ -1323,33 +1265,12 @@ export const onDeletePatient = /* GraphQL */ `
       marital_status
       birthdate
       patientHistory {
-        id
-        nonPathologicalHistory {
-          nextToken
-        }
-        pathologicalHistory {
+        items {
           id
           createdAt
           owner
         }
-        familyHistory {
-          nextToken
-        }
-        gynecoObstetricHistory {
-          id
-          menarche
-          sexual_development
-          menstrual_rhythm
-          sex_life
-          deliveries
-          abortions
-          caesarean_sections
-          contraceptive_method
-          createdAt
-          owner
-        }
-        createdAt
-        owner
+        nextToken
       }
       createdAt
       owner
@@ -1411,7 +1332,7 @@ export const onDeleteSpecialty = /* GraphQL */ `
   }
 `;
 export const onCreatePatientHistory = /* GraphQL */ `
-  subscription OnCreatePatientHistory($owner: String) {
+  subscription OnCreatePatientHistory($owner: String!) {
     onCreatePatientHistory(owner: $owner) {
       id
       nonPathologicalHistory {
@@ -1468,7 +1389,7 @@ export const onCreatePatientHistory = /* GraphQL */ `
   }
 `;
 export const onUpdatePatientHistory = /* GraphQL */ `
-  subscription OnUpdatePatientHistory($owner: String) {
+  subscription OnUpdatePatientHistory($owner: String!) {
     onUpdatePatientHistory(owner: $owner) {
       id
       nonPathologicalHistory {
@@ -1525,7 +1446,7 @@ export const onUpdatePatientHistory = /* GraphQL */ `
   }
 `;
 export const onDeletePatientHistory = /* GraphQL */ `
-  subscription OnDeletePatientHistory($owner: String) {
+  subscription OnDeletePatientHistory($owner: String!) {
     onDeletePatientHistory(owner: $owner) {
       id
       nonPathologicalHistory {

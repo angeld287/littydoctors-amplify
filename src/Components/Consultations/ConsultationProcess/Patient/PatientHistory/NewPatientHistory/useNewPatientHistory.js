@@ -17,6 +17,7 @@ import {
     } from '../../../../../../graphql/mutations';
 
 import { updatePatientaddPatientHistory } from '../../../../../../graphql/custom-mutations';
+import { getPatientForGlobal } from '../../../../../../graphql/custom-queries';
 
 import usePatientHistory from '../usePatientHistory';
 
@@ -354,7 +355,9 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
     * 
     */
 
-    const onSubmit = async (i) => {  
+    const onSubmit = async (i) => {
+          const patientid = global.patient.id;
+
         setLoadingButton(true);      
         global.patient.patientHistory = {
             pathologicalHistory : { patientMedications: patientMedications, patientAllergies: patientAllergies, surgicalInterventions: patientSurgicalInterventions },
@@ -393,7 +396,7 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
 
 
             //PATIENT HISTORY
-                const patienth = await API.graphql(graphqlOperation(createPatientHistory, {input: { patientHistoryPathologicalHistoryId: pathological.data.createPathologicalHistory.id}} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); });
+                const patienth = await API.graphql(graphqlOperation(createPatientHistory, {input: { patientPatientHistoryId: global.patient.id, patientHistoryPathologicalHistoryId: pathological.data.createPathologicalHistory.id}} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); });
 
             //NON PATHOLOGICAL
                 nonPath.forEach(async (e) => {
@@ -430,16 +433,26 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
 
             //ADDING PATIENT HISTORY TO PATIENT TABLE
                 setTimeout(() => {  
-                        API.graphql(graphqlOperation(updatePatientaddPatientHistory, {input: {id: global.patient.id, patientPatientHistoryId: patienth.data.createPatientHistory.id}} ))
-                        .then(async (r) => {                            
-                            setData(r.data.updatePatient.patientHistory);
-                            global.patient.patientHistory = r.data.updatePatient.patientHistory;
+                        API.graphql(graphqlOperation(getPatientForGlobal, { id: patientid}))
+                        .then(async (r) => {             
+                            
+                            console.log(r.data.getPatient);
+                            setData(r.data.getPatient.patientHistory.items[0]);
+                            global.patient.patientHistory = r.data.getPatient.patientHistory;
                             setGlobalData(global);
-                            setPatientHistory(r.data.updatePatient.patientHistory);
+                            setPatientHistory(r.data.getPatient.patientHistory.items[0]);
+
+
                             setHasPatientHistory(true);
                             setLoadingButton(false);
 			                await Swal.fire('Correcto', 'El elemento se ha creado correctamente', 'success');
                         })
+                        .catch( e => {
+                            setLoadingButton(false);
+                            console.log(e);
+
+                            Swal.fire('Ha ocurrido un error', 'Ocurrio un error pero los datos estan guardados correctamente. Refresque la pagina');
+                        });
                 }, 2000);
 
 		} catch (error) {

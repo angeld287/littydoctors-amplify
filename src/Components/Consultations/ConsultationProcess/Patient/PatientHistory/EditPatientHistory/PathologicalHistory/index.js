@@ -71,15 +71,15 @@ const PathologicalHistory = (
     const _s = [];
     const _m = [];
 
-    global.patient.patientHistory.pathologicalHistory.patientAllergies.items.forEach( e => {
+    global.patient.patientHistory.items[0].pathologicalHistory.patientAllergies.items.forEach( e => {
         _a.push({value: e.allergies.id, label: e.allergies.name})
     });
 
-    global.patient.patientHistory.pathologicalHistory.surgicalInterventions.items.forEach( e => {
+    global.patient.patientHistory.items[0].pathologicalHistory.surgicalInterventions.items.forEach( e => {
         _s.push({value: e.surgicalIntervention.id, label: e.surgicalIntervention.name})
     });
 
-    global.patient.patientHistory.pathologicalHistory.patientMedications.items.forEach( e => {
+    global.patient.patientHistory.items[0].pathologicalHistory.patientMedications.items.forEach( e => {
         _m.push({value: e.medications.id, label: e.medications.name})
     });
 
@@ -94,9 +94,9 @@ const PathologicalHistory = (
       setLb_editpath(true);
       const objectToEdit = {}
       
-      const _itemsS = global.patient.patientHistory.pathologicalHistory.surgicalInterventions.items;
-      const _itemsA = global.patient.patientHistory.pathologicalHistory.patientAllergies.items;
-      const _id = global.patient.patientHistory.pathologicalHistory.id;
+      const _itemsS = global.patient.patientHistory.items[0].pathologicalHistory.surgicalInterventions.items;
+      const _itemsA = global.patient.patientHistory.items[0].pathologicalHistory.patientAllergies.items;
+      const _id = global.patient.patientHistory.items[0].pathologicalHistory.id;
 
       if (surgicalInterventionsToEdit !== null) {
           
@@ -112,7 +112,7 @@ const PathologicalHistory = (
               const sIndex = _itemsS.findIndex(x => x.surgicalIntervention.id === e.value);
               if(sIndex === -1){
                   const input = {
-                      pathologicalHistorySurgicalIntPathologicalHistoryId: global.patient.patientHistory.pathologicalHistory.id,
+                      pathologicalHistorySurgicalIntPathologicalHistoryId: global.patient.patientHistory.items[0].pathologicalHistory.id,
                       pathologicalHistorySurgicalIntSurgicalInterventionId: e.value
                   };
                   const surgery = await API.graphql(graphqlOperation(createPathologicalHistorySurgicalInt, {input: input} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); setLb_editpath(false);  });
@@ -121,7 +121,7 @@ const PathologicalHistory = (
               }
           });
 
-          global.patient.patientHistory.pathologicalHistory.surgicalInterventions.items = _itemsS;
+          global.patient.patientHistory.items[0].pathologicalHistory.surgicalInterventions.items = _itemsS;
 
       }else{
           Swal.fire({
@@ -149,7 +149,7 @@ const PathologicalHistory = (
               const aIndex = _itemsA.findIndex(x => x.allergies.id === e.value);
               if(aIndex === -1){
                   const input = {
-                      patientAllergiesPathologicalHistoryId: global.patient.patientHistory.pathologicalHistory.id,
+                      patientAllergiesPathologicalHistoryId: global.patient.patientHistory.items[0].pathologicalHistory.id,
                       patientAllergiesAllergiesId: e.value
                   };
                     
