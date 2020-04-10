@@ -150,7 +150,7 @@ export default class App extends Component {
 
     return (
       <div> 
-          {(!this.state.loading && !this.state.error) &&
+          {!this.state.loading &&
             <div className="App">
               <HeaderLinks childProps={childProps}/>
               <Routes childProps={childProps} />
@@ -160,9 +160,6 @@ export default class App extends Component {
             <MDBBox display="flex" justifyContent="center" className="mt-5">
               <MDBSpinner big/>
             </MDBBox>
-          }
-          {this.state.error &&
-            <MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mt-5"><h2>Ha ocurrido un error</h2></MDBBox></MDBContainer>
           }
       </div>
     );
