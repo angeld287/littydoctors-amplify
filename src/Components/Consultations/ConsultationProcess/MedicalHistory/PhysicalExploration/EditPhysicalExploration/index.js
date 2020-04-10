@@ -16,6 +16,7 @@ const EditPhysicalExploration = ({
   
   const [ mm, setmm ] = useState(0);
   const [ hg, sethg ] = useState(0);
+  const [ loading, setloading ] = useState(true);
   const [ blood_pressure, setblood_pressure] = useState(fields.blood_pressure.blood_pressure);
 
   var foo = new Array(500);
@@ -37,7 +38,7 @@ const EditPhysicalExploration = ({
       };
 
       fetch();
-
+      setloading(false);
       return () => {
           didCancel = true;
       };
@@ -49,6 +50,8 @@ const EditPhysicalExploration = ({
 
   const savebtn = (<MDBBtn className="btn btn-outline-blue" onClick={editPhysicalExploration} ><MDBIcon icon="save" size="2x" /></MDBBtn>);
   const cancelbtn = (<MDBBtn className="btn btn-outline-blue" onClick={e => {setEdit(false)}} ><MDBIcon icon="times" size="2x" /></MDBBtn>);
+
+  if (loading) {return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>);}
 
   return (
     <MDBContainer>
