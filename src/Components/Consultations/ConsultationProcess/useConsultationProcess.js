@@ -113,7 +113,8 @@ const useConsultationProcess = () => {
                         setError(true);
                     })
                 }
-            } catch (error) {
+            } catch (err) {
+                console.log("Ocurrio un error: ",err);
                 setLoading(false);
                 setError(true);
             }

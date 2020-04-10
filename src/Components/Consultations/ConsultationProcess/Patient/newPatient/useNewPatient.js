@@ -83,7 +83,9 @@ const useNewPatient = () => {
                 setApi(api);
                 _setLoading(false);
 
-            } catch (error) {
+            } catch (err) {
+                console.log("Ha ocurrido un error al intentar traer las listas", err);
+                
                 _setLoading(false);
                 setError(true);
             }
