@@ -34,8 +34,8 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
                 const _category = await API.graphql(graphqlOperation(listCategorys, {filter: { module: { eq: "FamilyHistory"} }, limit: 400 }));    
                 
                 api = {
-                    diseases: _diseases.data.listDiseases.items,
-                    familytypes: _category.data.listCategorys.items,
+                    diseases: _diseases.data.listDiseases.items.sort(sortAlph),
+                    familytypes: _category.data.listCategorys.items.sort(sortAlph),
                 };
 
                 setApi(api);
@@ -57,6 +57,16 @@ const useFamilyHistory = (global, setGlobalData, setList, toggleFamily, familyAc
             didCancel = true;
         };
     }, []);
+
+    const sortAlph = (a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (b.name > a.name) {
+            return 1;
+        }
+        return 0;
+    }
 
     const createFamily = async (o) => {
         familyActions.setlb_family(true);

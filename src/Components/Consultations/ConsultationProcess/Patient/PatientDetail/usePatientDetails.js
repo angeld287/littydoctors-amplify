@@ -80,7 +80,8 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                     setData(global.consultationsHistoryData);
                     setLoading(false);
                 }
-            } catch (error) {
+            } catch (err) {
+                console.log(err);
                 setLoadingHistory(false);
                 setLoading(false);
                 setError(true);

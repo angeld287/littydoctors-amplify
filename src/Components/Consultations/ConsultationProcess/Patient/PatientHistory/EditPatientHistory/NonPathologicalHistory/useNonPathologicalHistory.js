@@ -22,8 +22,8 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
 				const _nonpath = await API.graphql(graphqlOperation(listCategorys, {filter: { or: [{module: {eq: "NonPathFrequency"}}, {module: {eq: "NonPathType"}}]}, limit: 400} )); 
 
                 api = {
-                    nonpathfrequencies: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathFrequency"),
-                    nonpathtypes: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathType"),
+                    nonpathfrequencies: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathFrequency").sort(sortAlph),
+                    nonpathtypes: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathType").sort(sortAlph),
                 };
 
                 setApi(api);
@@ -45,6 +45,16 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
             didCancel = true;
         };
     }, []);
+
+    const sortAlph = (a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (b.name > a.name) {
+            return 1;
+        }
+        return 0;
+    }
 
     const createNonPath = async (o) => {
 

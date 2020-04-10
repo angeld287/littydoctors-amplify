@@ -32,7 +32,8 @@ const useConsultationsList = (childProps) => {
                 var _consultations = await API.graphql(graphqlOperation(listMedicalConsultations, filetrLimit));
                 
                 
-            } catch (error) {
+            } catch (e) {
+                console.log("Ha ocurrido un error al intentar traer las listas", e);
                 setLoading(false);
                 setError(true);
             }

@@ -53,7 +53,8 @@ const useConsultations = () => {
                     ];
                 }
                 
-            } catch (error) {
+            } catch (e) {
+                console.log("Ocurrio un error al recibir la lista de pacientes: ", e);
                 setLoading(false);
                 setError(true);
             }

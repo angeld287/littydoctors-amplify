@@ -30,9 +30,9 @@ const usePostConsultationsActivity = (global, setGlobalData) => {
                 const _medications = await API.graphql(graphqlOperation(listMedicines, {limit: 400}));
                 
                 api = {
-                    medicalanalysis: _medicalanalysis.data.listMedicalAnalysiss.items,
-                    surgicalintervention: _surgicalintervention.data.listSurgicalInterventions.items,
-                    prescriptionmedications: _medications.data.listMedicines.items
+                    medicalanalysis: _medicalanalysis.data.listMedicalAnalysiss.items.sort(sortAlph),
+                    surgicalintervention: _surgicalintervention.data.listSurgicalInterventions.items.sort(sortAlph),
+                    prescriptionmedications: _medications.data.listMedicines.items.sort(sortAlph)
                 };
                 
                 setApi(api);
@@ -58,7 +58,7 @@ const usePostConsultationsActivity = (global, setGlobalData) => {
             setLoading(true);
             fetch();
         }else{
-            const __items = global.medicalHistory.postConsultationActivities.medicalPrescriptions.items;
+            const __items = global.medicalHistory.postConsultationActivities.medicalPrescriptions.items.sort(sortAlph);
             const __table = global.medicalHistory.postConsultationActivities.medicalPrescriptions.table;
             setApi(global.medicalHistory.postConsultationActivities.api);
             setItems(__items);
@@ -89,6 +89,16 @@ const usePostConsultationsActivity = (global, setGlobalData) => {
         register: register,
         handleSubmit: handleSubmit,
         formState: formState
+    }
+
+    const sortAlph = (a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (b.name > a.name) {
+            return 1;
+        }
+        return 0;
     }
 
     return { actions, errors, setNew, _new, _edit, setEdit, editLoading, editPhysicalExploration, api, loading};
