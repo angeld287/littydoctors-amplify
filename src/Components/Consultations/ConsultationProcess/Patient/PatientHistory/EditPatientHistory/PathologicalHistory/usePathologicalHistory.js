@@ -38,9 +38,9 @@ const usePathologicalHistory = (setGlobalData, global) => {
 				const _medications = await API.graphql(graphqlOperation(listMedicines, {limit: 400}));                
 
                 api = {
-                    medications: _medications.data.listMedicines.items,
-                    allergies: _allergies.data.listAllergys.items,
-                    surgicalinterventions: _surgicalInterventions.data.listSurgicalInterventions.items,
+                    medications: _medications.data.listMedicines.items.sort(sortAlph),
+                    allergies: _allergies.data.listAllergys.items.sort(sortAlph),
+                    surgicalinterventions: _surgicalInterventions.data.listSurgicalInterventions.items.sort(sortAlph),
                 };
 
                 setApi(api);
@@ -63,6 +63,16 @@ const usePathologicalHistory = (setGlobalData, global) => {
         };
 
     }, []);
+
+    const sortAlph = (a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (b.name > a.name) {
+            return 1;
+        }
+        return 0;
+    }
 
 
     //funciones de medicamentos

@@ -69,13 +69,13 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
 				const _nonpath = await API.graphql(graphqlOperation(listCategorys, {limit: 400}, {filter: { or: [{module: {eq: "NonPathFrequency"}}, {module: {eq: "NonPathType"}}, {module: {eq: "FamilyHistory"}}]}} ));                
 
                 api = {
-					medications: _medications.data.listMedicines.items,
-                    allergies: _allergies.data.listAllergys.items,
-                    surgicalinterventions: _surgicalinterventions.data.listSurgicalInterventions.items,
-                    diseases: _diseases.data.listDiseases.items,
-                    nonpathfrequencies: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathFrequency"),
-                    nonpathtypes: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathType"),
-                    familytypes: _nonpath.data.listCategorys.items.filter(x => x.module === "FamilyHistory"),
+					medications: _medications.data.listMedicines.items.sort(sortAlph),
+                    allergies: _allergies.data.listAllergys.items.sort(sortAlph),
+                    surgicalinterventions: _surgicalinterventions.data.listSurgicalInterventions.items.sort(sortAlph),
+                    diseases: _diseases.data.listDiseases.items.sort(sortAlph),
+                    nonpathfrequencies: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathFrequency").sort(sortAlph),
+                    nonpathtypes: _nonpath.data.listCategorys.items.filter(x => x.module === "NonPathType").sort(sortAlph),
+                    familytypes: _nonpath.data.listCategorys.items.filter(x => x.module === "FamilyHistory").sort(sortAlph),
                 };
 
                 setApi(api);
@@ -123,6 +123,17 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
             didCancel = true;
         };
     }, []);
+
+
+    const sortAlph = (a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (b.name > a.name) {
+            return 1;
+        }
+        return 0;
+    }
 
 
     /**

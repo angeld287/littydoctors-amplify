@@ -82,7 +82,7 @@ class IntroductionPage extends Component {
                   <h6 className="mb-4">
                     Somos especialistas en desarrollo de aplicaciones mobiles y web 
                     basadas en la automatizacion de los procesos de consultas medicas. 
-                    Nuestra mision es hacer que el doctor se siente comodo con el producto 
+                    Nuestra mision es hacer que el doctor se sienta comodo con el producto 
                     que utliza. Nuestra vision es llevar el producto a todos los doctores 
                     de republica dominicana.
                   </h6>
