@@ -9,6 +9,8 @@ import { updateMedicalHistory } from '../../../../../graphql/mutations';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 
+import AnalysisResults from './AnalysisResults';
+
 import TooltipButton from '../../../../TooltipButton';
 
 const PatientDetails = (
@@ -26,7 +28,7 @@ const PatientDetails = (
   const [ edit, setEdit ] = useState(false);
 
 
-  const { loadingHistory, data, lastMC, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal } = UsePatientDetails(childProps, patientData, global, setGlobalData);
+  const { loadingHistory, data, lastMC, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal, setPdfFile, addResultData, analysisToEdit } = UsePatientDetails(childProps, patientData, global, setGlobalData);
   const age = moment(new Date()).format('YYYY') - moment(patientData.birthdate).format('YYYY');
 
   const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MAN' ? 'Casado' : 'Casada') :
@@ -91,11 +93,12 @@ const PatientDetails = (
   const completeResultData = (<MDBModal isOpen={completeResultModal} toggle={toggleResult}>
                             <MDBModalHeader toggle={toggleResult}>Anexar PDF de resultado</MDBModalHeader>
                             <MDBModalBody>
-                              <MDBFileInput accept='application/pdf'/>
+                              <AnalysisResults result={analysisToEdit}/>
+                              <MDBFileInput accept='application/pdf' getValue={(e) => setPdfFile(e)}/>
                             </MDBModalBody>
                             <MDBModalFooter>
                               <MDBBtn color="secondary" onClick={toggleResult}>Cancelar</MDBBtn>
-                              <MDBBtn color="primary">Guardar</MDBBtn>
+                              <MDBBtn color="primary" onClick={addResultData}>Guardar</MDBBtn>
                             </MDBModalFooter>
                           </MDBModal>);
 

@@ -1,5 +1,5 @@
 import React,{ useState, useEffect, Fragment } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
 import { listMedicalConsultationsForHistory } from '../../../../../graphql/custom-queries';
 import { updatePostConsultActMedAnalysis } from '../../../../../graphql/mutations';
@@ -11,11 +11,14 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     const [ loadingAnal, setLoadingAnal ] = useState(false);
     const [ loadingHistory, setLoadingHistory ] = useState(false);
     const [ completeResultModal, setCompleteResultModal ] = useState(false);
+    const [ resultLoading, setResultLoading ] = useState(false);
     const [ error, setError ] = useState(false);
     const [ patientData, setPatientData ] = useState({});
     const [ data, setData ] = useState([]);
     const [ lastMC, setlastMC ] = useState([]);
     const [ analysis, setanalysis ] = useState([]);
+    const [ pdfFile, setPdfFile] = useState([]);
+    const [ analysisToEdit, setAnalysisToEdit] = useState({});
 
     useEffect(() => {
         let didCancel = false;
@@ -101,6 +104,12 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
         };
     }, []);
 
+
+    const setAddResultData = (e) => {
+        setAnalysisToEdit(e);
+        setCompleteResultModal(true);
+    }
+
     const setAnalysisList = (items) => {
         const rowa = [];
         var number = 0;
@@ -112,7 +121,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                             number: number, 
                             name: e.medicalAnalysis.name, 
                             state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
-                            actions: e.state === "INSERTED" ? (<Fragment><MDBBtn social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); setCompleteResultModal(true)}} ><MDBIcon icon="edit" size="2x" /></MDBBtn></Fragment>) : "N/A"
+                            actions: e.state === "INSERTED" ? (<Fragment><MDBBtn social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); setAddResultData(e)}} ><MDBIcon icon="edit" size="2x" /></MDBBtn></Fragment>) : "N/A"
                         };
                 rowa.push(row);
             });
@@ -133,6 +142,17 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
     }
 
+    const addResultData = () => {
+        if(pdfFile[0] !== undefined){putPdfonStorage();}
+    }
+
+    const putPdfonStorage = async () => {
+        const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEdit.medicalAnalysis.name).replace(" ","_")+"_"+patient.username+".pdf";
+        
+        const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setResultLoading(false); throw new SyntaxError("Error GraphQL"); });
+        console.log(putpdf.key);
+    }
+
     const setDone = async (id) => {
         setLoadingAnal(true);
         
@@ -149,7 +169,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
         setLoadingAnal(false);
     }
 
-    return { loadingHistory, data, lastMC, loading, analysis, setDone, loadingAnal, completeResultModal, setCompleteResultModal};
+    return { loadingHistory, data, lastMC, loading, analysis, setDone, loadingAnal, completeResultModal, setCompleteResultModal, setPdfFile, resultLoading, addResultData, analysisToEdit };
 };
 
 export default UsePatientDetails;

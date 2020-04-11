@@ -251,6 +251,7 @@ export const getMedicalConsultation = /* GraphQL */ `
             medicalAnalysis{
               id
               name
+              code
             }
           }
         }
@@ -352,6 +353,7 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
               medicalAnalysis{
                 id
                 name
+                code
               }
             }
           }
