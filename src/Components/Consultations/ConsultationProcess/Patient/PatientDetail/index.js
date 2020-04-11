@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { MDBContainer, MDBRow, MDBCol, MDBTable, MDBTableBody, MDBTableHead, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
-         MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBListGroup, MDBListGroupItem } from "mdbreact";
+         MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBFileInput, MDBListGroup, MDBListGroupItem, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from "mdbreact";
 import { API, graphqlOperation } from 'aws-amplify';
 
 import UsePatientDetails from './usePatientDetails';
@@ -26,7 +26,7 @@ const PatientDetails = (
   const [ edit, setEdit ] = useState(false);
 
 
-  const { loadingHistory, data, lastMC, loading, analysis, loadingAnal } = UsePatientDetails(childProps, patientData, global, setGlobalData);
+  const { loadingHistory, data, lastMC, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal } = UsePatientDetails(childProps, patientData, global, setGlobalData);
   const age = moment(new Date()).format('YYYY') - moment(patientData.birthdate).format('YYYY');
 
   const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MAN' ? 'Casado' : 'Casada') :
@@ -80,12 +80,29 @@ const PatientDetails = (
   const locationUrl = location.split(' ').join('%20');
   const mapUrl = "https://maps.google.com/maps?q="+locationUrl+"&t=&z=15&ie=UTF8&iwloc=&output=embed";
 
+  const toggleResult = () => {
+    setCompleteResultModal(false)
+  }
+
 
   const userPicture = patientData.sex === "MAN" ? "https://icons-for-free.com/iconfiles/png/512/boy+guy+man+icon-1320166733913205010.png" :
                       "https://i.ya-webdesign.com/images/girl-avatar-png.png";
 
+  const completeResultData = (<MDBModal isOpen={completeResultModal} toggle={toggleResult}>
+                            <MDBModalHeader toggle={toggleResult}>Anexar PDF de resultado</MDBModalHeader>
+                            <MDBModalBody>
+                              <MDBFileInput accept='application/pdf'/>
+                            </MDBModalBody>
+                            <MDBModalFooter>
+                              <MDBBtn color="secondary" onClick={toggleResult}>Cancelar</MDBBtn>
+                              <MDBBtn color="primary">Guardar</MDBBtn>
+                            </MDBModalFooter>
+                          </MDBModal>);
+
+
   return (
     <div>
+      {completeResultData}
       <MDBRow>
         <MDBCol md="4">
           <MDBCard style={{ width: "22rem" }}>

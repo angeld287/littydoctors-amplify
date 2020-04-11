@@ -10,6 +10,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     const [ loading, setLoading ] = useState(false);
     const [ loadingAnal, setLoadingAnal ] = useState(false);
     const [ loadingHistory, setLoadingHistory ] = useState(false);
+    const [ completeResultModal, setCompleteResultModal ] = useState(false);
     const [ error, setError ] = useState(false);
     const [ patientData, setPatientData ] = useState({});
     const [ data, setData ] = useState([]);
@@ -110,8 +111,8 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                 var row = { 
                             number: number, 
                             name: e.medicalAnalysis.name, 
-                            //state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
-                            //actions: e.state === "INSERTED" ? (<Fragment><MDBBtn size="sm" onClick={(ev) => {ev.preventDefault(); setDone(e.id) }}>Entregado</MDBBtn></Fragment>) : "N/A"
+                            state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
+                            actions: e.state === "INSERTED" ? (<Fragment><MDBBtn social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); setCompleteResultModal(true)}} ><MDBIcon icon="edit" size="2x" /></MDBBtn></Fragment>) : "N/A"
                         };
                 rowa.push(row);
             });
@@ -122,8 +123,8 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
             columns: [
                 {label: <Fragment>{!loadingAnal && <MDBIcon size="2x" icon="syringe" className="blue-text" />}{loadingAnal && <MDBSpinner small/>}</Fragment>, field: 'number' },
                 {label: 'Nombre', field: 'name' },
-                //{label: 'Estado', field: 'state' },
-                //{label: 'Acciones', field: 'actions' }
+                {label: 'Estado', field: 'state' },
+                {label: 'Acciones', field: 'actions' }
             ],
             rows: rowa
         };
@@ -148,7 +149,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
         setLoadingAnal(false);
     }
 
-    return { loadingHistory, data, lastMC, loading, analysis, setDone, loadingAnal };
+    return { loadingHistory, data, lastMC, loading, analysis, setDone, loadingAnal, completeResultModal, setCompleteResultModal};
 };
 
 export default UsePatientDetails;
