@@ -241,6 +241,7 @@ type Patient
     size: String
     age: String
     sex: Sex
+    image: String
     id_card: String
     religion: Religion @connection
     address: String
@@ -280,6 +281,7 @@ type Specialty
     ]) {
     id: ID!
     name: String
+    code: String
 }
 
 
@@ -521,9 +523,37 @@ type PostConsultActMedAnalysis @model(queries: null) {
   id: ID!
   state: State # se colocara un estado que espesificara si el analisis se realizo o no
   date: String
+  results: [MedicalAnalysisResults] @connection
+  file: String
   pcActivities: PostConsultationsActivity @connection(name: "pcama")
   medicalAnalysis: MedicalAnalysis @connection(name: "mapca")
   createdAt: String
+}
+
+type MedicalAnalysisResults
+    @model 
+    @auth(rules: [
+        { allow: owner },
+    ]) {
+    id: ID!
+    field: Field @connection
+    value: String
+}
+
+type Field
+    @model 
+    @auth(rules: [
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    modules: [String]
 }
 
 type MedicalAnalysis

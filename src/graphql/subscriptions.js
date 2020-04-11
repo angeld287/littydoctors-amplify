@@ -21,6 +21,7 @@ export const onCreateMedicalAppointment = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -45,6 +46,7 @@ export const onCreateMedicalAppointment = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -137,6 +139,7 @@ export const onUpdateMedicalAppointment = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -161,6 +164,7 @@ export const onUpdateMedicalAppointment = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -236,6 +240,7 @@ export const onCreateConsultingRoom = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -269,6 +274,7 @@ export const onUpdateConsultingRoom = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -302,6 +308,7 @@ export const onDeleteConsultingRoom = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -360,6 +367,7 @@ export const onCreateDoctor = /* GraphQL */ `
       speciality {
         id
         name
+        code
         owner
       }
       sex
@@ -397,6 +405,7 @@ export const onUpdateDoctor = /* GraphQL */ `
       speciality {
         id
         name
+        code
         owner
       }
       sex
@@ -434,6 +443,7 @@ export const onDeleteDoctor = /* GraphQL */ `
       speciality {
         id
         name
+        code
         owner
       }
       sex
@@ -605,6 +615,7 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -628,6 +639,7 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -675,6 +687,7 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
           size
           age
           sex
+          image
           id_card
           address
           marital_status
@@ -723,6 +736,7 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -746,6 +760,7 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -793,6 +808,7 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
           size
           age
           sex
+          image
           id_card
           address
           marital_status
@@ -838,6 +854,7 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
         speciality {
           id
           name
+          code
           owner
         }
         sex
@@ -861,6 +878,7 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -908,6 +926,7 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
           size
           age
           sex
+          image
           id_card
           address
           marital_status
@@ -958,6 +977,7 @@ export const onCreateMedicalHistory = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -1034,6 +1054,7 @@ export const onUpdateMedicalHistory = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -1110,6 +1131,7 @@ export const onDeleteMedicalHistory = /* GraphQL */ `
         size
         age
         sex
+        image
         id_card
         religion {
           id
@@ -1183,6 +1205,7 @@ export const onCreatePatient = /* GraphQL */ `
       size
       age
       sex
+      image
       id_card
       religion {
         id
@@ -1219,6 +1242,7 @@ export const onUpdatePatient = /* GraphQL */ `
       size
       age
       sex
+      image
       id_card
       religion {
         id
@@ -1255,6 +1279,7 @@ export const onDeletePatient = /* GraphQL */ `
       size
       age
       sex
+      image
       id_card
       religion {
         id
@@ -1309,6 +1334,7 @@ export const onCreateSpecialty = /* GraphQL */ `
     onCreateSpecialty(owner: $owner) {
       id
       name
+      code
       owner
     }
   }
@@ -1318,6 +1344,7 @@ export const onUpdateSpecialty = /* GraphQL */ `
     onUpdateSpecialty(owner: $owner) {
       id
       name
+      code
       owner
     }
   }
@@ -1327,6 +1354,7 @@ export const onDeleteSpecialty = /* GraphQL */ `
     onDeleteSpecialty(owner: $owner) {
       id
       name
+      code
       owner
     }
   }
@@ -2291,6 +2319,7 @@ export const onCreatePostConsultationsActivity = /* GraphQL */ `
           id
           state
           date
+          file
           createdAt
         }
         nextToken
@@ -2339,6 +2368,7 @@ export const onUpdatePostConsultationsActivity = /* GraphQL */ `
           id
           state
           date
+          file
           createdAt
         }
         nextToken
@@ -2384,6 +2414,7 @@ export const onDeletePostConsultationsActivity = /* GraphQL */ `
           id
           state
           date
+          file
           createdAt
         }
         nextToken
@@ -2495,6 +2526,15 @@ export const onCreatePostConsultActMedAnalysis = /* GraphQL */ `
       id
       state
       date
+      results {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
+      file
       pcActivities {
         id
         medicalpres {
@@ -2532,6 +2572,15 @@ export const onUpdatePostConsultActMedAnalysis = /* GraphQL */ `
       id
       state
       date
+      results {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
+      file
       pcActivities {
         id
         medicalpres {
@@ -2569,6 +2618,15 @@ export const onDeletePostConsultActMedAnalysis = /* GraphQL */ `
       id
       state
       date
+      results {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
+      file
       pcActivities {
         id
         medicalpres {
@@ -2600,6 +2658,81 @@ export const onDeletePostConsultActMedAnalysis = /* GraphQL */ `
     }
   }
 `;
+export const onCreateMedicalAnalysisResults = /* GraphQL */ `
+  subscription OnCreateMedicalAnalysisResults($owner: String!) {
+    onCreateMedicalAnalysisResults(owner: $owner) {
+      id
+      field {
+        id
+        name
+        modules
+        owner
+      }
+      value
+      owner
+    }
+  }
+`;
+export const onUpdateMedicalAnalysisResults = /* GraphQL */ `
+  subscription OnUpdateMedicalAnalysisResults($owner: String!) {
+    onUpdateMedicalAnalysisResults(owner: $owner) {
+      id
+      field {
+        id
+        name
+        modules
+        owner
+      }
+      value
+      owner
+    }
+  }
+`;
+export const onDeleteMedicalAnalysisResults = /* GraphQL */ `
+  subscription OnDeleteMedicalAnalysisResults($owner: String!) {
+    onDeleteMedicalAnalysisResults(owner: $owner) {
+      id
+      field {
+        id
+        name
+        modules
+        owner
+      }
+      value
+      owner
+    }
+  }
+`;
+export const onCreateField = /* GraphQL */ `
+  subscription OnCreateField($owner: String) {
+    onCreateField(owner: $owner) {
+      id
+      name
+      modules
+      owner
+    }
+  }
+`;
+export const onUpdateField = /* GraphQL */ `
+  subscription OnUpdateField($owner: String) {
+    onUpdateField(owner: $owner) {
+      id
+      name
+      modules
+      owner
+    }
+  }
+`;
+export const onDeleteField = /* GraphQL */ `
+  subscription OnDeleteField($owner: String) {
+    onDeleteField(owner: $owner) {
+      id
+      name
+      modules
+      owner
+    }
+  }
+`;
 export const onCreateMedicalAnalysis = /* GraphQL */ `
   subscription OnCreateMedicalAnalysis($owner: String) {
     onCreateMedicalAnalysis(owner: $owner) {
@@ -2611,6 +2744,7 @@ export const onCreateMedicalAnalysis = /* GraphQL */ `
           id
           state
           date
+          file
           createdAt
         }
         nextToken
@@ -2631,6 +2765,7 @@ export const onUpdateMedicalAnalysis = /* GraphQL */ `
           id
           state
           date
+          file
           createdAt
         }
         nextToken
@@ -2651,6 +2786,7 @@ export const onDeleteMedicalAnalysis = /* GraphQL */ `
           id
           state
           date
+          file
           createdAt
         }
         nextToken
