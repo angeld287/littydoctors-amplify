@@ -248,6 +248,7 @@ export const getMedicalConsultation = /* GraphQL */ `
             id
             state
             date
+            file
             medicalAnalysis{
               id
               name
@@ -350,6 +351,7 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
               id
               state
               date
+              file
               medicalAnalysis{
                 id
                 name

@@ -3,13 +3,15 @@ import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
 import { listMedicalConsultationsForHistory } from '../../../../../graphql/custom-queries';
 import { updatePostConsultActMedAnalysis } from '../../../../../graphql/mutations';
-import { MDBIcon, MDBBtn, MDBSpinner } from 'mdbreact';
+import { MDBIcon, MDBBtn, MDBSpinner, MDBBtnGroup } from 'mdbreact';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     const [ loading, setLoading ] = useState(false);
-    const [ loadingAnal, setLoadingAnal ] = useState(false);
+    const [ loadingPDF, setLoadingPDF ] = useState(false);
     const [ loadingHistory, setLoadingHistory ] = useState(false);
+    const [ PDFModal, setPDFModal ] = useState(false);
     const [ completeResultModal, setCompleteResultModal ] = useState(false);
     const [ resultLoading, setResultLoading ] = useState(false);
     const [ error, setError ] = useState(false);
@@ -17,8 +19,8 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     const [ data, setData ] = useState([]);
     const [ lastMC, setlastMC ] = useState([]);
     const [ analysis, setanalysis ] = useState([]);
-    const [ pdfFile, setPdfFile] = useState([]);
     const [ analysisToEdit, setAnalysisToEdit] = useState({});
+    const [ pdfFile, setPdfFile] = useState([]);
 
     useEffect(() => {
         let didCancel = false;
@@ -31,8 +33,6 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
                     setLoading(true);
                     setLoadingHistory(true);
-
-                    
 
                     const filtermc = {
                         filter: {
@@ -110,18 +110,30 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
         setCompleteResultModal(true);
     }
 
+    const sortAlph = (a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (b.name > a.name) {
+            return 1;
+        }
+        return 0;
+    }
+
     const setAnalysisList = (items) => {
         const rowa = [];
         var number = 0;
         if (items !== null) {
-            items.sort().forEach(e => {
+            items.sort(sortAlph).forEach(e => {
+                const attachBtn = (<MDBBtn social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); openPDFModal(e)}} ><MDBIcon icon="paperclip" size="2x" /></MDBBtn>);
+                const delteBtn = (<MDBBtn social="gplus" floating size="sm" onClick={(ev) => {ev.preventDefault(); deletePDF(e)}} ><MDBIcon icon="trash" size="2x" /></MDBBtn>);
                 number = number + 1;
                 
                 var row = { 
                             number: number, 
                             name: e.medicalAnalysis.name, 
                             state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
-                            actions: e.state === "INSERTED" ? (<Fragment><MDBBtn social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); setAddResultData(e)}} ><MDBIcon icon="edit" size="2x" /></MDBBtn></Fragment>) : "N/A"
+                            actions: (<MDBBtnGroup size="sm" className="mb-4">{e.file === null && attachBtn}{e.file !== null && delteBtn}<MDBBtn social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); setAddResultData(e)}} ><MDBIcon icon="edit" size="2x" /></MDBBtn></MDBBtnGroup>)
                         };
                 rowa.push(row);
             });
@@ -130,7 +142,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
         const adata = {
             columns: [
-                {label: <Fragment>{!loadingAnal && <MDBIcon size="2x" icon="syringe" className="blue-text" />}{loadingAnal && <MDBSpinner small/>}</Fragment>, field: 'number' },
+                {label: <Fragment><MDBIcon size="2x" icon="syringe" className="blue-text" /></Fragment>, field: 'number' },
                 {label: 'Nombre', field: 'name' },
                 {label: 'Estado', field: 'state' },
                 {label: 'Acciones', field: 'actions' }
@@ -142,34 +154,55 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
     }
 
-    const addResultData = () => {
-        if(pdfFile[0] !== undefined){putPdfonStorage();}
+    const openPDFModal = (e) => {
+        setAnalysisToEdit(e);
+        setPDFModal(true);
     }
 
     const putPdfonStorage = async () => {
-        const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEdit.medicalAnalysis.name).replace(" ","_")+"_"+patient.username+".pdf";
-        
-        const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setResultLoading(false); throw new SyntaxError("Error GraphQL"); });
-        console.log(putpdf.key);
-    }
-
-    const setDone = async (id) => {
-        setLoadingAnal(true);
-        
+        setLoadingPDF(true);
         const items = global.pendingAnalysis;
-        const input = {};
-        input.id = id;
-        input.state = 'DONE';
-        const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysis, {input: input} )).catch( e => {console.log(e); setLoadingAnal(false); throw new SyntaxError("Error GraphQL"); });
-        
-        items.splice(items.findIndex(v => v.id === id), 1);
-        items.push(pcama.data.updatePostConsultActMedAnalysis);
-        global.pendingAnalysis = items;
-        setGlobalData(global);
-        setLoadingAnal(false);
+
+        if(pdfFile[0] !== undefined){
+            const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEdit.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
+            const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+            const i = {id: analysisToEdit.id, state: 'DONE', file: filename}
+            const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysis, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+
+            items.splice(items.findIndex(v => v.id === analysisToEdit.id), 1);
+            items.push(pcama.data.updatePostConsultActMedAnalysis);
+            global.pendingAnalysis = items;
+            setGlobalData(global);
+        }
+
+        setTimeout(() => {  
+            setAnalysisList(global.pendingAnalysis);
+            setLoadingPDF(false);
+            setPDFModal(false);
+        }, 2000);
     }
 
-    return { loadingHistory, data, lastMC, loading, analysis, setDone, loadingAnal, completeResultModal, setCompleteResultModal, setPdfFile, resultLoading, addResultData, analysisToEdit };
+    const deletePDF = async (e) => {
+        setLoadingPDF(true);
+        const result = await Swal.fire({ title: '¿Desea eliminar el archivo pdf?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar'});
+        const items = global.pendingAnalysis;
+        if (result.value) {
+            const putpdf = await Storage.remove(e.file).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+            const i = {id: e.id, file: null}
+            const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysis, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+
+            items.splice(items.findIndex(v => v.id === e.id), 1);
+            items.push(pcama.data.updatePostConsultActMedAnalysis);
+            global.pendingAnalysis = items;
+            setGlobalData(global);
+        }
+        setTimeout(() => {  
+            setAnalysisList(global.pendingAnalysis);
+            setLoadingPDF(false);
+        }, 2000);
+    }
+
+    return { loadingHistory, data, lastMC, loading, analysis, loadingPDF, PDFModal, setPDFModal, setPdfFile, resultLoading, analysisToEdit, setResultLoading, completeResultModal, setCompleteResultModal, putPdfonStorage };
 };
 
 export default UsePatientDetails;
