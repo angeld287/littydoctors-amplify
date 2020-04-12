@@ -352,6 +352,14 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
               state
               date
               file
+              results {
+                items{
+                  id
+                  field {
+                    name
+                  }
+                }
+              }
               medicalAnalysis{
                 id
                 name

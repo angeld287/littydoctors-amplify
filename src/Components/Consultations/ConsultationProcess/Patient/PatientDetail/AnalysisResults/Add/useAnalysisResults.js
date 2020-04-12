@@ -2,17 +2,17 @@ import React,{ useState, useEffect } from 'react';
 import useForm from 'react-hook-form';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
-import { listFields } from '../../../../../../graphql/queries';
-import { createMedicalAnalysisResults } from '../../../../../../graphql/mutations';
+import { listFields } from '../../../../../../../graphql/queries';
+import { createMedicalAnalysisResults } from '../../../../../../../graphql/mutations';
 import { MDBIcon, MDBBtn, MDBSpinner, MDBInputGroup } from 'mdbreact';
 import moment from 'moment';
 
-const useAnalysisResults = (results, global, setResultLoading) => {
+const useAnalysisResults = (results, global, setResultLoading, toggleResult, setAnalysisList) => {
     
     const { register, handleSubmit, errors, formState } = useForm();
 
     const [ loading, setLoading ] = useState(true);
-    const [ loadingAdd, setLoadingAdd ] = useState(true);
+    const [ loadingAdd, setLoadingAdd ] = useState(false);
     const [ _error, setError ] = useState(false);
     const [ fieldsForm, setFieldsForm ] = useState();
 
@@ -25,7 +25,8 @@ const useAnalysisResults = (results, global, setResultLoading) => {
             const filter = {
                 filter: {
                     modules: {contains: results.medicalAnalysis.id}
-                }
+                },
+                limit: 400
             };
             const fieldsList = await API.graphql(graphqlOperation(listFields, filter)).catch((err) => { console.log("Ocurrio un error: ",err); setLoading(false); });   
             object[results.medicalAnalysis.id] = {
@@ -92,6 +93,11 @@ const useAnalysisResults = (results, global, setResultLoading) => {
     }
 
     const addResultData = (input) => {
+        setLoadingAdd(true);
+        const items = global.global.pendingAnalysis;
+        const item = items[items.findIndex(i => i.id === results.id)];
+        const resutlsArray = []
+
         Object.keys(input).forEach(
             async (e) => {
                 const i = {
@@ -100,12 +106,26 @@ const useAnalysisResults = (results, global, setResultLoading) => {
                     medicalAnalysisResultsFieldId: e,
                 }
                 const pcama = await API.graphql(graphqlOperation(createMedicalAnalysisResults, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
+                resutlsArray.push(pcama.data.createMedicalAnalysisResults)
             }
         );
+        item.results.items = resutlsArray;
+
+        items.splice(items.findIndex(v => v.id === item.id), 1);
+        items.push(item);
+        global.global.pendingAnalysis = items;
+        global.setGlobalData(global.global);
+
+        setTimeout(() => {  
+            setAnalysisList(items);
+            setLoadingAdd(false);
+            toggleResult();
+        }, 2000);
+        
     }
 
 
-    return { register, handleSubmit, errors, formState, loading, _error, fieldsForm, addResultData };
+    return { register, handleSubmit, errors, formState, loading, _error, fieldsForm, addResultData, loadingAdd };
 };
 
 export default useAnalysisResults;

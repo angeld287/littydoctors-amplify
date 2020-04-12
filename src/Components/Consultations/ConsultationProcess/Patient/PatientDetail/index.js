@@ -9,7 +9,8 @@ import { updateMedicalHistory } from '../../../../../graphql/mutations';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 
-import AnalysisResults from './AnalysisResults';
+import AnalysisResults from './AnalysisResults/Add';
+import EditAnalysisResults from './AnalysisResults/Edit';
 
 import TooltipButton from '../../../../TooltipButton';
 
@@ -28,7 +29,7 @@ const PatientDetails = (
   const [ edit, setEdit ] = useState(false);
 
 
-  const { loadingHistory, data, loadingPDF, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal, setResultLoading, analysisToEdit, PDFModal, setPDFModal, setPdfFile, putPdfonStorage } = UsePatientDetails(childProps, patientData, global, setGlobalData);
+  const { setAnalysisList, loadingHistory, data, loadingPDF, editResultModal, setEditResultModal, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal, setResultLoading, setEditResultLoading, analysisToEdit, PDFModal, setPDFModal, setPdfFile, putPdfonStorage } = UsePatientDetails(childProps, patientData, global, setGlobalData);
   const age = moment(new Date()).format('YYYY') - moment(patientData.birthdate).format('YYYY');
 
   const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MAN' ? 'Casado' : 'Casada') :
@@ -86,6 +87,10 @@ const PatientDetails = (
     setCompleteResultModal(false)
   }
 
+  const toggleEditResult = () => {
+    setEditResultModal(false)
+  }
+
   const togglePDF = () => {
     setPDFModal(false);
 }
@@ -97,7 +102,14 @@ const PatientDetails = (
   const completeResultData = (<MDBModal isOpen={completeResultModal} toggle={toggleResult}>
                                 <MDBModalHeader toggle={toggleResult}>Agregar Datos de Resultados</MDBModalHeader>
                                 <MDBModalBody>
-                                  <AnalysisResults setResultLoading={setResultLoading} result={analysisToEdit} global={{global: global, setGlobalData: setGlobalData}} toggleResult={toggleResult}/>
+                                  <AnalysisResults setAnalysisList={setAnalysisList} setResultLoading={setResultLoading} result={analysisToEdit} global={{global: global, setGlobalData: setGlobalData}} toggleResult={toggleResult}/>
+                                </MDBModalBody>
+                              </MDBModal>);
+
+  const editResultData = (<MDBModal isOpen={editResultModal} toggle={toggleEditResult}>
+                                <MDBModalHeader toggle={toggleEditResult}>Agregar Datos de Resultados</MDBModalHeader>
+                                <MDBModalBody>
+                                  <EditAnalysisResults setAnalysisList={setAnalysisList} setResultLoading={setEditResultLoading} result={analysisToEdit} global={{global: global, setGlobalData: setGlobalData}} toggleResult={toggleEditResult}/>
                                 </MDBModalBody>
                               </MDBModal>);
 
@@ -116,6 +128,7 @@ const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
 
   return (
     <div>
+      {editResultData}
       {completeResultData}
       {addPDF}
       <MDBRow>
@@ -212,8 +225,8 @@ const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
           <MDBCol md="12">
             <MDBCard style={{ width: '100%' }}>
                 <MDBContainer style={{marginBottom: 20}}>
-                  <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Analisis pendientes</strong> {loadingAnal &&  <MDBSpinner small/>} </h4>
-                  <MDBTable scrollY>
+                  <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Analisis pendientes</strong> {(loadingPDF || loadingAnal) &&  <MDBSpinner small/>} </h4>
+                  <MDBTable /* scrollY */>
                     <MDBTableHead columns={analysis.columns} />
                     <MDBTableBody rows={analysis.rows} />
                   </MDBTable>
