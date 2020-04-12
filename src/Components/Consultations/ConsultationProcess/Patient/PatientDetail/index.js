@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 
-import { MDBContainer, MDBRow, MDBCol, MDBTable, MDBTableBody, MDBTableHead, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
-         MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBListGroup, MDBListGroupItem } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBTable, MDBTableBody, MDBTableHead, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox, MDBBtnGroup,
+         MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBFileInput, MDBListGroup, MDBListGroupItem, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from "mdbreact";
 import { API, graphqlOperation } from 'aws-amplify';
 
 import UsePatientDetails from './usePatientDetails';
 import { updateMedicalHistory } from '../../../../../graphql/mutations';
 import moment from 'moment';
 import Swal from 'sweetalert2';
+
+import AnalysisResults from './AnalysisResults/Add';
+import EditAnalysisResults from './AnalysisResults/Edit';
 
 import TooltipButton from '../../../../TooltipButton';
 
@@ -26,7 +29,7 @@ const PatientDetails = (
   const [ edit, setEdit ] = useState(false);
 
 
-  const { loadingHistory, data, lastMC, loading, analysis, loadingAnal } = UsePatientDetails(childProps, patientData, global, setGlobalData);
+  const { setDate, setAnalysisList, loadingHistory, data, loadingPDF, editResultModal, setEditResultModal, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal, setResultLoading, setEditResultLoading, analysisToEdit, PDFModal, setPDFModal, setPdfFile, putPdfonStorage } = UsePatientDetails(childProps, patientData, global, setGlobalData);
   const age = moment(new Date()).format('YYYY') - moment(patientData.birthdate).format('YYYY');
 
   const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MAN' ? 'Casado' : 'Casada') :
@@ -80,12 +83,58 @@ const PatientDetails = (
   const locationUrl = location.split(' ').join('%20');
   const mapUrl = "https://maps.google.com/maps?q="+locationUrl+"&t=&z=15&ie=UTF8&iwloc=&output=embed";
 
+  const toggleResult = () => {
+    setCompleteResultModal(false)
+  }
+
+  const toggleEditResult = () => {
+    setEditResultModal(false)
+  }
+
+  const togglePDF = () => {
+    setPDFModal(false);
+}
+
 
   const userPicture = patientData.sex === "MAN" ? "https://icons-for-free.com/iconfiles/png/512/boy+guy+man+icon-1320166733913205010.png" :
                       "https://i.ya-webdesign.com/images/girl-avatar-png.png";
 
+  const completeResultData = (<MDBModal isOpen={completeResultModal} toggle={toggleResult}>
+                                <MDBModalHeader toggle={toggleResult}>Agregar Datos de Resultados</MDBModalHeader>
+                                <MDBModalBody>
+                                  <AnalysisResults setAnalysisList={setAnalysisList} setResultLoading={setResultLoading} result={analysisToEdit} global={{global: global, setGlobalData: setGlobalData}} toggleResult={toggleResult}/>
+                                </MDBModalBody>
+                              </MDBModal>);
+
+  const editResultData = (<MDBModal isOpen={editResultModal} toggle={toggleEditResult}>
+                                <MDBModalHeader toggle={toggleEditResult}>Agregar Datos de Resultados</MDBModalHeader>
+                                <MDBModalBody>
+                                  <EditAnalysisResults setAnalysisList={setAnalysisList} setResultLoading={setEditResultLoading} result={analysisToEdit} global={{global: global, setGlobalData: setGlobalData}} toggleResult={toggleEditResult}/>
+                                </MDBModalBody>
+                              </MDBModal>);
+
+const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
+                  <MDBModalHeader toggle={togglePDF}>Agregar PDF de Resultados</MDBModalHeader>
+                  <MDBModalBody>
+                    {!loadingPDF && 
+                      <div>
+                          <MDBFileInput className="mb-3" accept='application/pdf' getValue={(e) => setPdfFile(e)}/>
+                          <MDBBtnGroup disabled><label>Fecha de Analisis: </label> <input className="ml-4" type="date" onChange={e => setDate(moment(e.target.value).format('YYYY-MM-DD'))}></input></MDBBtnGroup>
+                      </div>}
+                    {loadingPDF && <MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-3"><MDBSpinner big/></MDBBox></MDBContainer>}
+                  </MDBModalBody>
+                  <MDBModalFooter>
+                    <MDBBtn color="secondary" onClick={togglePDF}>Cancelar</MDBBtn>
+                    <MDBBtn color="primary" onClick={putPdfonStorage}>Guardar</MDBBtn>
+                  </MDBModalFooter>
+                </MDBModal>);
+
+
   return (
     <div>
+      {editResultData}
+      {completeResultData}
+      {addPDF}
       <MDBRow>
         <MDBCol md="4">
           <MDBCard style={{ width: "22rem" }}>
@@ -155,7 +204,7 @@ const PatientDetails = (
       </MDBRow>
       <br/>
       <MDBRow>
-        <MDBCol md="6">
+        <MDBCol md="12">
           <MDBCard style={{ width: '100%' }}>
              <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Historial de Consultas</strong></h4>
             {!loadingHistory &&
@@ -175,11 +224,13 @@ const PatientDetails = (
             }
           </MDBCard>
         </MDBCol>
-          <MDBCol md="6">
+      </MDBRow>
+      <MDBRow className="mt-4">
+          <MDBCol md="12">
             <MDBCard style={{ width: '100%' }}>
                 <MDBContainer style={{marginBottom: 20}}>
-                  <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Analisis pendientes</strong> {loadingAnal &&  <MDBSpinner small/>} </h4>
-                  <MDBTable scrollY>
+                  <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Analisis pendientes</strong> {(loadingPDF || loadingAnal) &&  <MDBSpinner small/>} </h4>
+                  <MDBTable /* scrollY */>
                     <MDBTableHead columns={analysis.columns} />
                     <MDBTableBody rows={analysis.rows} />
                   </MDBTable>

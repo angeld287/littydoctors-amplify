@@ -1,20 +1,32 @@
 import React,{ useState, useEffect, Fragment } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
 import { listMedicalConsultationsForHistory } from '../../../../../graphql/custom-queries';
-import { updatePostConsultActMedAnalysis } from '../../../../../graphql/mutations';
-import { MDBIcon, MDBBtn, MDBSpinner } from 'mdbreact';
+import { updatePostConsultActMedAnalysisForGlobal } from '../../../../../graphql/custom-mutations'; 
+import { MDBIcon, MDBBtn, MDBSpinner, MDBBtnGroup } from 'mdbreact';
 import moment from 'moment';
+import Swal from 'sweetalert2';
+
+import TooltipButton from '../../../../TooltipButton';
 
 const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     const [ loading, setLoading ] = useState(false);
-    const [ loadingAnal, setLoadingAnal ] = useState(false);
+    const [ loadingPDF, setLoadingPDF ] = useState(false);
     const [ loadingHistory, setLoadingHistory ] = useState(false);
+    const [ PDFModal, setPDFModal ] = useState(false);
+    const [ completeResultModal, setCompleteResultModal ] = useState(false); 
+    const [ editResultModal, setEditResultModal ] = useState(false);
+    const [ resultLoading, setResultLoading ] = useState(false);
+    const [ editResultLoading, setEditResultLoading ] = useState(false);
     const [ error, setError ] = useState(false);
     const [ patientData, setPatientData ] = useState({});
     const [ data, setData ] = useState([]);
     const [ lastMC, setlastMC ] = useState([]);
     const [ analysis, setanalysis ] = useState([]);
+    const [ analysisToEdit, setAnalysisToEdit] = useState({});
+    const [ analysisToEditPDF, setAnalysisToEditPDF] = useState({});
+    const [ pdfFile, setPdfFile] = useState([]);
+    const [ date, setDate ] = useState(null);
 
     useEffect(() => {
         let didCancel = false;
@@ -27,8 +39,6 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
                     setLoading(true);
                     setLoadingHistory(true);
-
-                    
 
                     const filtermc = {
                         filter: {
@@ -78,6 +88,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                     setLoading(false);
                 }else{
                     setData(global.consultationsHistoryData);
+                    setAnalysisList(global.pendingAnalysis);
                     setLoading(false);
                 }
             } catch (err) {
@@ -100,18 +111,58 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
         };
     }, []);
 
+
+    const setAddResultData = (e) => {
+        setAnalysisToEdit(e);
+        setCompleteResultModal(true);
+    }
+
+    const setEditResultData = (e) => {
+        setAnalysisToEdit(e);
+        setEditResultModal(true);
+    }
+
+    const sortAlph = (a, b) => {
+        if (a.medicalAnalysis.name < b.medicalAnalysis.name) {
+            return -1;
+        }
+        if (b.medicalAnalysis.name > a.medicalAnalysis.name) {
+            return 1;
+        }
+        return 0;
+    }
+
+    const loadingIcon = (<div className="spinner-grow spinner-grow-sm" role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>);
+
     const setAnalysisList = (items) => {
         const rowa = [];
         var number = 0;
         if (items !== null) {
-            items.sort().forEach(e => {
+            items.sort(sortAlph).forEach(e => {
+
+                const editItem = (e.results.items.length > 0);
+                const attachBtn = (<MDBBtn disabled={loadingPDF} social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); openPDFModal(e)}} ><MDBIcon icon="paperclip" size="2x" /></MDBBtn>);
+                const showPdf = (<MDBBtn disabled={loadingPDF} social="slack" floating size="sm" onClick={(ev) => {ev.preventDefault(); openPDF(e)}} ><MDBIcon icon="external-link-alt" size="2x" /></MDBBtn>);
+                const delteBtn = (<MDBBtn disabled={loadingPDF} social="gplus" floating size="sm" onClick={(ev) => {ev.preventDefault(); deletePDF(e)}}><MDBIcon icon="unlink" size="2x" /></MDBBtn>);
+                const addBtn = (<MDBBtn social="tw" floating size="sm" onClick={(ev) => {ev.preventDefault(); setAddResultData(e)}} ><MDBIcon icon="plus" size="2x" /></MDBBtn>);
+                const editBtn = (<MDBBtn social="so" floating size="sm" onClick={(ev) => {ev.preventDefault(); setEditResultData(e)}} ><MDBIcon icon="edit" size="2x" /></MDBBtn>);
+
+                const tooltipatt = (<TooltipButton helperMessage={"Anexar Pdf"} component={attachBtn} placement="top"/>);
+                const tooltipshow = (<TooltipButton helperMessage={"Abrir Pdf"} component={showPdf} placement="top"/>);
+                const tooltipdel = (<TooltipButton helperMessage={"Borrar Pdf"} component={delteBtn} placement="top"/>);
+                const tooltipadd = (<TooltipButton helperMessage={"Agregar Resultados Graficables"} component={addBtn} placement="top"/>);
+                const tooltipedit = (<TooltipButton helperMessage={"Editar Resultados Graficables"} component={editBtn} placement="top"/>);
+                
                 number = number + 1;
                 
                 var row = { 
                             number: number, 
                             name: e.medicalAnalysis.name, 
-                            //state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
-                            //actions: e.state === "INSERTED" ? (<Fragment><MDBBtn size="sm" onClick={(ev) => {ev.preventDefault(); setDone(e.id) }}>Entregado</MDBBtn></Fragment>) : "N/A"
+                            state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
+                            data: moment(e.date).format('DD - MM - YYYY'),
+                            actions: (<MDBBtnGroup size="sm" className="mb-4">{e.file === null && tooltipatt}{e.file !== null && tooltipshow}{e.file !== null && tooltipdel}{!editItem && tooltipadd}{editItem && tooltipedit}</MDBBtnGroup>)
                         };
                 rowa.push(row);
             });
@@ -120,10 +171,11 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
         const adata = {
             columns: [
-                {label: <Fragment>{!loadingAnal && <MDBIcon size="2x" icon="syringe" className="blue-text" />}{loadingAnal && <MDBSpinner small/>}</Fragment>, field: 'number' },
+                {label: <Fragment><MDBIcon size="2x" icon="syringe" className="blue-text" /></Fragment>, field: 'number' },
                 {label: 'Nombre', field: 'name' },
-                //{label: 'Estado', field: 'state' },
-                //{label: 'Acciones', field: 'actions' }
+                {label: 'Estado', field: 'state' },
+                {label: 'Fecha', field: 'date' },
+                {label: 'Acciones', field: 'actions' }
             ],
             rows: rowa
         };
@@ -132,23 +184,75 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
     }
 
-    const setDone = async (id) => {
-        setLoadingAnal(true);
-        
+    const openPDFModal = (e) => {
+        setAnalysisToEditPDF(e);
+        setPDFModal(true);
+    }
+
+    const putPdfonStorage = async () => {
+        if (date === null) {
+            Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Favor completar la fecha en la que se realizo el examen medico',
+                    showConfirmButton: false,
+                    timer: 1500
+            });
+            return
+        }
+
+        setLoadingPDF(true);
         const items = global.pendingAnalysis;
-        const input = {};
-        input.id = id;
-        input.state = 'DONE';
-        const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysis, {input: input} )).catch( e => {console.log(e); setLoadingAnal(false); throw new SyntaxError("Error GraphQL"); });
-        
-        items.splice(items.findIndex(v => v.id === id), 1);
+        const i = {id: analysisToEditPDF.id, state: 'DONE', date: date}
+
+        if(pdfFile[0] !== undefined){
+            const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEditPDF.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
+            const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+            i.file = filename;
+        }
+
+        const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysisForGlobal, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+
+        items.splice(items.findIndex(v => v.id === analysisToEditPDF.id), 1);
         items.push(pcama.data.updatePostConsultActMedAnalysis);
         global.pendingAnalysis = items;
         setGlobalData(global);
-        setLoadingAnal(false);
+
+        setTimeout(() => {  
+            setAnalysisList(global.pendingAnalysis);
+            setDate(null);
+            setLoadingPDF(false);
+            setPDFModal(false);
+        }, 2000);
     }
 
-    return { loadingHistory, data, lastMC, loading, analysis, setDone, loadingAnal };
+    const deletePDF = async (e) => {
+        const result = await Swal.fire({ title: '¿Desea eliminar el archivo pdf?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar'});
+        const items = global.pendingAnalysis;
+        if (result.value) {
+            setLoadingPDF(true);
+            const putpdf = await Storage.remove(e.file).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+            const i = {id: e.id, file: null}
+            const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysisForGlobal, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+
+            items.splice(items.findIndex(v => v.id === e.id), 1);
+            items.push(pcama.data.updatePostConsultActMedAnalysis);
+            global.pendingAnalysis = items;
+            setGlobalData(global);
+        }
+        setTimeout(() => {  
+            setAnalysisList(global.pendingAnalysis);
+            setLoadingPDF(false);
+        }, 2000);
+    }
+
+    const openPDF = async (e) => {
+        const file = await Storage.get(e.file);
+        var win = window.open(file, '_blank');
+        win.focus();
+    }
+
+    return { setDate, editResultLoading, setEditResultLoading, editResultModal, setEditResultModal, setAnalysisList, loadingHistory, data, lastMC, loading, analysis, loadingPDF, loadingIcon, PDFModal, setPDFModal, setPdfFile, resultLoading, analysisToEdit, setResultLoading, completeResultModal, setCompleteResultModal, putPdfonStorage };
 };
 
 export default UsePatientDetails;

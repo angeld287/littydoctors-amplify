@@ -96,6 +96,7 @@ const useConsultationProcess = () => {
                             patientHistory: patientHistory,
                             medicalConsultation: r.data.getMedicalConsultation,
                             pendingAnalysis: [],
+                            pendingAnalysisFields: [],
                             consultationsHistory: false,
                             consultationsHistoryData: {},
                         });

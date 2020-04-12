@@ -248,9 +248,11 @@ export const getMedicalConsultation = /* GraphQL */ `
             id
             state
             date
+            file
             medicalAnalysis{
               id
               name
+              code
             }
           }
         }
@@ -349,9 +351,21 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
               id
               state
               date
+              file
+              results {
+                items{
+                  id
+                  field {
+                    id
+                    name
+                  }
+                  value
+                }
+              }
               medicalAnalysis{
                 id
                 name
+                code
               }
             }
           }

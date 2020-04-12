@@ -252,3 +252,56 @@ export const updateMedicalConsultationForPCAGlobal = /* GraphQL */ `
     }
   }
 `;
+
+export const updatePostConsultActMedAnalysisForGlobal = /* GraphQL */ `
+  mutation UpdatePostConsultActMedAnalysis(
+    $input: UpdatePostConsultActMedAnalysisInput!
+    $condition: ModelPostConsultActMedAnalysisConditionInput
+  ) {
+    updatePostConsultActMedAnalysis(input: $input, condition: $condition) {
+      id
+      state
+      date
+      results {
+        items{
+          id
+          field {
+            id
+            name
+          }
+          value
+        }
+        nextToken
+      }
+      file
+      pcActivities {
+        id
+        medicalpres {
+          nextToken
+        }
+        medicalAnalysis {
+          nextToken
+        }
+        surgicalIntervention {
+          nextToken
+        }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      medicalAnalysis {
+        id
+        name
+        code
+        medicalAnalysis {
+          nextToken
+        }
+        createdAt
+        owner
+      }
+      createdAt
+    }
+  }
+`;
