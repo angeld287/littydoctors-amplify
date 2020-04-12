@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { MDBContainer, MDBRow, MDBCol, MDBTable, MDBTableBody, MDBTableHead, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
+import { MDBContainer, MDBRow, MDBCol, MDBTable, MDBTableBody, MDBTableHead, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox, MDBBtnGroup,
          MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBFileInput, MDBListGroup, MDBListGroupItem, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from "mdbreact";
 import { API, graphqlOperation } from 'aws-amplify';
 
@@ -29,7 +29,7 @@ const PatientDetails = (
   const [ edit, setEdit ] = useState(false);
 
 
-  const { setAnalysisList, loadingHistory, data, loadingPDF, editResultModal, setEditResultModal, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal, setResultLoading, setEditResultLoading, analysisToEdit, PDFModal, setPDFModal, setPdfFile, putPdfonStorage } = UsePatientDetails(childProps, patientData, global, setGlobalData);
+  const { setDate, setAnalysisList, loadingHistory, data, loadingPDF, editResultModal, setEditResultModal, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal, setResultLoading, setEditResultLoading, analysisToEdit, PDFModal, setPDFModal, setPdfFile, putPdfonStorage } = UsePatientDetails(childProps, patientData, global, setGlobalData);
   const age = moment(new Date()).format('YYYY') - moment(patientData.birthdate).format('YYYY');
 
   const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MAN' ? 'Casado' : 'Casada') :
@@ -116,7 +116,11 @@ const PatientDetails = (
 const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
                   <MDBModalHeader toggle={togglePDF}>Agregar PDF de Resultados</MDBModalHeader>
                   <MDBModalBody>
-                    {!loadingPDF && <MDBFileInput accept='application/pdf' getValue={(e) => setPdfFile(e)}/>}
+                    {!loadingPDF && 
+                      <div>
+                          <MDBFileInput className="mb-3" accept='application/pdf' getValue={(e) => setPdfFile(e)}/>
+                          <MDBBtnGroup disabled><label>Fecha de Analisis: </label> <input className="ml-4" type="date" onChange={e => setDate(moment(e.target.value).format('YYYY-MM-DD'))}></input></MDBBtnGroup>
+                      </div>}
                     {loadingPDF && <MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-3"><MDBSpinner big/></MDBBox></MDBContainer>}
                   </MDBModalBody>
                   <MDBModalFooter>

@@ -2,7 +2,7 @@ import React,{ useState, useEffect, Fragment } from 'react';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
 import { listMedicalConsultationsForHistory } from '../../../../../graphql/custom-queries';
-import { updatePostConsultActMedAnalysis } from '../../../../../graphql/mutations';
+import { updatePostConsultActMedAnalysisForGlobal } from '../../../../../graphql/custom-mutations'; 
 import { MDBIcon, MDBBtn, MDBSpinner, MDBBtnGroup } from 'mdbreact';
 import moment from 'moment';
 import Swal from 'sweetalert2';
@@ -24,7 +24,9 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     const [ lastMC, setlastMC ] = useState([]);
     const [ analysis, setanalysis ] = useState([]);
     const [ analysisToEdit, setAnalysisToEdit] = useState({});
+    const [ analysisToEditPDF, setAnalysisToEditPDF] = useState({});
     const [ pdfFile, setPdfFile] = useState([]);
+    const [ date, setDate ] = useState(null);
 
     useEffect(() => {
         let didCancel = false;
@@ -159,7 +161,8 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                             number: number, 
                             name: e.medicalAnalysis.name, 
                             state: e.state === "INSERTED" ? "PENDIENTE" : "LISTO",
-                actions: (<MDBBtnGroup size="sm" className="mb-4">{e.file === null && tooltipatt}{e.file !== null && tooltipshow}{e.file !== null && tooltipdel}{!editItem && tooltipadd}{editItem && tooltipedit}</MDBBtnGroup>)
+                            data: moment(e.date).format('DD - MM - YYYY'),
+                            actions: (<MDBBtnGroup size="sm" className="mb-4">{e.file === null && tooltipatt}{e.file !== null && tooltipshow}{e.file !== null && tooltipdel}{!editItem && tooltipadd}{editItem && tooltipedit}</MDBBtnGroup>)
                         };
                 rowa.push(row);
             });
@@ -171,6 +174,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                 {label: <Fragment><MDBIcon size="2x" icon="syringe" className="blue-text" /></Fragment>, field: 'number' },
                 {label: 'Nombre', field: 'name' },
                 {label: 'Estado', field: 'state' },
+                {label: 'Fecha', field: 'date' },
                 {label: 'Acciones', field: 'actions' }
             ],
             rows: rowa
@@ -181,28 +185,42 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
     }
 
     const openPDFModal = (e) => {
-        setAnalysisToEdit(e);
+        setAnalysisToEditPDF(e);
         setPDFModal(true);
     }
 
     const putPdfonStorage = async () => {
+        if (date === null) {
+            Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Favor completar la fecha en la que se realizo el examen medico',
+                    showConfirmButton: false,
+                    timer: 1500
+            });
+            return
+        }
+
         setLoadingPDF(true);
         const items = global.pendingAnalysis;
+        const i = {id: analysisToEditPDF.id, state: 'DONE', date: date}
 
         if(pdfFile[0] !== undefined){
-            const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEdit.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
+            const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEditPDF.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
             const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
-            const i = {id: analysisToEdit.id, state: 'DONE', file: filename}
-            const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysis, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
-
-            items.splice(items.findIndex(v => v.id === analysisToEdit.id), 1);
-            items.push(pcama.data.updatePostConsultActMedAnalysis);
-            global.pendingAnalysis = items;
-            setGlobalData(global);
+            i.file = filename;
         }
+
+        const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysisForGlobal, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+
+        items.splice(items.findIndex(v => v.id === analysisToEditPDF.id), 1);
+        items.push(pcama.data.updatePostConsultActMedAnalysis);
+        global.pendingAnalysis = items;
+        setGlobalData(global);
 
         setTimeout(() => {  
             setAnalysisList(global.pendingAnalysis);
+            setDate(null);
             setLoadingPDF(false);
             setPDFModal(false);
         }, 2000);
@@ -215,7 +233,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
             setLoadingPDF(true);
             const putpdf = await Storage.remove(e.file).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
             const i = {id: e.id, file: null}
-            const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysis, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+            const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysisForGlobal, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
 
             items.splice(items.findIndex(v => v.id === e.id), 1);
             items.push(pcama.data.updatePostConsultActMedAnalysis);
@@ -234,7 +252,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
         win.focus();
     }
 
-    return { editResultLoading, setEditResultLoading, editResultModal, setEditResultModal, setAnalysisList, loadingHistory, data, lastMC, loading, analysis, loadingPDF, loadingIcon, PDFModal, setPDFModal, setPdfFile, resultLoading, analysisToEdit, setResultLoading, completeResultModal, setCompleteResultModal, putPdfonStorage };
+    return { setDate, editResultLoading, setEditResultLoading, editResultModal, setEditResultModal, setAnalysisList, loadingHistory, data, lastMC, loading, analysis, loadingPDF, loadingIcon, PDFModal, setPDFModal, setPdfFile, resultLoading, analysisToEdit, setResultLoading, completeResultModal, setCompleteResultModal, putPdfonStorage };
 };
 
 export default UsePatientDetails;

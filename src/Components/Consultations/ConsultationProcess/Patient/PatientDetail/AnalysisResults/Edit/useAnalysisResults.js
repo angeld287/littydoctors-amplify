@@ -3,7 +3,7 @@ import useForm from 'react-hook-form';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
 import { listFields } from '../../../../../../../graphql/queries';
-import { createMedicalAnalysisResults } from '../../../../../../../graphql/mutations';
+import { updateMedicalAnalysisResults } from '../../../../../../../graphql/mutations';
 import { MDBIcon, MDBBtn, MDBSpinner, MDBInputGroup } from 'mdbreact';
 import moment from 'moment';
 
@@ -77,36 +77,40 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
 
     const _setFieldsForm = (fields) => {
         const fieldsList = (fields !== null)?([].concat(fields)
-        .map((item,i)=> 
-            <div key={i} className="input-group mt-2">
-                <div className="input-group-prepend">
-                    <span className="input-group-text" id="basic-addon">
-                        {item.name}
-                    </span>
-                </div>
-                <input type="number" name={item.id} ref={register} className="form-control" placeholder={item.name} aria-describedby="basic-addon" />
-            </div>    
-        )):(<div></div>)
+        .map((item,i)=> {
+            const resultsF = results.results.items;
+            const value = resultsF[resultsF.findIndex(e => e.field.id === item.id)].value;
+
+            return (
+                <div key={i} className="input-group mt-2">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text" id="basic-addon">
+                            {item.name}
+                        </span>
+                    </div>
+                    <input type="number" id={item.id} name={item.id} ref={register} className="form-control" placeholder={item.name} defaultValue={value} aria-describedby="basic-addon" />
+                </div>  
+            );
+        })):(<div></div>)
 
         setFieldsForm(fieldsList);
         setLoading(false);
     }
 
-    const addResultData = (input) => {
+    const editResultData = (input) => {
         setLoadingAdd(true);
         const items = global.global.pendingAnalysis;
         const item = items[items.findIndex(i => i.id === results.id)];
         const resutlsArray = []
-
+        
         Object.keys(input).forEach(
             async (e) => {
                 const i = {
+                    id : item.results.items[item.results.items.findIndex(r => r.field.id === e)].id,
                     value: input[e],
-                    postConsultActMedAnalysisResultsId: results.id,
-                    medicalAnalysisResultsFieldId: e,
-                }
-                const pcama = await API.graphql(graphqlOperation(createMedicalAnalysisResults, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
-                resutlsArray.push(pcama.data.createMedicalAnalysisResults)
+                };
+                const pcama = await API.graphql(graphqlOperation(updateMedicalAnalysisResults, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
+                resutlsArray.push(pcama.data.updateMedicalAnalysisResults)
             }
         );
         item.results.items = resutlsArray;
@@ -125,7 +129,7 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
     }
 
 
-    return { register, handleSubmit, errors, formState, loading, _error, fieldsForm, addResultData, loadingAdd };
+    return { register, handleSubmit, errors, formState, loading, _error, fieldsForm, editResultData, loadingAdd };
 };
 
 export default useAnalysisResults;
