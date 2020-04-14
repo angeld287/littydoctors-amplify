@@ -164,7 +164,7 @@ type Subscription {
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
 enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
-enum Sex { MAN WOMAN }
+enum Sex { MAN WOMAN MALE FEMALE }
 
 #Medical Consultation Process BackEnd definition
 

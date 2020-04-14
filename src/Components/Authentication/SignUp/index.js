@@ -44,7 +44,8 @@ class CustomSignUp extends Component {
           <MDBContainer>
             <MDBRow>
               <MDBCol md="9" lg="7" xl="6" className="mx-auto mt-3">
-                <MDBNav tabs className="nav-justified" color="indigo">
+                <ClientSignUp gotoSignIn={this.gotoSignIn}/>
+                {/* <MDBNav tabs className="nav-justified" color="indigo">
                   <MDBNavItem>
                     <MDBNavLink to="#" className={this.state.activeItemOuterTabs==="1" ? "active" : "" } onClick={this.toggleOuterTabs("1")}
                       role="tab">
@@ -65,7 +66,7 @@ class CustomSignUp extends Component {
                   <MDBTabPane tabId="2" role="tabpanel">
                   <CompanySignUp gotoSignIn={this.gotoSignIn}/>
                   </MDBTabPane>
-                </MDBTabContent>
+                </MDBTabContent> */}
               </MDBCol>
             </MDBRow>
           </MDBContainer>

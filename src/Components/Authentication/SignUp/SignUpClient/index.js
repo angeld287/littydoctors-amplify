@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Auth } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 
 import awsmobile from '../../../../aws-exports'
 
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCard, MDBCardBody, MDBModalFooter, MDBInput, MDBModal, MDBModalHeader, MDBModalBody, MDBAlert } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBFormInline, MDBSpinner, MDBIcon, MDBCard, MDBCardBody, MDBModalFooter, MDBDatePicker, MDBInput, MDBModal, MDBModalHeader, MDBModalBody, MDBAlert } from 'mdbreact';
 
 import _ from 'lodash';
 
@@ -17,15 +17,20 @@ const INITIAL_STATE = {
   password: "",
   name: "",
   username: "",
-  phone_number: "",
-  gender: 'male',
+  phone_num: "",
+  sex: null,
   code: "",
   open: false,
   error: null,
   year: "", 
   month: "", 
   day: "",
-  modal: false
+  modal: false,
+  terms_conditions: false,
+  birthdate: null,
+  loading: false,
+  loadingConfirmation: false,
+  loadingResendCode: false,
 };
 
 class ClientSignUp extends Component {
@@ -42,50 +47,94 @@ class ClientSignUp extends Component {
     return new Date().getFullYear();
   }
 
+  testAPILambda = async () => {
+
+    const apiOptions = {};
+    apiOptions['headers'] = {
+        'Content-Type': 'application/json'
+    };
+    apiOptions['body'] = {
+      UserPoolId: awsmobile.aws_user_pools_id,
+      Username: "test2"
+    };
+
+    const resultP = await API.post('ApiForLambda', '/addUserToGroup', apiOptions);
+
+    console.log( resultP);
+
+
+  }
+
   handleConfirmCode = () => {
     const { username, code } = this.state;
-
+    this.setState({loadingConfirmation: true});
     Auth.confirmSignUp(username, code, {
         // Optional. Force user confirmation irrespective of existing alias. By default set to True.
         forceAliasCreation: true    
     }).then(data => {
-      //invoke lambda function to add user to a group
-      fetch('https://ugwnuazczk.execute-api.us-east-1.amazonaws.com/dev/addUserToGroup', {
-        method: 'POST',
-        headers: {
+      //invoke lambda function to add user to a group 
+      const apiOptions = {};
+
+      apiOptions['headers'] = {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          groupname: "client",
-          UserPoolId: awsmobile.aws_user_pools_id,
-          username: this.state.username
-        })
-      }).then((r) => r.json()).then((r) => {
-          this.setState({
-            modal: !this.state.modal
-          });
-          this.props.gotoSignIn();
+      };
+      
+      apiOptions['body'] = {
+        UserPoolId: awsmobile.aws_user_pools_id,
+        Username: this.state.username
+      };
+
+      API.post('ApiForLambda', '/addUserToGroup', apiOptions)
+      .then( r => {
+        this.setState({
+          modal: !this.state.modal,
+          loadingConfirmation: false
+        });
+        this.props.gotoSignIn();
       }).catch((err) => { // Error response
-          this.setState({ error: err });
+          this.setState({ error: err, loadingConfirmation:false });
           console.log(err);
       });      
     })
     .catch(err => {
-      this.setState({ error: err });
+      this.setState({ error: err, loadingConfirmation: false });
     });
   };
 
   handleResendCode = () => {
     const { username } = this.state;
+    this.setState({ loadingResendCode: true });
 
     Auth.resendSignUp(username).then(() => {
+      this.setState({ loadingResendCode: false });
     }).catch(e => {
         console.log('Error resending code: ', e);
+        this.setState({ loadingResendCode: false });
     });
   };
 
   onSubmit = event => {
-    const { username, email, password, phone_number, name } = this.state;
+    event.preventDefault(); 
+    this.setState({error:null, loading: true});
+    
+    const { username, email, password, phone_num, name, terms_conditions, sex, birthdate } = this.state;
+
+    const phone_number = "+1"+phone_num;
+
+    if (!terms_conditions) {
+      this.setState({loading: false, error: { message: "Debe Aceptar los Terminos y Condiciones"}});
+      return
+    }
+
+    if (sex === null) {
+      this.setState({loading: false, error: { message: "Debe seleccionar el sexo"}});
+      return
+    }
+
+    if (birthdate === null) {
+      this.setState({loading: false, error: { message: "Debe seleccionar la fecha de nacimiento"}});
+      return
+    }
 
     Auth.signIn(email, "password").then(user => {
       this.setState({
@@ -109,32 +158,40 @@ class ClientSignUp extends Component {
             })
             .then(data => {
               this.setState({
-                modal: !this.state.modal
+                modal: !this.state.modal,
+                loading: false,
               });
             })
             .catch(err => {
               console.log(err); 
-              this.setState({ error: err});
+              this.setState({ loading: false, error: err});
             });
       }else{
         this.setState({
           error: {
+            email_exist: true,
+            loading: false,
             message: 'This email is associated with an existing account'
           }
         });
       }
     });
-    event.preventDefault();
   };
 
   onClickRadio = value => () =>{
     this.setState({
-      gender: value
+      sex: value
+    });
+  }
+
+  onClickRadioTC = () =>{
+    this.setState({
+      terms_conditions: !this.state.terms_conditions
     });
   }
 
   render() {
-    const { email, password, phone_number, username, name, code, error, year, month, day } = this.state;
+    const { email, password, phone_num, username, name, code, error, year, month, day, terms_conditions, sex, loading, loadingConfirmation, loadingResendCode } = this.state;
 
     const isInvalid = (password === "" || email === "");
     const smallStyle = { fontSize: '0.8rem'}
@@ -151,78 +208,73 @@ class ClientSignUp extends Component {
                       <MDBRow>
                         <MDBCol>
                           <div className="text-center">
-                            <h3 className="dark-grey-text mb-5"><strong>Client Sign up</strong></h3>
+                            <h3 className="dark-grey-text mb-5"><strong>Registro de Paciente</strong></h3>
                           </div>
-                          <MDBInput label="Your UserName" value={username} onChange={event => this.setState(updateByPropertyName("username", event.target.value)) } group type="text" validate error="wrong" success="right"/>
-                          <MDBInput label="Your Name" value={name} onChange={event => this.setState(updateByPropertyName("name", event.target.value)) } group type="text" validate error="wrong" success="right"/> 
-                          <MDBInput label="Your Phone Number" value={phone_number} onChange={event => this.setState(updateByPropertyName("phone_number", event.target.value)) } group type="text" validate error="wrong" success="right"/>
-                          {/* <MDBRow>
-                            <MDBCol>
-                              <div className="mb-3" align="left">
-                                <Form.Check inline type="radio" onChange={this.onClickRadio('male')} checked={this.state.gender==='male' ? true : false} label="Male"/>
-                                <Form.Check inline type="radio" onChange={this.onClickRadio('female')} checked={this.state.gender==='female' ? true : false} label="Female"/>
-                              </div>
-                            </MDBCol>
-                          </MDBRow> */}
+                          <MDBInput label="Nombre de Usuario" value={username} pattern="^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$" onChange={event => this.setState(updateByPropertyName("username", event.target.value)) } group type="text" validate error="wrong" success="right" required/>
+
+                           {/*^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+                               └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
+                                     │         │         │            │           no _ or . at the end
+                                     │         │         │            │
+                                     │         │         │            allowed characters
+                                     │         │         │
+                                     │         │         no __ or _. or ._ or .. inside
+                                     │         │
+                                     │         no _ or . at the beginning
+                                     │
+                                     username is 8-20 characters long */}
+
+
+                          <MDBInput label="Nombre Completo" value={name} onChange={event => this.setState(updateByPropertyName("name", event.target.value)) } group type="text" validate error="wrong" success="right" required/> 
+                          <MDBInput label="Numero de Telefono" value={phone_num} onChange={event => this.setState(updateByPropertyName("phone_num", event.target.value)) } group type="number" validate error="wrong" success="right" required/>
                           <MDBRow>
-                            {/* <div>
-                              <p className="grey-text d-flex justify-content-end" style={smallStyle}>Birthdate</p>
-                            </div> */}
-                              <MDBCol md="3">
-                                <select className="browser-default custom-select" value={day} onChange={event => this.setState(updateByPropertyName("day", event.target.value))}>
-                                  <option value="0">Day</option>
-                                  { _.range(1, 32).map(day => <option key={day} value={day}>{day}</option>) }
-                                </select>
-                              </MDBCol>
-                              <MDBCol md="5">
-                                <select className="browser-default custom-select"
-                                        value={month} 
-                                        onChange={event =>
-                                          this.setState(updateByPropertyName("month", event.target.value))
-                                        }
-                                >
-                                  <option value="0">Month</option>
-                                  <option value="1">January</option>
-                                  <option value="2">February</option>
-                                  <option value="3">March</option>
-                                  <option value="4">April</option>
-                                  <option value="5">May</option>
-                                  <option value="6">June</option>
-                                  <option value="7">July</option>
-                                  <option value="8">August</option>
-                                  <option value="9">September</option>
-                                  <option value="10">October</option>
-                                  <option value="11">November</option>
-                                  <option value="12">December</option>
-                                </select>
-                              </MDBCol>
-                              <MDBCol md="4">
-                                <select className="browser-default custom-select" value={year} onChange={event => this.setState(updateByPropertyName("year", event.target.value))}>
-                                  <option value="0">Year</option>
-                                  { _.range(currentYear - 90, currentYear).map(year => <option key={year} value={year}>{year}</option>) }
-                                </select>
-                              </MDBCol>
+                            <MDBCol>
+                              <MDBFormInline className="mb-4">
+                                <label>Sexo: </label>
+                                <MDBCol>
+                                  <MDBInput type="radio" onChange={this.onClickRadio('MALE')} checked={ sex === 'MALE' } label="Masculino" id="sex_male" />
+                                </MDBCol>
+                                <MDBCol>
+                                  <MDBInput type="radio" onChange={this.onClickRadio('FEMALE')} checked={ sex === 'FEMALE' } label="Femenino" id="sex_female" />
+                                </MDBCol>
+                              </MDBFormInline>
+                            </MDBCol>
                           </MDBRow>
-                          <MDBInput label="Your email" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="email" validate error="wrong" success="right"/>
-                          <MDBInput label="Your password" value={password} onChange={event => this.setState(updateByPropertyName("password", event.target.value))} group type="password" validate containerClass="mb-0"/>
+                          <MDBRow className="mb-3">
+                            <MDBCol>
+                              <MDBFormInline className="mb-4">
+                                <label>Fecha de Nacimiento: </label>
+                                <MDBCol>
+                                  <MDBDatePicker style={{marginLeft: 20}} icon="birthday-cake" getValue={d => this.setState(updateByPropertyName("birthdate", d)) } />
+                                </MDBCol>
+                              </MDBFormInline>
+                            </MDBCol>
+                          </MDBRow>
+                          <MDBInput label="Email" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="email" validate error="wrong" success="right" required/>
+                          <MDBInput label="Clave" value={password} onChange={event => this.setState(updateByPropertyName("password", event.target.value))} group type="password" validate containerClass="mb-0" required/>
                           
-                          <div className="text-center pt-3 mb-3">
-                            <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} type="submit">Sign up</MDBBtn>
+                          {/* <MDBInput className="mt-4" gap onClick={this.onClickRadioTC(!terms_conditions)} checked={terms_conditions} label="Aceptar Terminos y Condiciones" type="checkbox" id="terms_conditions" /> */}
+                          <MDBInput className="mt-4 mb-4" label="Aceptar Terminos y Condiciones" checked={terms_conditions} onChange={this.onClickRadioTC} type="checkbox" id="terms_conditions" />
+
+                          <div className="text-center pt-5 mb-3">
+                            {/* <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}
+                            {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} type="submit">Registrarse</MDBBtn>}
+                            {loading && <MDBSpinner small />}
                             {(!(error === null) || (error === '')) &&
                             <MDBAlert color="danger">{error && <p>{error.message}</p>}</MDBAlert>}
                           </div>
-                          <p className="dark-grey-text text-right d-flex justify-content-center mb-3 pt-2" style={smallStyle}> or Sign up with:</p>
+                          {/* <p className="dark-grey-text text-right d-flex justify-content-center mb-3 pt-2" style={smallStyle}> or Sign up with:</p>
                           <div className="row my-3 d-flex justify-content-center">
                             <MDBBtn type="button" color="white" rounded className="mr-md-3 z-depth-1a"><MDBIcon fab icon="facebook-f" className="blue-text text-center" /></MDBBtn>
                             <MDBBtn type="button" color="white" rounded className="mr-md-3 z-depth-1a"><MDBIcon fab icon="twitter" className="blue-text" /></MDBBtn>
                             <MDBBtn type="button" color="white" rounded className="z-depth-1a"><MDBIcon fab icon="google-plus-g" className="blue-text" /></MDBBtn>
-                          </div>
+                          </div> */}
                         </MDBCol>
                       </MDBRow>
                     </form>
                   </MDBCardBody>
                   <MDBModalFooter className="mx-5 pt-3 mb-1">
-                    <p className="grey-text d-flex justify-content-end" style={smallStyle}>Already a member? <button onClick={() => this.props.gotoSignIn()} className="blue-text ml-1"> Sign In</button></p>
+                    <p className="grey-text d-flex justify-content-end" style={smallStyle}>Ya estas registrado? <button onClick={() => this.props.gotoSignIn()} className="blue-text ml-1"> Sign In</button></p>
                   </MDBModalFooter>
                 </MDBCard>
               </MDBCol>
@@ -230,13 +282,16 @@ class ClientSignUp extends Component {
           </MDBContainer>
           <MDBContainer>
             <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-              <MDBModalHeader toggle={this.toggle}>Email Confirmation</MDBModalHeader>
+              <MDBModalHeader toggle={this.toggle}>Confirmacion de Email</MDBModalHeader>
               <MDBModalBody>
-                <MDBInput label="Verification Code" value={code} onChange={event => this.setState(updateByPropertyName("code", event.target.value)) } group type="text" validate error="wrong" success="right"/>
+                <p>Se le ha enviado un codigo de vericacion a su correo para confirmar el email</p>
+                <br/>
+                <MDBInput label="Codigo de Verificacion" value={code} onChange={event => this.setState(updateByPropertyName("code", event.target.value)) } group type="text" validate error="wrong" success="right"/>
               </MDBModalBody>
               <MDBModalFooter>
-                <MDBBtn color="secondary" onClick={this.handleResendCode}>Resend Code</MDBBtn>
-                <MDBBtn color="primary" onClick={this.handleConfirmCode}>Confirm</MDBBtn>
+                {!loadingResendCode && <MDBBtn color="secondary" onClick={this.handleResendCode}>Reenviar Codigo</MDBBtn>}
+                {(loadingResendCode || loadingConfirmation )&& <MDBSpinner small />}
+                {!loadingConfirmation && <MDBBtn color="primary" onClick={this.handleConfirmCode}>Confirmar</MDBBtn>}
               </MDBModalFooter>
               {(!(error === null) || (error === '')) &&
               <MDBAlert color="danger">{error && <p>{error.message}</p>}</MDBAlert>}

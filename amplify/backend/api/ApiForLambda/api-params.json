@@ -1,0 +1,47 @@
+{
+    "paths": [
+        {
+            "name": "/addUserToGroup",
+            "lambdaFunction": "addUserToGroup",
+            "privacy": {
+                "protected": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH"
+                ],
+                "unauth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH"
+                ]
+            }
+        }
+    ],
+    "resourceName": "ApiForLambda",
+    "apiName": "ApiForLambda",
+    "functionArns": [
+        {
+            "lambdaFunction": "addUserToGroup"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 1,
+        "authRoleName": "amplify-littydoctors-dev-115546-authRole",
+        "unAuthRoleName": "amplify-littydoctors-dev-115546-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "addUserToGroup",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "e8d84cf1"
+}
