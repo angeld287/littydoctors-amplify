@@ -63,7 +63,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-littydoctors-dev-115546-deployment",
-					"S3Key": "amplify-builds/addUserToGroup-68373450715841664673-build.zip"
+					"S3Key": "amplify-builds/addUserToGroup-566163696c6444786c4f-build.zip"
 				}
 			}
 		},

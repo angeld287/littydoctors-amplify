@@ -18,6 +18,13 @@
                     "/PATCH"
                 ]
             }
+        },
+        {
+            "name": "/verifyIfUserExist",
+            "lambdaFunction": "addUserToGroup",
+            "privacy": {
+                "open": true
+            }
         }
     ],
     "resourceName": "ApiForLambda",
@@ -43,5 +50,5 @@
             ]
         }
     ],
-    "uuid": "e8d84cf1"
+    "uuid": "bf4b3d5e"
 }

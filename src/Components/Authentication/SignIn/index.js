@@ -89,7 +89,7 @@ class CustomSignIn extends Component {
                         <div className="text-center">
                           <h3 className="dark-grey-text mb-5"><strong>Sign in</strong></h3>
                         </div>
-                        <MDBInput label="Your email or username" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="text" validate error="wrong" success="right"/>
+                        <MDBInput label="Your username" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="text" validate error="wrong" success="right"/>
                         <MDBInput label="Your password" value={password} onChange={event => this.setState(updateByPropertyName("password", event.target.value))} group type="password" validate containerClass="mb-0"/>
                         {/* <MDBAutocomplete label="Your country" clear data={countries} clearClass="grey-text"/> */}
                         <div className="text-center pt-3 mb-3">

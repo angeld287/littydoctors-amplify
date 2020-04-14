@@ -47,7 +47,7 @@ class ClientSignUp extends Component {
     return new Date().getFullYear();
   }
 
-  testAPILambda = async () => {
+/*   testAPILambda = async () => {
 
     const apiOptions = {};
     apiOptions['headers'] = {
@@ -55,14 +55,28 @@ class ClientSignUp extends Component {
     };
     apiOptions['body'] = {
       UserPoolId: awsmobile.aws_user_pools_id,
-      Username: "test2"
+      email: "danielangelesangelestoribio@gmail.com"
     };
 
-    const resultP = await API.post('ApiForLambda', '/addUserToGroup', apiOptions);
+    const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
 
-    console.log( resultP);
+    console.log(resultP.body.body.Users.length > 0);
+  } */
 
+  emailExist = async (email) => {
 
+    const apiOptions = {};
+    apiOptions['headers'] = {
+        'Content-Type': 'application/json'
+    };
+    apiOptions['body'] = {
+      UserPoolId: awsmobile.aws_user_pools_id,
+      email: email
+    };
+
+    const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
+
+    return (resultP.body.body.Users.length > 0);
   }
 
   handleConfirmCode = () => {
@@ -121,6 +135,11 @@ class ClientSignUp extends Component {
 
     const phone_number = "+1"+phone_num;
 
+    if (this.emailExist(email)) {
+      this.setState({loading: false, error: { message: "El email ya esta asociado a una cuenta. Puede iniciar sesion con este email"}});
+      return
+    }
+
     if (!terms_conditions) {
       this.setState({loading: false, error: { message: "Debe Aceptar los Terminos y Condiciones"}});
       return
@@ -136,7 +155,7 @@ class ClientSignUp extends Component {
       return
     }
 
-    Auth.signIn(email, "password").then(user => {
+    Auth.signIn(username, "password").then(user => {
       this.setState({
         email_exist: false
       });
@@ -170,9 +189,9 @@ class ClientSignUp extends Component {
         this.setState({
           error: {
             email_exist: true,
-            loading: false,
-            message: 'This email is associated with an existing account'
-          }
+            message: 'El nombre de usuario ya esta asociado a una cuenta'
+          },
+          loading: false,
         });
       }
     });
@@ -257,7 +276,7 @@ class ClientSignUp extends Component {
                           <MDBInput className="mt-4 mb-4" label="Aceptar Terminos y Condiciones" checked={terms_conditions} onChange={this.onClickRadioTC} type="checkbox" id="terms_conditions" />
 
                           <div className="text-center pt-5 mb-3">
-                            {/* <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}
+                            <MDBBtn onClick={this.testAPILambda}>test</MDBBtn>
                             {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} type="submit">Registrarse</MDBBtn>}
                             {loading && <MDBSpinner small />}
                             {(!(error === null) || (error === '')) &&

@@ -92,6 +92,71 @@ app.post('/addUserToGroup', async function(req, res) {
     
 });
 
+app.post('/verifyIfUserExist', async function(req, res) {
+  // Add your code here
+    try {
+
+      var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+      const _response = null;
+      const params = {
+        GroupName: "client",
+        UserPoolId: req.body.UserPoolId,
+        Username: req.body.email
+      };
+
+      var params1 = {
+        UserPoolId: req.body.UserPoolId, /* required */
+        AttributesToGet: [
+          'email',
+        ],
+        Filter: 'email=\"'+req.body.email+'\"',
+        //Limit: 'NUMBER_VALUE',
+        //PaginationToken: 'STRING_VALUE'
+      };
+
+      //_response = await cognitoidentityserviceprovider.listUsers(params1).promise();
+
+      cognitoidentityserviceprovider.listUsers(params1, function(err, data) {
+        if (err) {
+          var response = {
+              statusCode: 200,
+              headers: {
+                  "Access-Control-Allow-Origin": "*"
+              },
+              body: err
+          };
+    
+          res.json({success: 'post call succeed!', url: req.url, body: response})
+          
+        } else{     
+          var response = {
+              statusCode: 200,
+              headers: {
+                  "Access-Control-Allow-Origin": "*"
+              },
+              body: data
+          };
+
+          res.json({success: 'post call succeed!', url: req.url, body: response})
+        }
+      });
+
+    } catch (error) {
+
+      var response = {
+          statusCode: 200,
+          headers: {
+              "Access-Control-Allow-Origin": "*"
+          },
+          body: error
+      };
+
+      res.json({success: 'post call succeed!', url: req.url, body: response})
+
+    }
+    
+});
+
 app.post('/addUserToGroup/*', function(req, res) {
   // Add your code here
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
