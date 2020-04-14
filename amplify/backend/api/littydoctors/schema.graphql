@@ -245,8 +245,10 @@ type Patient
     id_card: String
     religion: Religion @connection
     address: String
+    code: String
     marital_status: MaritalStatus
     birthdate: String
+    approved_terms_conditions: String
     patientHistory: [PatientHistory] @connection
     createdAt: String
 }

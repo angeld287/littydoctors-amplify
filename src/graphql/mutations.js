@@ -494,6 +494,7 @@ export const createMedicalAppointment = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -603,6 +604,7 @@ export const updateMedicalAppointment = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -712,6 +714,7 @@ export const deleteMedicalAppointment = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -815,6 +818,7 @@ export const createMedicalConsultation = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -858,6 +862,7 @@ export const createMedicalConsultation = /* GraphQL */ `
           address
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -936,6 +941,7 @@ export const updateMedicalConsultation = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -979,6 +985,7 @@ export const updateMedicalConsultation = /* GraphQL */ `
           address
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -1057,6 +1064,7 @@ export const deleteMedicalConsultation = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -1100,6 +1108,7 @@ export const deleteMedicalConsultation = /* GraphQL */ `
           address
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -1159,6 +1168,7 @@ export const createMedicalHistory = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -1239,6 +1249,7 @@ export const updateMedicalHistory = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -1319,6 +1330,7 @@ export const deleteMedicalHistory = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -1396,6 +1408,7 @@ export const createPatient = /* GraphQL */ `
       address
       marital_status
       birthdate
+      approved_terms_conditions
       patientHistory {
         items {
           id
@@ -1436,6 +1449,7 @@ export const updatePatient = /* GraphQL */ `
       address
       marital_status
       birthdate
+      approved_terms_conditions
       patientHistory {
         items {
           id
@@ -1476,6 +1490,7 @@ export const deletePatient = /* GraphQL */ `
       address
       marital_status
       birthdate
+      approved_terms_conditions
       patientHistory {
         items {
           id

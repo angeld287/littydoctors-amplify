@@ -206,9 +206,21 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
         const i = {id: analysisToEditPDF.id, state: 'DONE', date: date}
 
         if(pdfFile[0] !== undefined){
-            const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEditPDF.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
-            const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
-            i.file = filename;
+            if (pdfFile[0].type === "application/pdf") {
+                const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEditPDF.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
+                const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
+                i.file = filename;
+            }else{
+                Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'El tipo de archivo debe ser pdf',
+                        showConfirmButton: false,
+                        timer: 1500
+                });
+                setLoadingPDF(false);
+                return
+            }
         }
 
         const pcama = await API.graphql(graphqlOperation(updatePostConsultActMedAnalysisForGlobal, {input: i} )).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });

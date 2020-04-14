@@ -327,6 +327,7 @@ export const getMedicalAppointment = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -426,6 +427,7 @@ export const listMedicalAppointments = /* GraphQL */ `
           address
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -507,6 +509,7 @@ export const getMedicalConsultation = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -550,6 +553,7 @@ export const getMedicalConsultation = /* GraphQL */ `
           address
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -618,6 +622,7 @@ export const listMedicalConsultations = /* GraphQL */ `
           address
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -678,6 +683,7 @@ export const getMedicalHistory = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -755,6 +761,7 @@ export const listMedicalHistorys = /* GraphQL */ `
           address
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -801,6 +808,7 @@ export const getPatient = /* GraphQL */ `
       address
       marital_status
       birthdate
+      approved_terms_conditions
       patientHistory {
         items {
           id
@@ -843,6 +851,7 @@ export const listPatients = /* GraphQL */ `
         address
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }

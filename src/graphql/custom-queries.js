@@ -131,6 +131,8 @@ export const getMedicalConsultation = /* GraphQL */ `
       patient {
         id
         name
+        owner
+        approved_terms_conditions
         username
         email
         phone

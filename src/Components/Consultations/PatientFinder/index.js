@@ -73,7 +73,7 @@ const PatientFinder = ({childProps: childProps}) => {
                     {patient != null ? patient.name : "N/A"}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    {patient != null ? patient.email : "N/A"}
+                   {/*  {patient != null ? patient.email : "N/A"} */}
                   </Typography>
                   <Typography component="h5" variant="h5">
                     {patient != null ? patient.age : "00"}

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Auth, API } from "aws-amplify";
+import { Auth, API, graphqlOperation } from "aws-amplify";
 
 import awsmobile from '../../../../aws-exports'
+import { createPatient } from '../../../../graphql/mutations';
 
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBFormInline, MDBSpinner, MDBIcon, MDBCard, MDBCardBody, MDBModalFooter, MDBDatePicker, MDBInput, MDBModal, MDBModalHeader, MDBModalBody, MDBAlert } from 'mdbreact';
 
@@ -79,6 +80,41 @@ class ClientSignUp extends Component {
     return (resultP.body.body.Users.length > 0);
   }
 
+  insertPatientInfo = () => {
+    //loadingConfirmation: false
+    const { username, password, phone_num, birthdate, sex, email, name} = this.state;
+
+    Auth.signIn(username, password).then(user => {
+        const phone_number = "+1"+phone_num;
+
+        const input = {         
+          name: name,
+          username: username,
+          email: email,
+          phone: phone_number,
+          sex: sex,
+          approved_terms_conditions: true,
+          birthdate: birthdate,
+        };
+
+        API.graphql(graphqlOperation(createPatient, { input: input }))
+        .then((r) => {  
+          
+          Auth.signOut().then(r => {
+            this.setState({...INITIAL_STATE})
+            this.props.gotoSignIn();
+          }).catch(err => {this.setState({loadingConfirmation: false, error: err}); console.log(err);});
+
+        }).catch((err) => { 
+            this.setState({
+              loadingConfirmation: false,
+              error: err
+            });
+            console.log(err);
+        })
+    });
+  }
+
   handleConfirmCode = () => {
     const { username, code } = this.state;
     this.setState({loadingConfirmation: true});
@@ -100,11 +136,7 @@ class ClientSignUp extends Component {
 
       API.post('ApiForLambda', '/addUserToGroup', apiOptions)
       .then( r => {
-        this.setState({
-          modal: !this.state.modal,
-          loadingConfirmation: false
-        });
-        this.props.gotoSignIn();
+        this.insertPatientInfo();
       }).catch((err) => { // Error response
           this.setState({ error: err, loadingConfirmation:false });
           console.log(err);
@@ -127,7 +159,7 @@ class ClientSignUp extends Component {
     });
   };
 
-  onSubmit = event => {
+  onSubmit = async event => {
     event.preventDefault(); 
     this.setState({error:null, loading: true});
     
@@ -135,7 +167,9 @@ class ClientSignUp extends Component {
 
     const phone_number = "+1"+phone_num;
 
-    if (this.emailExist(email)) {
+    const exist = await this.emailExist(email);
+    
+    if (exist) {
       this.setState({loading: false, error: { message: "El email ya esta asociado a una cuenta. Puede iniciar sesion con este email"}});
       return
     }
@@ -229,7 +263,7 @@ class ClientSignUp extends Component {
                           <div className="text-center">
                             <h3 className="dark-grey-text mb-5"><strong>Registro de Paciente</strong></h3>
                           </div>
-                          <MDBInput label="Nombre de Usuario" value={username} pattern="^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$" onChange={event => this.setState(updateByPropertyName("username", event.target.value)) } group type="text" validate error="wrong" success="right" required/>
+                          <MDBInput label="Nombre de Usuario" value={username} title="entre 8 y 20 caracteres, no espacios en blanco" pattern="^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$" onChange={event => this.setState(updateByPropertyName("username", event.target.value)) } group type="text" validate error="wrong" success="right" required/>
 
                            {/*^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
                                └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
@@ -269,14 +303,14 @@ class ClientSignUp extends Component {
                               </MDBFormInline>
                             </MDBCol>
                           </MDBRow>
-                          <MDBInput label="Email" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="email" validate error="wrong" success="right" required/>
+                          <MDBInput label="Email" value={email} pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="email" validate error="wrong" success="right" required/>
                           <MDBInput label="Clave" value={password} onChange={event => this.setState(updateByPropertyName("password", event.target.value))} group type="password" validate containerClass="mb-0" required/>
                           
                           {/* <MDBInput className="mt-4" gap onClick={this.onClickRadioTC(!terms_conditions)} checked={terms_conditions} label="Aceptar Terminos y Condiciones" type="checkbox" id="terms_conditions" /> */}
                           <MDBInput className="mt-4 mb-4" label="Aceptar Terminos y Condiciones" checked={terms_conditions} onChange={this.onClickRadioTC} type="checkbox" id="terms_conditions" />
 
                           <div className="text-center pt-5 mb-3">
-                            <MDBBtn onClick={this.testAPILambda}>test</MDBBtn>
+                            {/* <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}
                             {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} type="submit">Registrarse</MDBBtn>}
                             {loading && <MDBSpinner small />}
                             {(!(error === null) || (error === '')) &&
@@ -308,9 +342,8 @@ class ClientSignUp extends Component {
                 <MDBInput label="Codigo de Verificacion" value={code} onChange={event => this.setState(updateByPropertyName("code", event.target.value)) } group type="text" validate error="wrong" success="right"/>
               </MDBModalBody>
               <MDBModalFooter>
-                {!loadingResendCode && <MDBBtn color="secondary" onClick={this.handleResendCode}>Reenviar Codigo</MDBBtn>}
                 {(loadingResendCode || loadingConfirmation )&& <MDBSpinner small />}
-                {!loadingConfirmation && <MDBBtn color="primary" onClick={this.handleConfirmCode}>Confirmar</MDBBtn>}
+                {(!loadingResendCode && !loadingConfirmation )&& <div><MDBBtn color="secondary" onClick={this.handleResendCode}>Reenviar Codigo</MDBBtn> <MDBBtn color="primary" onClick={this.handleConfirmCode}>Confirmar</MDBBtn></div>}
               </MDBModalFooter>
               {(!(error === null) || (error === '')) &&
               <MDBAlert color="danger">{error && <p>{error.message}</p>}</MDBAlert>}

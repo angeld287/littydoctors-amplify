@@ -13,6 +13,8 @@ const useNewPatient = () => {
     const [ api, setApi ] = useState ("");
     const [ religion, setreligion ] = useState ("");
     const [ address, setaddress ] = useState ("");
+    const [ age, setAge ] = useState (0);
+    const [ monthAge, setMonthAge ] = useState (0);
     const [ id_card, setid_card ] = useState ("");
     const [ marital_status, setmarital_status ] = useState ("");
     const [ sex, setsex ] = useState ("");
@@ -76,7 +78,7 @@ const useNewPatient = () => {
                 
                 api = {
                     religions: _religions_,
-                    sexs: [{value: 'MAN', label: 'Hombre'}, {value: 'WOMAN', label: 'Mujer'}],
+                    sexs: [{value: 'MALE', label: 'Hombre'}, {value: 'FEMALE', label: 'Mujer'}],
                     maritalstatus: [{value: 'MARRIED', label: 'Casado(a)'}, {value: 'SINGLE', label: 'Soltero(a)'}, {value: 'DIVORCED', label: 'Divorciado(a)'}, {value: 'WIDOWED', label: 'Viudo(a)'}],
                 };
 
@@ -104,7 +106,7 @@ const useNewPatient = () => {
 
 
 
-    return { birthdate, setBirthdate, register, handleSubmit, errors, formState, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange };
+    return { monthAge, setMonthAge, age, setAge, birthdate, setBirthdate, register, handleSubmit, errors, formState, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange };
 };
 
 export default useNewPatient;

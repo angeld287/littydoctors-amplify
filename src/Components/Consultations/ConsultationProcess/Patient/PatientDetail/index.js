@@ -30,12 +30,25 @@ const PatientDetails = (
 
 
   const { setDate, setAnalysisList, loadingHistory, data, loadingPDF, editResultModal, setEditResultModal, loading, analysis, loadingAnal, completeResultModal, setCompleteResultModal, setResultLoading, setEditResultLoading, analysisToEdit, PDFModal, setPDFModal, setPdfFile, putPdfonStorage } = UsePatientDetails(childProps, patientData, global, setGlobalData);
-  const age = moment(new Date()).format('YYYY') - moment(patientData.birthdate).format('YYYY');
 
-  const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MAN' ? 'Casado' : 'Casada') :
-                          patientData.marital_status === "SINGLE" ? (patientData.sex === 'MAN' ? 'Soltero' : 'Soltera') :
-                          patientData.marital_status === "DIVORCED" ? (patientData.sex === 'MAN' ? 'Divorciado' : 'Divorciada') :
-                          patientData.marital_status === "WIDOWED" ? (patientData.sex === 'MAN' ? 'Viudo' : 'Viuda') : "N/A";
+  const calcAge = (dateString) => {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+  }
+
+  const age = calcAge(patientData.birthdate);
+
+  const marital_status =  patientData.marital_status === "MARRIED" ? (patientData.sex === 'MALE' ? 'Casado' : 'Casada') :
+                          patientData.marital_status === "SINGLE" ? (patientData.sex === 'MALE' ? 'Soltero' : 'Soltera') :
+                          patientData.marital_status === "DIVORCED" ? (patientData.sex === 'MALE' ? 'Divorciado' : 'Divorciada') :
+                          patientData.marital_status === "WIDOWED" ? (patientData.sex === 'MALE' ? 'Viudo' : 'Viuda') : "N/A";
 
   const EditingReason = () => {  
     setEdit(true);
@@ -78,10 +91,11 @@ const PatientDetails = (
       {(!withoutReason && edit) && <TooltipButton component={cancelBtn} helperMessage={"Cancelar Edicion"} placement="top"/>}
     </div>
   );
-
-  const location = String(patientData.address);
+  const shared = patientData.approved_terms_conditions || (patientData.owner === childProps.state.doctorusername);
+  const location = shared ? String(patientData.address) : "Republica Dominicana";
   const locationUrl = location.split(' ').join('%20');
-  const mapUrl = "https://maps.google.com/maps?q="+locationUrl+"&t=&z=15&ie=UTF8&iwloc=&output=embed";
+  const z = shared ? 15 : 7;
+  const mapUrl = "https://maps.google.com/maps?q="+locationUrl+"&t=&z="+z+"&ie=UTF8&iwloc=&output=embed";
 
   const toggleResult = () => {
     setCompleteResultModal(false)
@@ -93,10 +107,9 @@ const PatientDetails = (
 
   const togglePDF = () => {
     setPDFModal(false);
-}
+  }
 
-
-  const userPicture = patientData.sex === "MAN" ? "https://icons-for-free.com/iconfiles/png/512/boy+guy+man+icon-1320166733913205010.png" :
+  const userPicture = patientData.sex === "MALE" ? "https://icons-for-free.com/iconfiles/png/512/boy+guy+man+icon-1320166733913205010.png" :
                       "https://i.ya-webdesign.com/images/girl-avatar-png.png";
 
   const completeResultData = (<MDBModal isOpen={completeResultModal} toggle={toggleResult}>
@@ -128,6 +141,18 @@ const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
                     <MDBBtn color="primary" onClick={putPdfonStorage}>Guardar</MDBBtn>
                   </MDBModalFooter>
                 </MDBModal>);
+
+  const patientDataList = (<MDBCard style={{ width: "100%" }}> 
+                            <MDBListGroup style={{ width: "22rem" }}>
+                              <MDBListGroupItem>Email: {shared ? patientData.email : "dato no compartido"}</MDBListGroupItem>
+                              <MDBListGroupItem>Telefono: { shared ? patientData.phone : "dato no compartido"}</MDBListGroupItem>
+                              <MDBListGroupItem>Edad: {age} años</MDBListGroupItem>
+                              <MDBListGroupItem>Sexo: {patientData.sex === 'MALE' ? 'Hombre' : 'Mujer'}</MDBListGroupItem>
+                              <MDBListGroupItem>Cedula: { shared ? (patientData.id_card) : "dato no compartido"}</MDBListGroupItem>
+                              <MDBListGroupItem>Religion: {shared ? (patientData.religion === null ? "N/A" : patientData.religion.name) : "dato no compartido"}</MDBListGroupItem>
+                              <MDBListGroupItem>Estado Civil: {shared ? marital_status : "dato no compartido"}</MDBListGroupItem>
+                            </MDBListGroup>
+                          </MDBCard>);
 
 
   return (
@@ -189,17 +214,8 @@ const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
           </div>
         </MDBCol>
         <MDBCol md="3" className="m-1">
-          <MDBCard style={{ width: "100%" }}> 
-            <MDBListGroup style={{ width: "22rem" }}>
-              <MDBListGroupItem>Email: {patientData.email}</MDBListGroupItem>
-              <MDBListGroupItem>Telefono: {patientData.phone}</MDBListGroupItem>
-              <MDBListGroupItem>Edad: {age} años</MDBListGroupItem>
-              <MDBListGroupItem>Sexo: {patientData.sex === 'MAN' ? 'Hombre' : 'Mujer'}</MDBListGroupItem>
-              <MDBListGroupItem>Cedula: {patientData.id_card}</MDBListGroupItem>
-              <MDBListGroupItem>Religion: {patientData.religion.name}</MDBListGroupItem>
-              <MDBListGroupItem>Estado Civil: {marital_status}</MDBListGroupItem>
-            </MDBListGroup>
-          </MDBCard>
+          {shared && patientDataList}
+          {!shared && <TooltipButton component={patientDataList} helperMessage={"Para poder ver los datos no compartidos, el paciente debe registrase en la plataforma con el codigo del paciente que esta en la lista de datos del paciente"} placement="left"/>}
         </MDBCol>
       </MDBRow>
       <br/>
