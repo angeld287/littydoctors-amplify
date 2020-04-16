@@ -207,7 +207,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
 
         if(pdfFile[0] !== undefined){
             if (pdfFile[0].type === "application/pdf") {
-                const filename = "PDF_FILES/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEditPDF.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
+                const filename = "PDF_FILES/MEDICAL_RESULTS/"+moment(new Date()).format('YYYYMMDDHHmmSS')+"_"+(analysisToEditPDF.medicalAnalysis.code).replace(" ","_")+"_"+global.patient.username+".pdf";
                 const putpdf = await Storage.put(filename, pdfFile[0], { contentType: 'application/pdf' }).catch( e => {console.log(e); setLoadingPDF(false); throw new SyntaxError("Error Storage"); });
                 i.file = filename;
             }else{

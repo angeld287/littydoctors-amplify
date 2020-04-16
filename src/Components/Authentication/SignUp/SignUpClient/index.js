@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Auth, API, graphqlOperation } from "aws-amplify";
+import { Auth, API, graphqlOperation, Storage } from "aws-amplify";
 
 import awsmobile from '../../../../aws-exports'
 import { createPatient } from '../../../../graphql/mutations';
 import moment from 'moment';
+
+import TooltipButton from '../../../TooltipButton';
 
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBFormInline, MDBSpinner, MDBIcon, MDBCard, MDBCardBody, MDBModalFooter, MDBDatePicker, MDBInput, MDBModal, MDBModalHeader, MDBModalBody, MDBAlert } from 'mdbreact';
 
@@ -65,6 +67,12 @@ class ClientSignUp extends Component {
 
     console.log(resultP);
   } */
+
+  openPDF = async () => {
+    const file = await Storage.get('LEGAL_DOCUMENTS/TERMS_CONDITIONS.pdf');
+    var win = window.open(file, '_blank');
+    win.focus();
+  }
 
   Exist = async (username, email) => {
 
@@ -239,6 +247,8 @@ class ClientSignUp extends Component {
     const isInvalid = (password === "" || email === "");
     const smallStyle = { fontSize: '0.8rem'}
     const currentYear = this.getYear().toString();
+
+    const showPdf = (<MDBBtn social="slack" floating size="sm" onClick={(ev) => {ev.preventDefault(); this.openPDF()}} ><MDBIcon icon="external-link-alt" size="2x" /></MDBBtn>);
     
     return (
       <div>
@@ -297,7 +307,7 @@ class ClientSignUp extends Component {
                           <MDBInput label="Clave" value={password} onChange={event => this.setState(updateByPropertyName("password", event.target.value))} group type="password" validate containerClass="mb-0" required/>
                           
                           {/* <MDBInput className="mt-4" gap onClick={this.onClickRadioTC(!terms_conditions)} checked={terms_conditions} label="Aceptar Terminos y Condiciones" type="checkbox" id="terms_conditions" /> */}
-                          <MDBInput className="mt-4 mb-4" label="Aceptar Terminos y Condiciones" checked={terms_conditions} onChange={this.onClickRadioTC} type="checkbox" id="terms_conditions" />
+                          <MDBFormInline><MDBInput className="mt-4 mb-4" label="Aceptar Terminos y Condiciones" checked={terms_conditions} onChange={this.onClickRadioTC} type="checkbox" id="terms_conditions" /><TooltipButton helperMessage={"Ver Terminos y Condiciones"} component={showPdf} placement="top"></TooltipButton></MDBFormInline>
 
                           <div className="text-center pt-5 mb-3">
                            {/*  <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}

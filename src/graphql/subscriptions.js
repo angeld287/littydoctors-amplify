@@ -1265,8 +1265,8 @@ export const onCreatePatient = /* GraphQL */ `
   }
 `;
 export const onUpdatePatient = /* GraphQL */ `
-  subscription OnUpdatePatient($owner: String) {
-    onUpdatePatient(owner: $owner) {
+  subscription OnUpdatePatient($owner: String, $username: String) {
+    onUpdatePatient(owner: $owner, username: $username) {
       id
       name
       username

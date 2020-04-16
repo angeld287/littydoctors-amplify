@@ -229,6 +229,7 @@ type Patient
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: owner, ownerField: "username", operations: [update, read] }
     ]) {
     id: ID!
     name: String!
@@ -265,6 +266,7 @@ type Religion
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: groups, groups: ["client"], operations: [read] }
     ]) {
     id: ID!
     name: String

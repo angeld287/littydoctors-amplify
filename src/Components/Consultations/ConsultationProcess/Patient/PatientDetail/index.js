@@ -215,7 +215,7 @@ const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
         </MDBCol>
         <MDBCol md="3" className="m-1">
           {shared && patientDataList}
-          {!shared && <TooltipButton component={patientDataList} helperMessage={"Para poder ver los datos no compartidos, el paciente debe registrase en la plataforma con el codigo del paciente que esta en la lista de datos del paciente"} placement="left"/>}
+          {!shared && <TooltipButton component={patientDataList} helperMessage={"Para poder ver los datos no compartidos, el paciente debe iniciar sesion en la plataforma y aprobar los terminos y condiciones"} placement="left"/>}
         </MDBCol>
       </MDBRow>
       <br/>

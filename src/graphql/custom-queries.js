@@ -554,3 +554,43 @@ export const getPatientForGlobal = /* GraphQL */ `
     }
   }
 `;
+
+export const listPatientsForAppjs = /* GraphQL */ `
+  query ListPatients(
+    $filter: ModelPatientFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPatients(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        username
+        email
+        phone
+        phone_id
+        weight
+        height
+        size
+        age
+        sex
+        image
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        code
+        temporary_password
+        marital_status
+        birthdate
+        approved_terms_conditions
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;

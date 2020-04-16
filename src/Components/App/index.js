@@ -11,7 +11,7 @@ import HeaderLinks from '../HeaderLinks';
 
 import {Routes, ProppedRoute, ProtectedRoute, ProtectedRouteCompany} from '../Routes';
 
-import { listConsultingRoomsSecretary, listConsultingRooms } from '../../graphql/custom-queries';
+import { listConsultingRoomsSecretary, listConsultingRooms, listPatientsForAppjs } from '../../graphql/custom-queries';
 
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 
@@ -102,6 +102,25 @@ export default class App extends Component {
                 secretary: result.data.listConsultingRooms.items[0].secretary,
                 loading: false,
                 username: data.accessToken.payload.username,
+            });
+        }).catch( err => {
+          this.setState({
+              error: true,
+              loading: false,
+          });
+          console.log('There was an error: ' + err);
+        });
+      }
+      else if(roll === 'client'){
+        API.graphql(graphqlOperation(listPatientsForAppjs)).then( result =>{
+            this.setState({
+                username: result.data.listPatients.items[0].username,
+                email: result.data.listPatients.items[0].email,
+                phonenumber: result.data.listPatients.items[0].phone,
+                name: result.data.listPatients.items[0].name,
+                patientid: result.data.listPatients.items[0].id,
+                approved_terms_conditions: result.data.listPatients.items[0].approved_terms_conditions,
+                loading: false,
             });
         }).catch( err => {
           this.setState({
