@@ -91,7 +91,7 @@ const PatientDetails = (
       {(!withoutReason && edit) && <TooltipButton component={cancelBtn} helperMessage={"Cancelar Edicion"} placement="top"/>}
     </div>
   );
-  const shared = patientData.approved_terms_conditions || (patientData.owner === childProps.state.doctorusername);
+  const shared = patientData.approved_terms_conditions === "true" || (patientData.owner === childProps.state.doctorusername);
   const location = shared ? String(patientData.address) : "Republica Dominicana";
   const locationUrl = location.split(' ').join('%20');
   const z = shared ? 15 : 7;
