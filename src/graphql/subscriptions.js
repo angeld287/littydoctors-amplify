@@ -54,8 +54,11 @@ export const onCreateMedicalAppointment = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -172,8 +175,11 @@ export const onUpdateMedicalAppointment = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -647,8 +653,11 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -690,8 +699,11 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
           image
           id_card
           address
+          code
+          temporary_password
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -768,8 +780,11 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -811,8 +826,11 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
           image
           id_card
           address
+          code
+          temporary_password
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -886,8 +904,11 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -929,8 +950,11 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
           image
           id_card
           address
+          code
+          temporary_password
           marital_status
           birthdate
+          approved_terms_conditions
           createdAt
           owner
         }
@@ -985,8 +1009,11 @@ export const onCreateMedicalHistory = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -1062,8 +1089,11 @@ export const onUpdateMedicalHistory = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -1139,8 +1169,11 @@ export const onDeleteMedicalHistory = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
+        approved_terms_conditions
         patientHistory {
           nextToken
         }
@@ -1213,8 +1246,11 @@ export const onCreatePatient = /* GraphQL */ `
         owner
       }
       address
+      code
+      temporary_password
       marital_status
       birthdate
+      approved_terms_conditions
       patientHistory {
         items {
           id
@@ -1229,8 +1265,8 @@ export const onCreatePatient = /* GraphQL */ `
   }
 `;
 export const onUpdatePatient = /* GraphQL */ `
-  subscription OnUpdatePatient($owner: String) {
-    onUpdatePatient(owner: $owner) {
+  subscription OnUpdatePatient($owner: String, $username: String) {
+    onUpdatePatient(owner: $owner, username: $username) {
       id
       name
       username
@@ -1250,8 +1286,11 @@ export const onUpdatePatient = /* GraphQL */ `
         owner
       }
       address
+      code
+      temporary_password
       marital_status
       birthdate
+      approved_terms_conditions
       patientHistory {
         items {
           id
@@ -1287,8 +1326,11 @@ export const onDeletePatient = /* GraphQL */ `
         owner
       }
       address
+      code
+      temporary_password
       marital_status
       birthdate
+      approved_terms_conditions
       patientHistory {
         items {
           id

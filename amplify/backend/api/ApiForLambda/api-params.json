@@ -1,0 +1,49 @@
+{
+    "paths": [
+        {
+            "name": "/addUserToGroup",
+            "lambdaFunction": "CognitoActions",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/verifyIfUserExist",
+            "lambdaFunction": "CognitoActions",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/createUser",
+            "lambdaFunction": "CognitoActions",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "ApiForLambda",
+    "apiName": "ApiForLambda",
+    "functionArns": [
+        {
+            "lambdaFunction": "CognitoActions"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-littydoctors-dev-115546-authRole",
+        "unAuthRoleName": "amplify-littydoctors-dev-115546-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "CognitoActions",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "681af49b"
+}

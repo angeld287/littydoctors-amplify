@@ -105,7 +105,6 @@ const useConsultationProcess = () => {
                         setConsultationObject(r.data.getMedicalConsultation);
                         let _consultation = r.data.getMedicalConsultation;
                         setLoading(false);                        
-                        //console.log(r.data.getMedicalConsultation);
                         //global.patient.PatientHistory
                     })
                     .catch((err) => { 

@@ -164,7 +164,7 @@ type Subscription {
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
 enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
-enum Sex { MAN WOMAN }
+enum Sex { MAN WOMAN MALE FEMALE }
 
 #Medical Consultation Process BackEnd definition
 
@@ -229,6 +229,7 @@ type Patient
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: owner, ownerField: "username", operations: [update, read] }
     ]) {
     id: ID!
     name: String!
@@ -245,8 +246,11 @@ type Patient
     id_card: String
     religion: Religion @connection
     address: String
+    code: String
+    temporary_password: String
     marital_status: MaritalStatus
     birthdate: String
+    approved_terms_conditions: String
     patientHistory: [PatientHistory] @connection
     createdAt: String
 }
@@ -262,6 +266,7 @@ type Religion
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: groups, groups: ["client"], operations: [read] }
     ]) {
     id: ID!
     name: String

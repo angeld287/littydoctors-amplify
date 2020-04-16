@@ -84,17 +84,16 @@ class CustomSignIn extends Component {
               <MDBCol md="9" lg="7" xl="5" className="mx-auto mt-3">
                 <MDBCard>
                   <MDBCardBody className="mx-4">
-                  <form onSubmit={this.onSubmit}>
                     <MDBRow>
                       <MDBCol>
                         <div className="text-center">
                           <h3 className="dark-grey-text mb-5"><strong>Sign in</strong></h3>
                         </div>
-                        <MDBInput label="Your email or username" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="text" validate error="wrong" success="right"/>
+                        <MDBInput label="Your username" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="text" validate error="wrong" success="right"/>
                         <MDBInput label="Your password" value={password} onChange={event => this.setState(updateByPropertyName("password", event.target.value))} group type="password" validate containerClass="mb-0"/>
                         {/* <MDBAutocomplete label="Your country" clear data={countries} clearClass="grey-text"/> */}
                         <div className="text-center pt-3 mb-3">
-                          {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} type="submit">Sign in</MDBBtn>}
+                          {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} onClick={this.onSubmit}>Sign in</MDBBtn>}
                           {loading && <MDBSpinner />}
                           {error !== null &&
                           <MDBAlert color="danger">{error && <p>{error.message}</p>}</MDBAlert>}
@@ -107,11 +106,10 @@ class CustomSignIn extends Component {
                         </div> */}
                       </MDBCol>
                     </MDBRow>
-                  </form>
                   </MDBCardBody>
-                  {/* <MDBModalFooter className="mx-5 pt-3 mb-1">
-                    <p className="grey-text d-flex justify-content-end" style={smallStyle}>No account? <button onClick={() => this.gotoSignUp()} className="blue-text ml-1"> Sign Up</button></p>
-                  </MDBModalFooter> */}
+                  <MDBModalFooter className="mx-5 pt-3 mb-1">
+                    <p className="grey-text d-flex justify-content-end" style={smallStyle}>No estas registrado? <button onClick={() => this.gotoSignUp()} className="blue-text ml-1"> Registrate como Paciente</button></p>
+                  </MDBModalFooter>
                 </MDBCard>
               </MDBCol>
             </MDBRow>

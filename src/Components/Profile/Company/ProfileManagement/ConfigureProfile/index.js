@@ -216,7 +216,7 @@ class ConfigureProfile extends Component {
 
   handleSubmission = () => {
     this.setState({ loading: true });
-    Storage.put(this.state.username+".png", this.state.croppedImage, {
+    Storage.put("DOCTORS/"+this.state.username+".png", this.state.croppedImage, {
         contentType: 'image/png'
     })
     .then (result =>{
