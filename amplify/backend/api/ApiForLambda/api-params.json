@@ -2,26 +2,21 @@
     "paths": [
         {
             "name": "/addUserToGroup",
-            "lambdaFunction": "addUserToGroup",
+            "lambdaFunction": "CognitoActions",
             "privacy": {
-                "protected": true,
-                "auth": [
-                    "/POST",
-                    "/GET",
-                    "/PUT",
-                    "/PATCH"
-                ],
-                "unauth": [
-                    "/POST",
-                    "/GET",
-                    "/PUT",
-                    "/PATCH"
-                ]
+                "open": true
             }
         },
         {
             "name": "/verifyIfUserExist",
-            "lambdaFunction": "addUserToGroup",
+            "lambdaFunction": "CognitoActions",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/createUser",
+            "lambdaFunction": "CognitoActions",
             "privacy": {
                 "open": true
             }
@@ -31,24 +26,24 @@
     "apiName": "ApiForLambda",
     "functionArns": [
         {
-            "lambdaFunction": "addUserToGroup"
+            "lambdaFunction": "CognitoActions"
         }
     ],
     "privacy": {
-        "auth": 1,
-        "unauth": 1,
+        "auth": 0,
+        "unauth": 0,
         "authRoleName": "amplify-littydoctors-dev-115546-authRole",
         "unAuthRoleName": "amplify-littydoctors-dev-115546-unauthRole"
     },
     "dependsOn": [
         {
             "category": "function",
-            "resourceName": "addUserToGroup",
+            "resourceName": "CognitoActions",
             "attributes": [
                 "Name",
                 "Arn"
             ]
         }
     ],
-    "uuid": "bf4b3d5e"
+    "uuid": "681af49b"
 }

@@ -28,7 +28,7 @@
             "dependsOn": [
                 {
                     "category": "function",
-                    "resourceName": "addUserToGroup",
+                    "resourceName": "CognitoActions",
                     "attributes": [
                         "Name",
                         "Arn"
@@ -50,7 +50,7 @@
         }
     },
     "function": {
-        "addUserToGroup": {
+        "CognitoActions": {
             "service": "Lambda",
             "providerPlugin": "awscloudformation",
             "build": true

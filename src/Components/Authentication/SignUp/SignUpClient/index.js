@@ -3,6 +3,7 @@ import { Auth, API, graphqlOperation } from "aws-amplify";
 
 import awsmobile from '../../../../aws-exports'
 import { createPatient } from '../../../../graphql/mutations';
+import moment from 'moment';
 
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBFormInline, MDBSpinner, MDBIcon, MDBCard, MDBCardBody, MDBModalFooter, MDBDatePicker, MDBInput, MDBModal, MDBModalHeader, MDBModalBody, MDBAlert } from 'mdbreact';
 
@@ -56,15 +57,16 @@ class ClientSignUp extends Component {
     };
     apiOptions['body'] = {
       UserPoolId: awsmobile.aws_user_pools_id,
-      email: "danielangelesangelestoribio@gmail.com"
+      email: "danielangelesangelestoribio@gmail.com",
+      Username: "jcallejon"
     };
 
     const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
 
-    console.log(resultP.body.body.Users.length > 0);
+    console.log(resultP);
   } */
 
-  emailExist = async (email) => {
+  Exist = async (username, email) => {
 
     const apiOptions = {};
     apiOptions['headers'] = {
@@ -72,12 +74,13 @@ class ClientSignUp extends Component {
     };
     apiOptions['body'] = {
       UserPoolId: awsmobile.aws_user_pools_id,
-      email: email
+      email: email,
+      Username: username
     };
 
     const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
 
-    return (resultP.body.body.Users.length > 0);
+    return (resultP);
   }
 
   insertPatientInfo = () => {
@@ -95,6 +98,7 @@ class ClientSignUp extends Component {
           sex: sex,
           approved_terms_conditions: true,
           birthdate: birthdate,
+          code: moment(new Date()).format('YYYYMMDDHHmmSSssss')+"_"+username
         };
 
         API.graphql(graphqlOperation(createPatient, { input: input }))
@@ -167,10 +171,15 @@ class ClientSignUp extends Component {
 
     const phone_number = "+1"+phone_num;
 
-    const exist = await this.emailExist(email);
+    const exist = await this.Exist(username, email);
+
+    if (exist.body.cognito.username) {
+      this.setState({loading: false, error: { message: "Este nombre de usuario ya existe, debe utilizar otro"}});
+      return
+    }
     
-    if (exist) {
-      this.setState({loading: false, error: { message: "El email ya esta asociado a una cuenta. Puede iniciar sesion con este email"}});
+    if (exist.body.cognito.email) {
+      this.setState({loading: false, error: { message: "El email ya esta asociado a una cuenta"}});
       return
     }
 
@@ -189,45 +198,26 @@ class ClientSignUp extends Component {
       return
     }
 
-    Auth.signIn(username, "password").then(user => {
-      this.setState({
-        email_exist: false
-      });
-      Auth.signOut()
-        .then()
-        .catch(err => console.log('Error logging out', err));
-    }).catch(err => {
-      if(err.code === 'UserNotFoundException' && err.message === 'User does not exist.'){
-          Auth.signUp({
-            username,
-            password,
-            attributes: {
-                email,          // optional
-                phone_number,   // optional - E.164 number convention daniel_1234@hotmail.es   +18292130970
-                name,
-                // other custom attributes 
-            },
-            //validationData: []  //optional
-            })
-            .then(data => {
-              this.setState({
-                modal: !this.state.modal,
-                loading: false,
-              });
-            })
-            .catch(err => {
-              console.log(err); 
-              this.setState({ loading: false, error: err});
-            });
-      }else{
+    Auth.signUp({
+      username,
+      password,
+      attributes: {
+          email,          // optional
+          phone_number,   // optional - E.164 number convention daniel_1234@hotmail.es   +18292130970
+          name,
+          // other custom attributes 
+      },
+      //validationData: []  //optional
+    })
+    .then(data => {
         this.setState({
-          error: {
-            email_exist: true,
-            message: 'El nombre de usuario ya esta asociado a una cuenta'
-          },
+          modal: !this.state.modal,
           loading: false,
         });
-      }
+    })
+    .catch(err => {
+        console.log(err); 
+        this.setState({ loading: false, error: err});
     });
   };
 
@@ -279,7 +269,7 @@ class ClientSignUp extends Component {
 
 
                           <MDBInput label="Nombre Completo" value={name} onChange={event => this.setState(updateByPropertyName("name", event.target.value)) } group type="text" validate error="wrong" success="right" required/> 
-                          <MDBInput label="Numero de Telefono" value={phone_num} onChange={event => this.setState(updateByPropertyName("phone_num", event.target.value)) } group type="number" validate error="wrong" success="right" required/>
+                          <MDBInput label="Numero de Telefono" value={phone_num} pattern="^[+]*[0-9]{11}$" title="Agregar (+1) mas el numero telefono. Ej: +18491220022" onChange={event => this.setState(updateByPropertyName("phone_num", event.target.value)) } group type="number" validate error="wrong" success="right" required/>
                           <MDBRow>
                             <MDBCol>
                               <MDBFormInline className="mb-4">
@@ -310,7 +300,7 @@ class ClientSignUp extends Component {
                           <MDBInput className="mt-4 mb-4" label="Aceptar Terminos y Condiciones" checked={terms_conditions} onChange={this.onClickRadioTC} type="checkbox" id="terms_conditions" />
 
                           <div className="text-center pt-5 mb-3">
-                            {/* <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}
+                           {/*  <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}
                             {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} type="submit">Registrarse</MDBBtn>}
                             {loading && <MDBSpinner small />}
                             {(!(error === null) || (error === '')) &&

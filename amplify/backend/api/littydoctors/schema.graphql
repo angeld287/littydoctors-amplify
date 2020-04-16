@@ -246,6 +246,7 @@ type Patient
     religion: Religion @connection
     address: String
     code: String
+    temporary_password: String
     marital_status: MaritalStatus
     birthdate: String
     approved_terms_conditions: String

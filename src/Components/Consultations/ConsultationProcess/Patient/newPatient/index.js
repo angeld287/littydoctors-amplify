@@ -9,6 +9,8 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
 
+import { uuidv2 } from '../../../../../Functions/uuid';
+
 import PlacesAutocomplete from 'react-places-autocomplete';
 
 const NewPatient = (
@@ -21,7 +23,7 @@ const NewPatient = (
                       }
                    ) => {
 
-  const { monthAge, setMonthAge, age, setAge, register, setBirthdate, handleSubmit, formState, birthdate, newPatient, errors, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange } = useNewPatient();
+  const { CognitoCreateUser, Exist, setMonthAge, age, setAge, register, setBirthdate, handleSubmit, formState, birthdate, newPatient, errors, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange } = useNewPatient();
 
   const _setAge = (d) =>{
     const y = moment(new Date()).format('YYYY') - moment(d).format('YYYY');
@@ -52,20 +54,16 @@ const NewPatient = (
         var date = moment(new Date()).format('YYYY-MM-DD');
         var bdate = moment(birthdate).format('YYYY-MM-DD');
 
-        const filetrLimit = {
-          filter: {
-            or: [
-              {username: {eq: String(input.username) }}, 
-            ]
-          },
-          limit: 400
-        };
+        const exist = await Exist(input.username, input.email);
 
-        var patient = await API.graphql(graphqlOperation(listPatients, filetrLimit));
-
-
-        if(patient.data.listPatients.items.length !== 0){
+        if(exist.body.cognito.username){
             Swal.fire('Nombre de Usuario Existente', 'Favor agregar otro nombre de usuario, dado que este ya existe', 'error');
+            _setLoading(false);
+            return
+        }
+
+        if(exist.body.cognito.email){
+            Swal.fire('Email Existente', 'El email ya esta asociado a una cuenta', 'error');
             _setLoading(false);
             return
         }
@@ -107,16 +105,22 @@ const NewPatient = (
         input.patientReligionId = fields.religion.religion;
         if(!adult){input.id_card = null;}
         input.approved_terms_conditions = false;
-        
-        API.graphql(graphqlOperation(createPatient, { input: input }))
-        .then((r) => {
-            createConsultation(childProps.state, r.data.createPatient, reason);
-        })
-        .catch((err) => { 
-            console.log(err);
-            _setLoading(false);
-        })
-        
+        input.temporary_password = uuidv2();
+        input.code = moment(new Date()).format('YYYYMMDDHHmmSSssss')+"_"+input.username;
+
+
+        const cognito = await CognitoCreateUser(input);
+
+        if (cognito.body.code === undefined) {
+          API.graphql(graphqlOperation(createPatient, { input: input }))
+          .then((r) => {
+              createConsultation(childProps.state, r.data.createPatient, reason);
+          })
+          .catch((err) => { 
+              console.log(err);
+              _setLoading(false);
+          })
+        }
     }
 
     const searchOptions = {
@@ -162,7 +166,7 @@ const NewPatient = (
                     <MDBIcon icon="phone" size="2x"/>
                   </MDBCol>
                   <MDBCol md="11">
-                    <input name="phone" placeholder="Telefono" autoComplete="off" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
+                    <input name="phone" placeholder="Telefono" autoComplete="off" pattern="^[+]*[0-9]{11}$" title="Agregar (+1) mas el numero telefono. Ej: +18491220022" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
                     {errors.phone && <span className="text-danger mb-2">{errors.phone.message}</span>}
                   </MDBCol>
                 </MDBRow>

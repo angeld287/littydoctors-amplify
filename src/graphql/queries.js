@@ -325,6 +325,8 @@ export const getMedicalAppointment = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
         approved_terms_conditions
@@ -425,6 +427,8 @@ export const listMedicalAppointments = /* GraphQL */ `
           image
           id_card
           address
+          code
+          temporary_password
           marital_status
           birthdate
           approved_terms_conditions
@@ -507,6 +511,8 @@ export const getMedicalConsultation = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
         approved_terms_conditions
@@ -551,6 +557,8 @@ export const getMedicalConsultation = /* GraphQL */ `
           image
           id_card
           address
+          code
+          temporary_password
           marital_status
           birthdate
           approved_terms_conditions
@@ -620,6 +628,8 @@ export const listMedicalConsultations = /* GraphQL */ `
           image
           id_card
           address
+          code
+          temporary_password
           marital_status
           birthdate
           approved_terms_conditions
@@ -681,6 +691,8 @@ export const getMedicalHistory = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
         approved_terms_conditions
@@ -759,6 +771,8 @@ export const listMedicalHistorys = /* GraphQL */ `
           image
           id_card
           address
+          code
+          temporary_password
           marital_status
           birthdate
           approved_terms_conditions
@@ -806,6 +820,8 @@ export const getPatient = /* GraphQL */ `
         owner
       }
       address
+      code
+      temporary_password
       marital_status
       birthdate
       approved_terms_conditions
@@ -849,6 +865,8 @@ export const listPatients = /* GraphQL */ `
           owner
         }
         address
+        code
+        temporary_password
         marital_status
         birthdate
         approved_terms_conditions

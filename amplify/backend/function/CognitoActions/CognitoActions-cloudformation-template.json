@@ -63,7 +63,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-littydoctors-dev-115546-deployment",
-					"S3Key": "amplify-builds/addUserToGroup-566163696c6444786c4f-build.zip"
+					"S3Key": "amplify-builds/CognitoActions-7048586770797351456b-build.zip"
 				}
 			}
 		},
@@ -73,12 +73,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"littydoctorsLambdaRole930a44d1",
+						"littydoctorsLambdaRole30983a87",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"littydoctorsLambdaRole930a44d1",
+									"littydoctorsLambdaRole30983a87",
 									"-",
 									{
 										"Ref": "env"

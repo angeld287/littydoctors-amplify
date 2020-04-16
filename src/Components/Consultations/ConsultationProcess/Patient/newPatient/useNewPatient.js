@@ -5,6 +5,8 @@ import { listReligions } from '../../../../../graphql/queries';
 
 import { API, graphqlOperation } from 'aws-amplify';
 
+import awsmobile from '../../../../../aws-exports'
+
 const useNewPatient = () => {
     const [ _loading, _setLoading ] = useState(true);
     const [ error, setError ] = useState(false);
@@ -50,6 +52,43 @@ const useNewPatient = () => {
         
         //setlocation(location);
       };
+
+      const Exist = async (username, email) => {
+
+        const apiOptions = {};
+        apiOptions['headers'] = {
+            'Content-Type': 'application/json'
+        };
+        apiOptions['body'] = {
+          UserPoolId: awsmobile.aws_user_pools_id,
+          email: email,
+          Username: username
+        };
+    
+        const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
+    
+        return (resultP);
+      }
+
+      const CognitoCreateUser = async (data) => {
+
+        const apiOptions = {};
+        apiOptions['headers'] = {
+            'Content-Type': 'application/json'
+        };
+        apiOptions['body'] = {
+          UserPoolId: awsmobile.aws_user_pools_id,
+          email: data.email,
+          Username: data.username,
+          name: data.name,
+          phone_number: data.phone,
+          Password: data.temporary_password,
+        };
+    
+        const resultP = await API.post('ApiForLambda', '/createUser', apiOptions); 
+    
+        return resultP;
+      }
 
       const handleSelect = location => {
         setlocation(location);
@@ -106,7 +145,7 @@ const useNewPatient = () => {
 
 
 
-    return { monthAge, setMonthAge, age, setAge, birthdate, setBirthdate, register, handleSubmit, errors, formState, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange };
+    return { CognitoCreateUser, Exist, monthAge, setMonthAge, age, setAge, birthdate, setBirthdate, register, handleSubmit, errors, formState, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange };
 };
 
 export default useNewPatient;
