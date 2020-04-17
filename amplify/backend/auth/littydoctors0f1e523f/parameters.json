@@ -46,10 +46,7 @@
     },
     "useDefault": "default",
     "userPoolGroupList": [
-        "admin",
-        "doctor",
-        "secretary",
-        "client"
+        "m"
     ],
     "dependsOn": []
 }

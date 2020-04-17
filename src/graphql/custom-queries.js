@@ -295,7 +295,16 @@ export const getMedicalConsultation = /* GraphQL */ `
               abdomen
               members
               genitals
-              others
+              others {
+                items{
+                  id
+                  field {
+                    id
+                    name
+                  }
+                  value
+                }
+              }
               doctor
               secretary
               patient

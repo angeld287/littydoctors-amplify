@@ -528,14 +528,14 @@ type PostConsultActMedAnalysis @model(queries: null) {
   id: ID!
   state: State # se colocara un estado que espesificara si el analisis se realizo o no
   date: String
-  results: [MedicalAnalysisResults] @connection
+  results: [OthersFields] @connection
   file: String
   pcActivities: PostConsultationsActivity @connection(name: "pcama")
   medicalAnalysis: MedicalAnalysis @connection(name: "mapca")
   createdAt: String
 }
 
-type MedicalAnalysisResults
+type OthersFields
     @model 
     @auth(rules: [
         { allow: owner },
@@ -684,7 +684,7 @@ type RegionalExploration
     abdomen: String
     members: String
     genitals: String
-    others: String
+    others: [OthersFields] @connection
     doctor: String
     secretary: String
     patient: String

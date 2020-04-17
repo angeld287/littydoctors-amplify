@@ -725,7 +725,6 @@ export const getMedicalHistory = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -1505,9 +1504,9 @@ export const listMedicalPrescriptions = /* GraphQL */ `
     }
   }
 `;
-export const getMedicalAnalysisResults = /* GraphQL */ `
-  query GetMedicalAnalysisResults($id: ID!) {
-    getMedicalAnalysisResults(id: $id) {
+export const getOthersFields = /* GraphQL */ `
+  query GetOthersFields($id: ID!) {
+    getOthersFields(id: $id) {
       id
       field {
         id
@@ -1520,17 +1519,13 @@ export const getMedicalAnalysisResults = /* GraphQL */ `
     }
   }
 `;
-export const listMedicalAnalysisResultss = /* GraphQL */ `
-  query ListMedicalAnalysisResultss(
-    $filter: ModelMedicalAnalysisResultsFilterInput
+export const listOthersFieldss = /* GraphQL */ `
+  query ListOthersFieldss(
+    $filter: ModelOthersFieldsFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listMedicalAnalysisResultss(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listOthersFieldss(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         field {
@@ -1700,7 +1695,9 @@ export const getPhysicalExploration = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient
@@ -1749,7 +1746,6 @@ export const listPhysicalExplorations = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -1815,7 +1811,14 @@ export const getRegionalExploration = /* GraphQL */ `
       abdomen
       members
       genitals
-      others
+      others {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
       doctor
       secretary
       patient
@@ -1843,7 +1846,9 @@ export const listRegionalExplorations = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient

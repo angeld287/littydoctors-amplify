@@ -3,7 +3,7 @@ import useForm from 'react-hook-form';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
 import { listFields } from '../../../../../../../graphql/queries';
-import { updateMedicalAnalysisResults } from '../../../../../../../graphql/mutations';
+import { updateOthersFields } from '../../../../../../../graphql/mutations';
 import { MDBIcon, MDBBtn, MDBSpinner, MDBInputGroup } from 'mdbreact';
 import moment from 'moment';
 
@@ -109,8 +109,8 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
                     id : item.results.items[item.results.items.findIndex(r => r.field.id === e)].id,
                     value: input[e],
                 };
-                const pcama = await API.graphql(graphqlOperation(updateMedicalAnalysisResults, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
-                resutlsArray.push(pcama.data.updateMedicalAnalysisResults)
+                const pcama = await API.graphql(graphqlOperation(updateOthersFields, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
+                resutlsArray.push(pcama.data.updateOthersFields)
             }
         );
         item.results.items = resutlsArray;
