@@ -137,6 +137,22 @@ const usePhysicalExploration = (global, setGlobalData) => {
         setothers(re.others !== null ? re.others : "");
     }
 
+    const setEditDataFromCreate = (o) => {
+        setgeneral_exploration(o.general_exploration !== null ? o.general_exploration : "");
+        setbreathing(o.breathing !== null ? o.breathing : "");
+        setpulse(o.pulse !== null ? o.pulse : "");
+        setblood_pressure(o.blood_pressure !== null ? o.blood_pressure : "");
+        settemperature(o.temperature !== null ? o.temperature : "");
+
+        sethead(o.head !== null ? o.head : "");
+        setneck(o.neck !== null ? o.neck : "");
+        setthorax(o.thorax !== null ? o.thorax : "");
+        setabdomen(o.abdomen !== null ? o.abdomen : "");
+        setmembers(o.members !== null ? o.members : "");
+        setgenitals(o.genitals !== null ? o.genitals : "");
+        setothers(o.others !== null ? o.others : "");
+    }
+
 
     const createsPhysicalExploration = async (o) => {
         //const _items = global.medicalConsultation.medicalHistory.familyHistory.items;
@@ -178,7 +194,7 @@ const usePhysicalExploration = (global, setGlobalData) => {
         global.medicalConsultation.medicalHistory.physicalExploration = cpe.data.createPhysicalExploration;
 
         setGlobalData(global);
-        
+        setEditDataFromCreate(o);
         setTimeout(() => {  
             setNew(false);
             setLoading(false);
