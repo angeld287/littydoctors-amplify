@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
          MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBDataTable } from "mdbreact";
 
@@ -10,6 +10,8 @@ const ViewPhysicalExploration = ({
     global: global,
     setEdit: setEdit,
     editLoading: editLoading,
+    fieldsForm: fieldsForm,
+    setFieldsForm: setFieldsForm
 }) => {
   //const { register, loading, handleSubmit, onSubmit, formState } = usePhysicalExploration(global, setGlobalData);
 
@@ -100,8 +102,10 @@ const ViewPhysicalExploration = ({
             </MDBCol>
           </MDBRow>
           <div className="form-group">
-            <label htmlFor="others">Otro</label>
-            <textarea value={re.others === null ? "" : re.others} disabled name="others"  className="form-control" id="others" rows="3" ></textarea>
+            <label htmlFor="others">Exploracion Fisica por Especialidad</label>
+            <MDBCard>
+              <MDBContainer className="m-1">{fieldsForm}</MDBContainer>
+            </MDBCard>
           </div>
           <div className="text-center py-4 mt-3">
               {!editLoading && <TooltipButton helperMessage={"Editar Exploracion Fisica"} component={editBtn} placement="top"/>}

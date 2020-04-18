@@ -96,7 +96,7 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
         setLoadingAdd(true);
         const items = global.global.pendingAnalysis;
         const item = items[items.findIndex(i => i.id === results.id)];
-        const resutlsArray = []
+        const resutlsArray = [];
 
         Object.keys(input).forEach(
             async (e) => {
