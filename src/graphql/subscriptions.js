@@ -1043,7 +1043,6 @@ export const onCreateMedicalHistory = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -1123,7 +1122,6 @@ export const onUpdateMedicalHistory = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -1203,7 +1201,6 @@ export const onDeleteMedicalHistory = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -2700,9 +2697,9 @@ export const onDeletePostConsultActMedAnalysis = /* GraphQL */ `
     }
   }
 `;
-export const onCreateMedicalAnalysisResults = /* GraphQL */ `
-  subscription OnCreateMedicalAnalysisResults($owner: String!) {
-    onCreateMedicalAnalysisResults(owner: $owner) {
+export const onCreateOthersFields = /* GraphQL */ `
+  subscription OnCreateOthersFields($owner: String!) {
+    onCreateOthersFields(owner: $owner) {
       id
       field {
         id
@@ -2715,9 +2712,9 @@ export const onCreateMedicalAnalysisResults = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateMedicalAnalysisResults = /* GraphQL */ `
-  subscription OnUpdateMedicalAnalysisResults($owner: String!) {
-    onUpdateMedicalAnalysisResults(owner: $owner) {
+export const onUpdateOthersFields = /* GraphQL */ `
+  subscription OnUpdateOthersFields($owner: String!) {
+    onUpdateOthersFields(owner: $owner) {
       id
       field {
         id
@@ -2730,9 +2727,9 @@ export const onUpdateMedicalAnalysisResults = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteMedicalAnalysisResults = /* GraphQL */ `
-  subscription OnDeleteMedicalAnalysisResults($owner: String!) {
-    onDeleteMedicalAnalysisResults(owner: $owner) {
+export const onDeleteOthersFields = /* GraphQL */ `
+  subscription OnDeleteOthersFields($owner: String!) {
+    onDeleteOthersFields(owner: $owner) {
       id
       field {
         id
@@ -3175,7 +3172,9 @@ export const onCreatePhysicalExploration = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient
@@ -3215,7 +3214,9 @@ export const onUpdatePhysicalExploration = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient
@@ -3255,7 +3256,9 @@ export const onDeletePhysicalExploration = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient
@@ -3328,7 +3331,14 @@ export const onCreateRegionalExploration = /* GraphQL */ `
       abdomen
       members
       genitals
-      others
+      others {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
       doctor
       secretary
       patient
@@ -3347,7 +3357,14 @@ export const onUpdateRegionalExploration = /* GraphQL */ `
       abdomen
       members
       genitals
-      others
+      others {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
       doctor
       secretary
       patient
@@ -3366,7 +3383,14 @@ export const onDeleteRegionalExploration = /* GraphQL */ `
       abdomen
       members
       genitals
-      others
+      others {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
       doctor
       secretary
       patient

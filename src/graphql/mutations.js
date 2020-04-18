@@ -1218,7 +1218,6 @@ export const createMedicalHistory = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -1301,7 +1300,6 @@ export const updateMedicalHistory = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -1384,7 +1382,6 @@ export const deleteMedicalHistory = /* GraphQL */ `
           abdomen
           members
           genitals
-          others
           doctor
           secretary
           patient
@@ -3031,12 +3028,12 @@ export const deletePostConsultActMedAnalysis = /* GraphQL */ `
     }
   }
 `;
-export const createMedicalAnalysisResults = /* GraphQL */ `
-  mutation CreateMedicalAnalysisResults(
-    $input: CreateMedicalAnalysisResultsInput!
-    $condition: ModelMedicalAnalysisResultsConditionInput
+export const createOthersFields = /* GraphQL */ `
+  mutation CreateOthersFields(
+    $input: CreateOthersFieldsInput!
+    $condition: ModelOthersFieldsConditionInput
   ) {
-    createMedicalAnalysisResults(input: $input, condition: $condition) {
+    createOthersFields(input: $input, condition: $condition) {
       id
       field {
         id
@@ -3049,12 +3046,12 @@ export const createMedicalAnalysisResults = /* GraphQL */ `
     }
   }
 `;
-export const updateMedicalAnalysisResults = /* GraphQL */ `
-  mutation UpdateMedicalAnalysisResults(
-    $input: UpdateMedicalAnalysisResultsInput!
-    $condition: ModelMedicalAnalysisResultsConditionInput
+export const updateOthersFields = /* GraphQL */ `
+  mutation UpdateOthersFields(
+    $input: UpdateOthersFieldsInput!
+    $condition: ModelOthersFieldsConditionInput
   ) {
-    updateMedicalAnalysisResults(input: $input, condition: $condition) {
+    updateOthersFields(input: $input, condition: $condition) {
       id
       field {
         id
@@ -3067,12 +3064,12 @@ export const updateMedicalAnalysisResults = /* GraphQL */ `
     }
   }
 `;
-export const deleteMedicalAnalysisResults = /* GraphQL */ `
-  mutation DeleteMedicalAnalysisResults(
-    $input: DeleteMedicalAnalysisResultsInput!
-    $condition: ModelMedicalAnalysisResultsConditionInput
+export const deleteOthersFields = /* GraphQL */ `
+  mutation DeleteOthersFields(
+    $input: DeleteOthersFieldsInput!
+    $condition: ModelOthersFieldsConditionInput
   ) {
-    deleteMedicalAnalysisResults(input: $input, condition: $condition) {
+    deleteOthersFields(input: $input, condition: $condition) {
       id
       field {
         id
@@ -3563,7 +3560,9 @@ export const createPhysicalExploration = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient
@@ -3606,7 +3605,9 @@ export const updatePhysicalExploration = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient
@@ -3649,7 +3650,9 @@ export const deletePhysicalExploration = /* GraphQL */ `
         abdomen
         members
         genitals
-        others
+        others {
+          nextToken
+        }
         doctor
         secretary
         patient
@@ -3734,7 +3737,14 @@ export const createRegionalExploration = /* GraphQL */ `
       abdomen
       members
       genitals
-      others
+      others {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
       doctor
       secretary
       patient
@@ -3756,7 +3766,14 @@ export const updateRegionalExploration = /* GraphQL */ `
       abdomen
       members
       genitals
-      others
+      others {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
       doctor
       secretary
       patient
@@ -3778,7 +3795,14 @@ export const deleteRegionalExploration = /* GraphQL */ `
       abdomen
       members
       genitals
-      others
+      others {
+        items {
+          id
+          value
+          owner
+        }
+        nextToken
+      }
       doctor
       secretary
       patient

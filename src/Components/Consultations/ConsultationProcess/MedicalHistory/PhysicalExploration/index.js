@@ -11,9 +11,11 @@ import EditPhysicalExploration from './EditPhysicalExploration';
 
 const PhysicalExploration = ({
     global: global,
-    setGlobalData: setGlobalData
+    setGlobalData: setGlobalData,
+    patientData: patientData,
+    childProps: childProps
 }) => {
-  const { actions, _new , _edit, setEdit, editLoading, fields, editPhysicalExploration, setEditData, loading} = usePhysicalExploration(global, setGlobalData);
+  const { _setFieldsForm, fieldsForm, actions, _new , _edit, setEdit, editLoading, fields, editPhysicalExploration, setEditData, loading} = usePhysicalExploration(childProps, patientData, global, setGlobalData);
 
   useEffect(() => {
       let didCancel = false;
@@ -49,6 +51,8 @@ const PhysicalExploration = ({
               global={global}
               setGlobalData={setGlobalData}
               actions={actions}
+              fieldsForm={fieldsForm}
+              setFieldsForm={_setFieldsForm}
           />
       }
 
@@ -58,17 +62,23 @@ const PhysicalExploration = ({
               global={global}
               setEdit={setEdit}
               editLoading={editLoading}
+              fieldsForm={fieldsForm}
+              setFieldsForm={_setFieldsForm}
           />
       }
 
       {/* Editar Datos de Exploracion Fisica */}
       {(!_new && _edit)&&
           <EditPhysicalExploration
+              global={global}
+              actions={actions}
               editPhysicalExploration={editPhysicalExploration}
               fields={fields}
               editLoading={editLoading}
               setEditData={setEditData}
               setEdit={setEdit}
+              fieldsForm={fieldsForm}
+              setFieldsForm={_setFieldsForm}
           />
       }
       

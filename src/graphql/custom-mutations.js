@@ -305,3 +305,109 @@ export const updatePostConsultActMedAnalysisForGlobal = /* GraphQL */ `
     }
   }
 `;
+
+export const createPhysicalExplorationForGlobal = /* GraphQL */ `
+  mutation CreatePhysicalExploration(
+    $input: CreatePhysicalExplorationInput!
+    $condition: ModelPhysicalExplorationConditionInput
+  ) {
+    createPhysicalExploration(input: $input, condition: $condition) {
+      id
+      general_exploration
+      vitalsign {
+        id
+        blood_pressure
+        breathing
+        pulse
+        temperature
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      regionalExploration {
+        id
+        head
+        neck
+        thorax
+        abdomen
+        members
+        genitals
+        others {
+          items{
+            id
+            field {
+              id
+              name
+            }
+            value
+          }
+        }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const updatePhysicalExplorationForGlobal = /* GraphQL */ `
+  mutation UpdatePhysicalExploration(
+    $input: UpdatePhysicalExplorationInput!
+    $condition: ModelPhysicalExplorationConditionInput
+  ) {
+    updatePhysicalExploration(input: $input, condition: $condition) {
+      id
+      general_exploration
+      vitalsign {
+        id
+        blood_pressure
+        breathing
+        pulse
+        temperature
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      regionalExploration {
+        id
+        head
+        neck
+        thorax
+        abdomen
+        members
+        genitals
+        others {
+          items{
+            id
+            field {
+              id
+              name
+            }
+            value
+          }
+        }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;

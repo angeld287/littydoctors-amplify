@@ -1,20 +1,24 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
 import useForm from 'react-hook-form';
-import {    createPhysicalExploration, 
-            updatePhysicalExploration,
+import { listFields } from '../../../../../graphql/queries';
+import {MDBRow, MDBCol} from 'mdbreact';
+import { createPhysicalExplorationForGlobal, updatePhysicalExplorationForGlobal } from '../../../../../graphql/custom-mutations';
+import {    createRegionalExploration, 
             updateMedicalHistory,
             createVitalSign,
             updateVitalSign,
-            createRegionalExploration,
             updateRegionalExploration,
+            createOthersFields,
+            updateOthersFields,
         } from '../../../../../graphql/mutations';
 
-const usePhysicalExploration = (global, setGlobalData) => {
+const usePhysicalExploration = (childProps, patientData, global, setGlobalData) => {
     const [ loading, setLoading ] = useState(false);
     const [ error, setError ] = useState(false);
     let { consultation, patient } = useParams();
+    const [ fieldsForm, setFieldsForm ] = useState();
     const { register, handleSubmit, errors, formState } = useForm();
 
   const medicalHistory = global.medicalConsultation.medicalHistory;
@@ -94,27 +98,84 @@ const usePhysicalExploration = (global, setGlobalData) => {
 
         const fetch = async () => {
             try {
-                /* API.graphql(graphqlOperation(createMedicalHistory, {input: input}))
-                .then((r) => {
-                    
-                }).catch((err) => { 
-                    console.log("Ocurrio un error: ",err); 
-                    setError(true) 
+                const filter = {
+                    filter: {
+                        modules: {contains: childProps.state.specialityid}
+                    },
+                    limit: 400
+                };
+                const fieldsList = await API.graphql(graphqlOperation(listFields, filter)).catch((err) => { console.log("Ocurrio un error: ",err); setLoading(false); });   
+
+                
+                global.regionalExplorationFields = fieldsList.data.listFields.items;
+                global.regionalExplorationFieldsLoaded = true;
+
+                setGlobalData(global)
+
+                _setFieldsForm(fieldsList.data.listFields.items, global.medicalConsultation.medicalHistory.physicalExploration === null ? [] : global.medicalConsultation.medicalHistory.physicalExploration.regionalExploration.others.items);
+
+                setLoading(false);
+                if (!didCancel) {
                     setLoading(false);
-                });  */
+                }
+                
             } catch (error) {
                 setError(true);
                 setLoading(false);
             }
         };
-        setLoading(true);
-        fetch();
-        setLoading(false);
+        
+        if (!global.regionalExplorationFieldsLoaded) {
+            setLoading(true);
+            fetch();
+            setLoading(false);
+        }else{
+            _setFieldsForm(global.regionalExplorationFields, global.medicalConsultation.medicalHistory.physicalExploration === null ? [] : global.medicalConsultation.medicalHistory.physicalExploration.regionalExploration.others.items);
+        }
         return () => {
             didCancel = true;
         };
     }, []);
-    
+
+    const sortAlph = (a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (b.name > a.name) {
+            return 1;
+        }
+        return 0;
+    }
+
+    const _setFieldsForm = (_fields, df) => {
+        const fields = _fields.sort(sortAlph);
+        const fields_number = fields.length % 2 === 1 ? fields.length + 1 : fields.length;
+        const fieldsListLeft = (fields !== null)?([].concat(fields.slice(0, (fields_number/2))).map((item,i)=><div key={i} className="input-group mt-2"><div className="input-group-prepend"><span className="input-group-text" id="basic-addon">{item.name}</span></div>
+                <input disabled={!_edit && !_new} defaultValue={df.findIndex(f => f.field.id === item.id) !== -1 ? df[df.findIndex(f => f.field.id === item.id)].value : ""} name={item.id} ref={register} className="form-control" placeholder={item.name} aria-describedby="basic-addon" /></div>)):(<div></div>)
+
+        const fieldsListRigth = (fields !== null)?([].concat(fields.slice((fields_number/2), (fields.length))).map((item,i)=><div key={i} className="input-group mt-2"><div className="input-group-prepend"><span className="input-group-text" id="basic-addon">{item.name}</span></div>
+                <input disabled={!_edit && !_new} defaultValue={df.findIndex(f => f.field.id === item.id) !== -1 ? df[df.findIndex(f => f.field.id === item.id)].value : ""} name={item.id} ref={register} className="form-control" placeholder={item.name} aria-describedby="basic-addon" /></div>)):(<div></div>)
+
+        const fieldsList = (<MDBRow className="mb-3"><MDBCol>{fieldsListLeft}</MDBCol><MDBCol>{fieldsListRigth}</MDBCol></MDBRow>);
+
+        setFieldsForm(fieldsList);
+        setLoading(false);
+    }
+
+    const _setFieldsFormDisable = (_fields, df) => {
+        const fields = _fields.sort(sortAlph);
+        const fields_number = fields.length % 2 === 1 ? fields.length + 1 : fields.length;
+        const fieldsListLeft = (fields !== null)?([].concat(fields.slice(0, (fields_number/2))).map((item,i)=><div key={i} className="input-group mt-2"><div className="input-group-prepend"><span className="input-group-text" id="basic-addon">{item.name}</span></div>
+                <input disabled={true} defaultValue={df.findIndex(f => f.field.id === item.id) !== -1 ? df[df.findIndex(f => f.field.id === item.id)].value : ""} name={item.id} ref={register} className="form-control" placeholder={item.name} aria-describedby="basic-addon" /></div>)):(<div></div>)
+
+        const fieldsListRigth = (fields !== null)?([].concat(fields.slice((fields_number/2), (fields.length))).map((item,i)=><div key={i} className="input-group mt-2"><div className="input-group-prepend"><span className="input-group-text" id="basic-addon">{item.name}</span></div>
+                <input disabled={true} defaultValue={df.findIndex(f => f.field.id === item.id) !== -1 ? df[df.findIndex(f => f.field.id === item.id)].value : ""} name={item.id} ref={register} className="form-control" placeholder={item.name} aria-describedby="basic-addon" /></div>)):(<div></div>)
+
+        const fieldsList = (<MDBRow className="mb-3"><MDBCol>{fieldsListLeft}</MDBCol><MDBCol>{fieldsListRigth}</MDBCol></MDBRow>);
+
+        setFieldsForm(fieldsList);
+        setLoading(false);
+    }
 
     const onSubmit = (i) => {
         setLoading(true);
@@ -137,10 +198,26 @@ const usePhysicalExploration = (global, setGlobalData) => {
         setothers(re.others !== null ? re.others : "");
     }
 
+    const setEditDataFromCreate = (o) => {
+        setgeneral_exploration(o.general_exploration !== null ? o.general_exploration : "");
+        setbreathing(o.breathing !== null ? o.breathing : "");
+        setpulse(o.pulse !== null ? o.pulse : "");
+        setblood_pressure(o.blood_pressure !== null ? o.blood_pressure : "");
+        settemperature(o.temperature !== null ? o.temperature : "");
+
+        sethead(o.head !== null ? o.head : "");
+        setneck(o.neck !== null ? o.neck : "");
+        setthorax(o.thorax !== null ? o.thorax : "");
+        setabdomen(o.abdomen !== null ? o.abdomen : "");
+        setmembers(o.members !== null ? o.members : "");
+        setgenitals(o.genitals !== null ? o.genitals : "");
+        setothers(o.others !== null ? o.others : "");
+    }
+
 
     const createsPhysicalExploration = async (o) => {
         //const _items = global.medicalConsultation.medicalHistory.familyHistory.items;
-        
+        const fixed_fields = ['general_exploration', 'breathing', 'pulse', 'blood_pressure', 'temperature', 'head', 'neck', 'thorax', 'abdomen', 'members', 'genitals'];
         const vsinput = {}
         const reinput = {};
         const peinput = {};
@@ -151,7 +228,7 @@ const usePhysicalExploration = (global, setGlobalData) => {
         if(o.breathing !== ""){vsinput.breathing = o.breathing}
         if(o.pulse !== ""){vsinput.pulse = o.pulse}
         if(o.temperature !== ""){vsinput.temperature = o.temperature}
-        const cvs = await API.graphql(graphqlOperation(createVitalSign, {input: vsinput} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); setLoading(false); });
+        const cvs = await API.graphql(graphqlOperation(createVitalSign, {input: vsinput} )).catch( e => { console.log(e); setLoading(false);  throw new SyntaxError("Error GraphQL"); });
 
 
         //exploracion regional
@@ -161,24 +238,40 @@ const usePhysicalExploration = (global, setGlobalData) => {
         if(o.abdomen !== ""){reinput.abdomen = o.abdomen}
         if(o.members !== ""){reinput.members = o.members}
         if(o.genitals !== ""){reinput.genitals = o.genitals}
-        if(o.others !== ""){reinput.others = o.others}
-        const crx = await API.graphql(graphqlOperation(createRegionalExploration, {input: reinput} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); setLoading(false); });
+        
+        const crx = await API.graphql(graphqlOperation(createRegionalExploration, {input: reinput} )).catch( e => { console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
+        const dfer = [];
+        
+        Object.keys(o).forEach(
+            async (e) => {
+                if (fixed_fields.findIndex(v => v === e) === -1) {
+                    const i = {
+                        value: o[e] === "" ? "N/A" : o[e],
+                        regionalExplorationOthersId: crx.data.createRegionalExploration.id,
+                        othersFieldsFieldId: e,
+                    }
+    
+                    const pcama = await API.graphql(graphqlOperation(createOthersFields, {input: i} )).catch( e => {console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
+                    dfer.push(pcama.data.createOthersFields);
+                }
+            }
+        );
 
         //exploracion fisica
         if(o.general_exploration !== ""){peinput.general_exploration = o.general_exploration}
         peinput.physicalExplorationVitalsignId = cvs.data.createVitalSign.id;
         peinput.physicalExplorationRegionalExplorationId = crx.data.createRegionalExploration.id;
 
-        const cpe = await API.graphql(graphqlOperation(createPhysicalExploration, {input: peinput} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); setLoading(false); });
+        const cpe = await API.graphql(graphqlOperation(createPhysicalExplorationForGlobal, {input: peinput} )).catch( e => {  console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
         
         mhinput.id = global.medicalConsultation.medicalHistory.id
         mhinput.medicalHistoryPhysicalExplorationId = cpe.data.createPhysicalExploration.id;
-        const updatemh = await API.graphql(graphqlOperation(updateMedicalHistory, {input: mhinput} )).catch( e => { throw new SyntaxError("Error GraphQL"); console.log(e); setLoading(false); });
-
+        const updatemh = await API.graphql(graphqlOperation(updateMedicalHistory, {input: mhinput} )).catch( e => { console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL");  });
+        _setFieldsFormDisable(global.regionalExplorationFields, dfer);
         global.medicalConsultation.medicalHistory.physicalExploration = cpe.data.createPhysicalExploration;
 
         setGlobalData(global);
-        
+        setEditDataFromCreate(o);
         setTimeout(() => {  
             setNew(false);
             setLoading(false);
@@ -186,40 +279,63 @@ const usePhysicalExploration = (global, setGlobalData) => {
 
     }
 
-    const editPhysicalExploration = async () => {
+    const editPhysicalExploration = async (o) => {
+        
         setEditLoading(true);
+        const fixed_fields = ['general_exploration', 'breathing', 'pulse', 'blood_pressure', 'temperature', 'head', 'neck', 'thorax', 'abdomen', 'members', 'genitals'];
         const vsinput = {}
         const reinput = {};
         const peinput = {};
 
         //signos vitales
         vsinput.id = vs.id;
-        if(blood_pressure !== ""){vsinput.blood_pressure = blood_pressure}
-        if(breathing !== ""){vsinput.breathing = breathing}
-        if(pulse !== ""){vsinput.pulse = pulse}
-        if(temperature !== ""){vsinput.temperature = temperature}
+        if(o.blood_pressure !== ""){vsinput.blood_pressure = o.blood_pressure}
+        if(o.breathing !== ""){vsinput.breathing = o.breathing}
+        if(o.pulse !== ""){vsinput.pulse = o.pulse}
+        if(o.temperature !== ""){vsinput.temperature = o.temperature}
+
         const uvs = await API.graphql(graphqlOperation(updateVitalSign, {input: vsinput} )).catch( e => { console.log(e); setEditLoading(false); throw new SyntaxError("Error GraphQL"); });
 
 
         //exploracion regional
         reinput.id = re.id;
-        if(head !== ""){reinput.head = head}
-        if(neck !== ""){reinput.neck = neck}
-        if(thorax !== ""){reinput.thorax = thorax}
-        if(abdomen !== ""){reinput.abdomen = abdomen}
-        if(members !== ""){reinput.members = members}
-        if(genitals !== ""){reinput.genitals = genitals}
-        if(others !== ""){reinput.others = others}
+        if(o.head !== ""){reinput.head = o.head}
+        if(o.neck !== ""){reinput.neck = o.neck}
+        if(o.thorax !== ""){reinput.thorax = o.thorax}
+        if(o.abdomen !== ""){reinput.abdomen = o.abdomen}
+        if(o.members !== ""){reinput.members = o.members}
+        if(o.genitals !== ""){reinput.genitals = o.genitals}
         const urx = await API.graphql(graphqlOperation(updateRegionalExploration, {input: reinput} )).catch( e => { console.log(e); setEditLoading(false); throw new SyntaxError("Error GraphQL"); });
+
+        const df = global.medicalConsultation.medicalHistory.physicalExploration === null ? [] : global.medicalConsultation.medicalHistory.physicalExploration.regionalExploration.others.items;
+        const dfer = [];
+        Object.keys(o).forEach(
+            async (e) => {
+                if (fixed_fields.findIndex(v => v === e) === -1) {
+                    const f = df[df.findIndex(f => f.field.id === e)];
+                    if (f.value !== o[e]) {
+                        const i = {
+                            id: f.id,
+                            value: o[e] === "" ? "N/A" : o[e]
+                        }
+                        const pcama = await API.graphql(graphqlOperation(updateOthersFields, {input: i} )).catch( e => {console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
+                        
+                        dfer.push(pcama.data.updateOthersFields);
+                    }else{
+                        dfer.push(f);
+                    }
+                }
+            }
+        );
 
         //exploracion fisica
         peinput.id = physicalexploration.id;
-        if(general_exploration !== ""){peinput.general_exploration = general_exploration}
+        if(o.general_exploration !== ""){peinput.general_exploration = o.general_exploration}
 
-        const upe = await API.graphql(graphqlOperation(updatePhysicalExploration, {input: peinput} )).catch( e => { console.log(e); setEditLoading(false); throw new SyntaxError("Error GraphQL"); });
-    
+        const upe = await API.graphql(graphqlOperation(updatePhysicalExplorationForGlobal, {input: peinput} )).catch( e => { console.log(e); setEditLoading(false); throw new SyntaxError("Error GraphQL"); });
+        _setFieldsFormDisable(global.regionalExplorationFields, dfer);
+
         global.medicalConsultation.medicalHistory.physicalExploration = upe.data.updatePhysicalExploration;
-
         setGlobalData(global);
         
         setTimeout(() => {  
@@ -236,9 +352,10 @@ const usePhysicalExploration = (global, setGlobalData) => {
         handleSubmit: handleSubmit,
         formState: formState,
         setLoading: setLoading,
+        editPhysicalExploration: editPhysicalExploration,
     }
 
-    return { actions, errors, _new, _edit, setEdit, editLoading, fields, editPhysicalExploration, setEditData, loading};
+    return { _setFieldsForm, fieldsForm, actions, errors, _new, _edit, setEdit, editLoading, fields, editPhysicalExploration, setEditData, loading};
 };
 
 export default usePhysicalExploration;

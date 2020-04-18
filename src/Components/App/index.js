@@ -53,6 +53,7 @@ export default class App extends Component {
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
                 speciality: result.data.listConsultingRooms.items[0].doctor.speciality.name,
+                specialityid: result.data.listConsultingRooms.items[0].doctor.speciality.id,
                 image: result.data.listConsultingRooms.items[0].doctor.image,
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,

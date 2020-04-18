@@ -1441,7 +1441,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "getMedicalAnalysisResults",
+          "name" : "getOthersFields",
           "description" : null,
           "args" : [ {
             "name" : "id",
@@ -1459,20 +1459,20 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MedicalAnalysisResults",
+            "name" : "OthersFields",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "listMedicalAnalysisResultss",
+          "name" : "listOthersFieldss",
           "description" : null,
           "args" : [ {
             "name" : "filter",
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsFilterInput",
+              "name" : "ModelOthersFieldsFilterInput",
               "ofType" : null
             },
             "defaultValue" : null
@@ -1497,7 +1497,7 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "ModelMedicalAnalysisResultsConnection",
+            "name" : "ModelOthersFieldsConnection",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6565,7 +6565,7 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsFilterInput",
+              "name" : "ModelOthersFieldsFilterInput",
               "ofType" : null
             },
             "defaultValue" : null
@@ -6599,7 +6599,7 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "ModelMedicalAnalysisResultsConnection",
+            "name" : "ModelOthersFieldsConnection",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6655,7 +6655,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "ModelMedicalAnalysisResultsConnection",
+        "name" : "ModelOthersFieldsConnection",
         "description" : null,
         "fields" : [ {
           "name" : "items",
@@ -6666,7 +6666,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MedicalAnalysisResults",
+              "name" : "OthersFields",
               "ofType" : null
             }
           },
@@ -6690,7 +6690,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "MedicalAnalysisResults",
+        "name" : "OthersFields",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -6808,7 +6808,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelMedicalAnalysisResultsFilterInput",
+        "name" : "ModelOthersFieldsFilterInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -6837,7 +6837,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsFilterInput",
+              "name" : "ModelOthersFieldsFilterInput",
               "ofType" : null
             }
           },
@@ -6850,7 +6850,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsFilterInput",
+              "name" : "ModelOthersFieldsFilterInput",
               "ofType" : null
             }
           },
@@ -6860,7 +6860,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "ModelMedicalAnalysisResultsFilterInput",
+            "name" : "ModelOthersFieldsFilterInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -9106,10 +9106,46 @@
         }, {
           "name" : "others",
           "description" : null,
-          "args" : [ ],
+          "args" : [ {
+            "name" : "filter",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelOthersFieldsFilterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "sortDirection",
+            "description" : null,
+            "type" : {
+              "kind" : "ENUM",
+              "name" : "ModelSortDirection",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "limit",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "Int",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "nextToken",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
           "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
+            "kind" : "OBJECT",
+            "name" : "ModelOthersFieldsConnection",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -11452,15 +11488,6 @@
           "defaultValue" : null
         }, {
           "name" : "genitals",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "others",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -14345,7 +14372,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "createMedicalAnalysisResults",
+          "name" : "createOthersFields",
           "description" : null,
           "args" : [ {
             "name" : "input",
@@ -14355,7 +14382,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "CreateMedicalAnalysisResultsInput",
+                "name" : "CreateOthersFieldsInput",
                 "ofType" : null
               }
             },
@@ -14365,20 +14392,20 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsConditionInput",
+              "name" : "ModelOthersFieldsConditionInput",
               "ofType" : null
             },
             "defaultValue" : null
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MedicalAnalysisResults",
+            "name" : "OthersFields",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "updateMedicalAnalysisResults",
+          "name" : "updateOthersFields",
           "description" : null,
           "args" : [ {
             "name" : "input",
@@ -14388,7 +14415,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "UpdateMedicalAnalysisResultsInput",
+                "name" : "UpdateOthersFieldsInput",
                 "ofType" : null
               }
             },
@@ -14398,20 +14425,20 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsConditionInput",
+              "name" : "ModelOthersFieldsConditionInput",
               "ofType" : null
             },
             "defaultValue" : null
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MedicalAnalysisResults",
+            "name" : "OthersFields",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "deleteMedicalAnalysisResults",
+          "name" : "deleteOthersFields",
           "description" : null,
           "args" : [ {
             "name" : "input",
@@ -14421,7 +14448,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "DeleteMedicalAnalysisResultsInput",
+                "name" : "DeleteOthersFieldsInput",
                 "ofType" : null
               }
             },
@@ -14431,14 +14458,14 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsConditionInput",
+              "name" : "ModelOthersFieldsConditionInput",
               "ofType" : null
             },
             "defaultValue" : null
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MedicalAnalysisResults",
+            "name" : "OthersFields",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -21675,7 +21702,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "CreateMedicalAnalysisResultsInput",
+        "name" : "CreateOthersFieldsInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -21706,7 +21733,16 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "medicalAnalysisResultsFieldId",
+          "name" : "othersFieldsFieldId",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "regionalExplorationOthersId",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21720,7 +21756,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelMedicalAnalysisResultsConditionInput",
+        "name" : "ModelOthersFieldsConditionInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -21740,7 +21776,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsConditionInput",
+              "name" : "ModelOthersFieldsConditionInput",
               "ofType" : null
             }
           },
@@ -21753,7 +21789,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelMedicalAnalysisResultsConditionInput",
+              "name" : "ModelOthersFieldsConditionInput",
               "ofType" : null
             }
           },
@@ -21763,7 +21799,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "ModelMedicalAnalysisResultsConditionInput",
+            "name" : "ModelOthersFieldsConditionInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -21773,7 +21809,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "UpdateMedicalAnalysisResultsInput",
+        "name" : "UpdateOthersFieldsInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -21808,7 +21844,16 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "medicalAnalysisResultsFieldId",
+          "name" : "othersFieldsFieldId",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "regionalExplorationOthersId",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21822,7 +21867,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "DeleteMedicalAnalysisResultsInput",
+        "name" : "DeleteOthersFieldsInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -23385,15 +23430,6 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "others",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
           "name" : "doctor",
           "description" : null,
           "type" : {
@@ -23485,15 +23521,6 @@
           "defaultValue" : null
         }, {
           "name" : "genitals",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "others",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -23614,15 +23641,6 @@
           "defaultValue" : null
         }, {
           "name" : "genitals",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "others",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -25509,7 +25527,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "onCreateMedicalAnalysisResults",
+          "name" : "onCreateOthersFields",
           "description" : null,
           "args" : [ {
             "name" : "owner",
@@ -25527,13 +25545,13 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MedicalAnalysisResults",
+            "name" : "OthersFields",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "onUpdateMedicalAnalysisResults",
+          "name" : "onUpdateOthersFields",
           "description" : null,
           "args" : [ {
             "name" : "owner",
@@ -25551,13 +25569,13 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MedicalAnalysisResults",
+            "name" : "OthersFields",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "onDeleteMedicalAnalysisResults",
+          "name" : "onDeleteOthersFields",
           "description" : null,
           "args" : [ {
             "name" : "owner",
@@ -25575,7 +25593,7 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MedicalAnalysisResults",
+            "name" : "OthersFields",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -26985,23 +27003,6 @@
         "onFragment" : false,
         "onField" : true
       }, {
-        "name" : "deprecated",
-        "description" : null,
-        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
-        "args" : [ {
-          "name" : "reason",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : "\"No longer supported\""
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
         "name" : "aws_api_key",
         "description" : "Tells the service this field/object has access authorized by an API key.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
@@ -27076,6 +27077,23 @@
             }
           },
           "defaultValue" : null
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "deprecated",
+        "description" : null,
+        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
+        "args" : [ {
+          "name" : "reason",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : "\"No longer supported\""
         } ],
         "onOperation" : false,
         "onFragment" : false,
