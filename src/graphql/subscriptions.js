@@ -865,6 +865,15 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        diagnosis {
+          id
+          commentary
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
         doctor
         secretary
         patientname
@@ -1002,6 +1011,15 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
         physicalExploration {
           id
           general_exploration
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          commentary
           doctor
           secretary
           patient
@@ -1148,6 +1166,15 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        diagnosis {
+          id
+          commentary
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
         doctor
         secretary
         patientname
@@ -1241,6 +1268,44 @@ export const onCreateMedicalHistory = /* GraphQL */ `
         createdAt
         owner
       }
+      diagnosis {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
       doctor
       secretary
       patientname
@@ -1325,6 +1390,44 @@ export const onUpdateMedicalHistory = /* GraphQL */ `
         createdAt
         owner
       }
+      diagnosis {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
       doctor
       secretary
       patientname
@@ -1403,6 +1506,44 @@ export const onDeleteMedicalHistory = /* GraphQL */ `
           createdAt
           owner
         }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
         doctor
         secretary
         patient
@@ -3782,6 +3923,141 @@ export const onDeleteCategory = /* GraphQL */ `
       module
       deleted
       deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onCreateDiagnosis = /* GraphQL */ `
+  subscription OnCreateDiagnosis($owner: String) {
+    onCreateDiagnosis(owner: $owner) {
+      id
+      type {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      evolution {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        name
+        description
+        familyDetails {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      commentary
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+export const onUpdateDiagnosis = /* GraphQL */ `
+  subscription OnUpdateDiagnosis($owner: String) {
+    onUpdateDiagnosis(owner: $owner) {
+      id
+      type {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      evolution {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        name
+        description
+        familyDetails {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      commentary
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+export const onDeleteDiagnosis = /* GraphQL */ `
+  subscription OnDeleteDiagnosis($owner: String) {
+    onDeleteDiagnosis(owner: $owner) {
+      id
+      type {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      evolution {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        name
+        description
+        familyDetails {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      commentary
+      doctor
+      secretary
+      patient
       createdAt
       owner
     }

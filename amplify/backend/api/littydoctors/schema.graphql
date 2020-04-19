@@ -221,6 +221,7 @@ type MedicalHistory
     reason: String
     patient: Patient @connection
     physicalExploration: PhysicalExploration @connection
+    diagnosis: Diagnosis @connection
     doctor: String
     secretary: String
     patientname: String
@@ -737,5 +738,25 @@ type Category
     module: String
     deleted: Boolean
     deletedAt: String
+    createdAt: String
+}
+
+type Diagnosis
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        { allow: groups, groups: ["admin"] }
+        { allow: groups, groups: ["doctor"], operations: [read] },
+        { allow: groups, groups: ["secretary"], operations: [read] },
+    ]) {
+    id: ID!
+    type: Category @connection
+    evolution: Category @connection
+    diagnosis: Disease @connection
+    commentary: String
+    doctor: String
+    secretary: String
+    patient: String
     createdAt: String
 }

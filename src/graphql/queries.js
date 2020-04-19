@@ -669,6 +669,15 @@ export const getMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        diagnosis {
+          id
+          commentary
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
         doctor
         secretary
         patientname
@@ -842,6 +851,44 @@ export const getMedicalHistory = /* GraphQL */ `
         createdAt
         owner
       }
+      diagnosis {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
       doctor
       secretary
       patientname
@@ -888,6 +935,15 @@ export const listMedicalHistorys = /* GraphQL */ `
         physicalExploration {
           id
           general_exploration
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          commentary
           doctor
           secretary
           patient
@@ -2061,6 +2117,100 @@ export const listCategorys = /* GraphQL */ `
         module
         deleted
         deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getDiagnosis = /* GraphQL */ `
+  query GetDiagnosis($id: ID!) {
+    getDiagnosis(id: $id) {
+      id
+      type {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      evolution {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        name
+        description
+        familyDetails {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      commentary
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+export const listDiagnosiss = /* GraphQL */ `
+  query ListDiagnosiss(
+    $filter: ModelDiagnosisFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDiagnosiss(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
+        doctor
+        secretary
+        patient
         createdAt
         owner
       }

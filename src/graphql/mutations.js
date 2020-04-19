@@ -1051,6 +1051,15 @@ export const createMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        diagnosis {
+          id
+          commentary
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
         doctor
         secretary
         patientname
@@ -1188,6 +1197,15 @@ export const updateMedicalConsultation = /* GraphQL */ `
         physicalExploration {
           id
           general_exploration
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          commentary
           doctor
           secretary
           patient
@@ -1337,6 +1355,15 @@ export const deleteMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        diagnosis {
+          id
+          commentary
+          doctor
+          secretary
+          patient
+          createdAt
+          owner
+        }
         doctor
         secretary
         patientname
@@ -1433,6 +1460,44 @@ export const createMedicalHistory = /* GraphQL */ `
         createdAt
         owner
       }
+      diagnosis {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
       doctor
       secretary
       patientname
@@ -1520,6 +1585,44 @@ export const updateMedicalHistory = /* GraphQL */ `
         createdAt
         owner
       }
+      diagnosis {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
       doctor
       secretary
       patientname
@@ -1601,6 +1704,44 @@ export const deleteMedicalHistory = /* GraphQL */ `
           createdAt
           owner
         }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        type {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        evolution {
+          id
+          name
+          description
+          module
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        diagnosis {
+          id
+          name
+          description
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        commentary
         doctor
         secretary
         patient
@@ -4220,6 +4361,150 @@ export const deleteCategory = /* GraphQL */ `
       module
       deleted
       deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const createDiagnosis = /* GraphQL */ `
+  mutation CreateDiagnosis(
+    $input: CreateDiagnosisInput!
+    $condition: ModelDiagnosisConditionInput
+  ) {
+    createDiagnosis(input: $input, condition: $condition) {
+      id
+      type {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      evolution {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        name
+        description
+        familyDetails {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      commentary
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+export const updateDiagnosis = /* GraphQL */ `
+  mutation UpdateDiagnosis(
+    $input: UpdateDiagnosisInput!
+    $condition: ModelDiagnosisConditionInput
+  ) {
+    updateDiagnosis(input: $input, condition: $condition) {
+      id
+      type {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      evolution {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        name
+        description
+        familyDetails {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      commentary
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+export const deleteDiagnosis = /* GraphQL */ `
+  mutation DeleteDiagnosis(
+    $input: DeleteDiagnosisInput!
+    $condition: ModelDiagnosisConditionInput
+  ) {
+    deleteDiagnosis(input: $input, condition: $condition) {
+      id
+      type {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      evolution {
+        id
+        name
+        description
+        module
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      diagnosis {
+        id
+        name
+        description
+        familyDetails {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      commentary
+      doctor
+      secretary
+      patient
       createdAt
       owner
     }

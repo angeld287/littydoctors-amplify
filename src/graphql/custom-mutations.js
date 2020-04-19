@@ -411,3 +411,30 @@ export const updatePhysicalExplorationForGlobal = /* GraphQL */ `
     }
   }
 `;
+
+export const updateMedicalHistoryDiForGlobal = /* GraphQL */ `
+  mutation UpdateMedicalHistory(
+    $input: UpdateMedicalHistoryInput!
+    $condition: ModelMedicalHistoryConditionInput
+  ) {
+    updateMedicalHistory(input: $input, condition: $condition) {
+      id
+      diagnosis {
+        id
+        type {
+          id
+          name
+        }
+        evolution {
+          id
+          name
+        }
+        diagnosis {
+          id
+          name
+        }
+        commentary
+      }
+    }
+  }
+`;

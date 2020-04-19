@@ -1,7 +1,8 @@
 import React from 'react';
-import { MDBContainer, MDBCard } from "mdbreact";
+import { MDBContainer, MDBCard, MDBRow } from "mdbreact";
 
 import PostConsultationsActivity from './PostConsultationsActivity';
+import Diagnosis from './Diagnosis';
 
 const PrescriptionsStudies = ({
     global: global,
@@ -10,12 +11,22 @@ const PrescriptionsStudies = ({
 
   return (
     <MDBContainer>
-      <MDBCard style={{width: '100%'}}>
-        <PostConsultationsActivity
-           global={global}
-           setGlobalData={setGlobalData}
-       />
-      </MDBCard>
+      <MDBRow className="mb-4">
+        <MDBCard style={{width: '100%'}}>
+          <Diagnosis
+            global={global}
+            setGlobalData={setGlobalData}
+        />
+        </MDBCard>
+      </MDBRow>
+      <MDBRow>
+        <MDBCard style={{width: '100%'}}>
+          <PostConsultationsActivity
+            global={global}
+            setGlobalData={setGlobalData}
+        />
+        </MDBCard>
+      </MDBRow>
     </MDBContainer>
   );
 }
