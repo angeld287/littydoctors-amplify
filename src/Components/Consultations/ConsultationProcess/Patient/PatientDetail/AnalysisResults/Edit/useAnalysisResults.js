@@ -3,7 +3,7 @@ import useForm from 'react-hook-form';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { useHistory, useParams } from 'react-router-dom';
 import { listFields } from '../../../../../../../graphql/queries';
-import { updateOthersFields } from '../../../../../../../graphql/mutations';
+import { updateOthersFields, createOthersFields } from '../../../../../../../graphql/mutations';
 import { MDBIcon, MDBBtn, MDBSpinner, MDBInputGroup } from 'mdbreact';
 import moment from 'moment';
 
@@ -24,7 +24,10 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
             const _fieldsList = global.global.pendingAnalysisFields;
             const filter = {
                 filter: {
-                    modules: {contains: results.medicalAnalysis.id}
+                    and:[
+                        {modules: {contains: results.medicalAnalysis.id}},
+                        {deleted: {eq: false}}
+                    ]
                 },
                 limit: 400
             };
@@ -79,7 +82,7 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
         const fieldsList = (fields !== null)?([].concat(fields)
         .map((item,i)=> {
             const resultsF = results.results.items;
-            const value = resultsF[resultsF.findIndex(e => e.field.id === item.id)].value;
+            const value = resultsF[resultsF.findIndex(e => e.field.id === item.id)] === undefined ? "" : resultsF[resultsF.findIndex(e => e.field.id === item.id)].value;
 
             return (
                 <div key={i} className="input-group mt-2">
@@ -105,12 +108,23 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
         
         Object.keys(input).forEach(
             async (e) => {
-                const i = {
-                    id : item.results.items[item.results.items.findIndex(r => r.field.id === e)].id,
-                    value: input[e],
-                };
-                const pcama = await API.graphql(graphqlOperation(updateOthersFields, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
-                resutlsArray.push(pcama.data.updateOthersFields)
+                if (item.results.items[item.results.items.findIndex(r => r.field.id === e)] === undefined) {
+                    const i = {
+                        value: input[e],
+                        postConsultActMedAnalysisResultsId: results.id,
+                        othersFieldsFieldId: e,
+                    }
+                    const pcama = await API.graphql(graphqlOperation(createOthersFields, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
+                    resutlsArray.push(pcama.data.createOthersFields)
+                }else{
+                    const _item = item.results.items[item.results.items.findIndex(r => r.field.id === e)];
+                    const i = {
+                        id : _item.id,
+                        value: input[e],
+                    };
+                    const pcama = await API.graphql(graphqlOperation(updateOthersFields, {input: i} )).catch( e => {console.log(e); setLoadingAdd(false); throw new SyntaxError("Error GraphQL"); });
+                    resutlsArray.push(pcama.data.updateOthersFields)
+                }
             }
         );
         item.results.items = resutlsArray;

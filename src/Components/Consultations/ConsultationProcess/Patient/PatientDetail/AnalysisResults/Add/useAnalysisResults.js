@@ -24,7 +24,10 @@ const useAnalysisResults = (results, global, setResultLoading, toggleResult, set
             const _fieldsList = global.global.pendingAnalysisFields;
             const filter = {
                 filter: {
-                    modules: {contains: results.medicalAnalysis.id}
+                    and:[
+                        {modules: {contains: results.medicalAnalysis.id}},
+                        {deleted: {eq: false}}
+                    ]
                 },
                 limit: 400
             };

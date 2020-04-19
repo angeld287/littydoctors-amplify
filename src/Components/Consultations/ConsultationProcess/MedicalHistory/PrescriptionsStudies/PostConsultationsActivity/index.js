@@ -29,7 +29,7 @@ const PostConsultationsActivity = ({
       };
   }, []);
 
-  if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>)
+  if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mb-3"><MDBSpinner big/></MDBBox></MDBContainer>)
   
   return (
     <MDBContainer>

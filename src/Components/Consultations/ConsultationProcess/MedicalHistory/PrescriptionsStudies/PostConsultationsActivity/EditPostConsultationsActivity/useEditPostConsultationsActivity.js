@@ -3,8 +3,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
 import useForm from 'react-hook-form';
 import { deletePostConsultActSurgicalInt, createPostConsultActSurgicalInt, createPostConsultActMedAnalysis, deletePostConsultActMedAnalysis,
-         createMedicalPrescription, deleteMedicalPrescription, updateMedicalPrescription } from '../../../../../../graphql/mutations';
-import { updateMedicalConsultationForPCAGlobal } from '../../../../../../graphql/custom-mutations';
+         createMedicalPrescription, deleteMedicalPrescription, updateMedicalPrescription } from '../../../../../../../graphql/mutations';
+import { updateMedicalConsultationForPCAGlobal } from '../../../../../../../graphql/custom-mutations';
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import Swal from 'sweetalert2';
 

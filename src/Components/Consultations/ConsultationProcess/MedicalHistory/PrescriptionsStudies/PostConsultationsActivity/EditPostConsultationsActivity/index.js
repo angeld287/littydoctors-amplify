@@ -10,7 +10,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import EditMedicalPrescription from './EditMedicalPrescription';
 
-import TooltipButton from '../../../../../TooltipButton';
+import TooltipButton from '../../../../../../TooltipButton';
 
 const EditPostConsultationsActivity = ({
       global: global,

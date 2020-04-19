@@ -273,6 +273,23 @@ export const getMedicalConsultation = /* GraphQL */ `
       medicalHistory {
         id
         reason
+        diagnosis {
+          id
+          type {
+            id
+            name
+          }
+          evolution {
+            id
+            name
+          }
+          diagnosis {
+            id
+            name
+          }
+          commentary
+          createdAt
+        }
         physicalExploration {
           id
           general_exploration

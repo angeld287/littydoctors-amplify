@@ -86,6 +86,9 @@ const useConsultationProcess = () => {
                             postConsultationActivities: {
                                 notEmpty: false,
                             },
+                            diagnosis: {
+                                notEmpty: false,
+                            }
                         };
                         
                         setGlobal({
