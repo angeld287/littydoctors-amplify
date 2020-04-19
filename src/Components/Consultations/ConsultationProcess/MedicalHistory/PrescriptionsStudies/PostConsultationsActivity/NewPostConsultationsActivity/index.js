@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 
-import TooltipButton from '../../../../../TooltipButton';
+import TooltipButton from '../../../../../../TooltipButton';
 
 const NewPostConsultationsActivity = ({
     global: global,

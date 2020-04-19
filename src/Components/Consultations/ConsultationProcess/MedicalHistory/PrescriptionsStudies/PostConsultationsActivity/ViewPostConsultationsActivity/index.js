@@ -8,7 +8,7 @@ import useViewPostConsultationsActivity from './useViewPostConsultationsActivity
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import TooltipButton from '../../../../../TooltipButton';
+import TooltipButton from '../../../../../../TooltipButton';
 
 const ViewPostConsultationsActivity = ({
     global: global,

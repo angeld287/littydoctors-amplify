@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { listMedicalAnalysiss, listSurgicalInterventions, listMedicines } from '../../../../../graphql/queries';
+import { listMedicalAnalysiss, listSurgicalInterventions, listMedicines } from '../../../../../../graphql/queries';
 import { API, graphqlOperation } from 'aws-amplify';
 import useForm from 'react-hook-form';
 
