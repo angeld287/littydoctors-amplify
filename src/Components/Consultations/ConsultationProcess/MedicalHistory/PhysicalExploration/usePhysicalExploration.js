@@ -100,7 +100,10 @@ const usePhysicalExploration = (childProps, patientData, global, setGlobalData) 
             try {
                 const filter = {
                     filter: {
-                        modules: {contains: childProps.state.specialityid}
+                        and:[
+                            {modules: {contains: childProps.state.specialityid}},
+                            {deleted: {eq: false}}
+                        ]
                     },
                     limit: 400
                 };
@@ -311,20 +314,34 @@ const usePhysicalExploration = (childProps, patientData, global, setGlobalData) 
         const dfer = [];
         Object.keys(o).forEach(
             async (e) => {
+
                 if (fixed_fields.findIndex(v => v === e) === -1) {
                     const f = df[df.findIndex(f => f.field.id === e)];
-                    if (f.value !== o[e]) {
+                    if (f === undefined) {
                         const i = {
-                            id: f.id,
-                            value: o[e] === "" ? "N/A" : o[e]
+                            value: o[e] === "" ? "N/A" : o[e],
+                            regionalExplorationOthersId: urx.data.updateRegionalExploration.id,
+                            othersFieldsFieldId: e,
                         }
-                        const pcama = await API.graphql(graphqlOperation(updateOthersFields, {input: i} )).catch( e => {console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
-                        
-                        dfer.push(pcama.data.updateOthersFields);
+        
+                        const pcama = await API.graphql(graphqlOperation(createOthersFields, {input: i} )).catch( e => {console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
+                        dfer.push(pcama.data.createOthersFields);
+
                     }else{
-                        dfer.push(f);
+                        if (f.value !== o[e]) {
+                            const i = {
+                                id: f.id,
+                                value: o[e] === "" ? "N/A" : o[e]
+                            }
+                            const pcama = await API.graphql(graphqlOperation(updateOthersFields, {input: i} )).catch( e => {console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
+                            
+                            dfer.push(pcama.data.updateOthersFields);
+                        }else{
+                            dfer.push(f);
+                        }
                     }
                 }
+
             }
         );
 
