@@ -122,7 +122,7 @@ const NonPathological = ({
               {(data.items.length > 2) && <a href="#!" className="rotate-btn text-dark" data-card="card-1" onClick={handleFlipping}>
                   <MDBIcon icon="undo" /> Click aqui para rotar
               </a>}
-              {!(data.items.length > 2) && <p>Para Mostrar el radar debe tener 3 o mas Antecedentes</p>}
+              {!(data.items.length > 2) && <p>Para mostrar el radar debe tener 3 o mas Antecedentes</p>}
             </MDBCard>
           </MDBRotatingCard>
         </MDBCol>
