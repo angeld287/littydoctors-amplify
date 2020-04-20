@@ -415,6 +415,7 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
 
                     input.active = e.active;
                     input.frequency = e.frequency.label;
+                    input.risk_factor = e.risk_factor;
                     if(e.comment !== ""){input.comment = e.comment;}
                     input.patientHistoryNonPathologicalHistoryId = patienth.data.createPatientHistory.id;
                     input.nonPathologicalHistoryTypeId = e.type.value;
@@ -446,8 +447,6 @@ const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPa
                 setTimeout(() => {  
                         API.graphql(graphqlOperation(getPatientForGlobal, { id: patientid}))
                         .then(async (r) => {             
-                            
-                            console.log(r.data.getPatient);
                             setData(r.data.getPatient.patientHistory.items[0]);
                             global.patient.patientHistory = r.data.getPatient.patientHistory;
                             setGlobalData(global);

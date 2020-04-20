@@ -19,7 +19,7 @@ const Reports = () => {
             </MDBCol>
             <MDBCol md="6" className="mt-3">
                 <MDBCard>
-                    <PieChart/>
+                    <PolygonCharts/>
                 </MDBCard>
             </MDBCol>
         </MDBRow>
@@ -38,7 +38,7 @@ const Reports = () => {
             </MDBCol>
             <MDBCol md="6" className="mt-3">
                 <MDBCard>
-                    <PolygonCharts/>
+                    <PieChart/>
                 </MDBCard>
             </MDBCol>
         </MDBRow>

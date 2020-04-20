@@ -340,6 +340,7 @@ type NonPathologicalHistory
     active: Boolean
     frequency: String
     comment: String
+    risk_factor: String
     createdAt: String
 }
 

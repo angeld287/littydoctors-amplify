@@ -174,6 +174,7 @@ export const createNonPathologicalHistoryForGlobal = /* GraphQL */ `
       id
       frequency
       comment
+      risk_factor
       type {
         id
         name
@@ -193,6 +194,7 @@ export const updateNonPathologicalHistoryForGlobal = /* GraphQL */ `
       id
       frequency
       comment
+      risk_factor
       type {
         id
         name

@@ -1778,6 +1778,7 @@ export const onCreatePatientHistory = /* GraphQL */ `
           active
           frequency
           comment
+          risk_factor
           createdAt
           owner
         }
@@ -1835,6 +1836,7 @@ export const onUpdatePatientHistory = /* GraphQL */ `
           active
           frequency
           comment
+          risk_factor
           createdAt
           owner
         }
@@ -1892,6 +1894,7 @@ export const onDeletePatientHistory = /* GraphQL */ `
           active
           frequency
           comment
+          risk_factor
           createdAt
           owner
         }
@@ -1956,6 +1959,7 @@ export const onCreateNonPathologicalHistory = /* GraphQL */ `
       active
       frequency
       comment
+      risk_factor
       createdAt
       owner
     }
@@ -1978,6 +1982,7 @@ export const onUpdateNonPathologicalHistory = /* GraphQL */ `
       active
       frequency
       comment
+      risk_factor
       createdAt
       owner
     }
@@ -2000,6 +2005,7 @@ export const onDeleteNonPathologicalHistory = /* GraphQL */ `
       active
       frequency
       comment
+      risk_factor
       createdAt
       owner
     }

@@ -1126,6 +1126,7 @@ export const getPatientHistory = /* GraphQL */ `
           active
           frequency
           comment
+          risk_factor
           createdAt
           owner
         }
@@ -1230,6 +1231,7 @@ export const getNonPathologicalHistory = /* GraphQL */ `
       active
       frequency
       comment
+      risk_factor
       createdAt
       owner
     }
@@ -1261,6 +1263,7 @@ export const listNonPathologicalHistorys = /* GraphQL */ `
         active
         frequency
         comment
+        risk_factor
         createdAt
         owner
       }

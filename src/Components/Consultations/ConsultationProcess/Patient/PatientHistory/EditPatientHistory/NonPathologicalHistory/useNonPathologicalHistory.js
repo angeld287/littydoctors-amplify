@@ -66,6 +66,7 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
         input.active = o.active;
         input.frequency = o.frequency.label;
         if(o.comment !== ""){input.comment = o.comment;}
+        input.risk_factor = o.risk_factor;
         input.patientHistoryNonPathologicalHistoryId = global.patient.patientHistory.items[0].id;
         input.nonPathologicalHistoryTypeId = o.type.value;
 
@@ -93,6 +94,7 @@ const useNonPathologicalHistory = (global, setGlobalData, setList, toggleNonPath
         
         if(o.comment !== item.comment){objectToEdit.comment = o.comment;}
         if(o.active !== item.active){objectToEdit.active = o.active;}
+        if(o.risk_factor !== item.risk_factor){objectToEdit.risk_factor = o.risk_factor;}
         if(o.frequency.label !== item.frequency){objectToEdit.frequency = o.frequency.label;}
 
         if (o.type.value !== undefined) {
