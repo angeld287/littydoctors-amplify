@@ -158,6 +158,7 @@ export const getMedicalConsultation = /* GraphQL */ `
                 id
                 frequency
                 comment
+                risk_factor
                 type {
                   id
                   name
@@ -507,6 +508,7 @@ export const getPatientForGlobal = /* GraphQL */ `
               id
               frequency
               comment
+              risk_factor
               type {
                 id
                 name

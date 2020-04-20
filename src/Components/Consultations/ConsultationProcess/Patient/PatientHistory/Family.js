@@ -32,12 +32,12 @@ const Family = ({
       const result = await Swal.fire({ title: '¿Desea eliminar el elemento?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar'});
       if (result.value) {
           familyActions.setlb_family(true);
-          const _items = global.patient.patientHistory.familyHistory.items;
+          const _items = global.patient.patientHistory.items[0].familyHistory.items;
           
           API.graphql(graphqlOperation(deleteFamilyHistory, {input: {id: id}} ));
           _items.splice(_items.findIndex(v => v.id === id), 1);
 
-          global.patient.patientHistory.familyHistory.items = _items;
+          global.patient.patientHistory.items[0].familyHistory.items = _items;
 
           setGlobalData(global);
           
