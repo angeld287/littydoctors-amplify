@@ -9,7 +9,8 @@ import EditPostConsultationsActivity from './EditPostConsultationsActivity';
 
 const PostConsultationsActivity = ({
     global: global,
-    setGlobalData: setGlobalData
+    setGlobalData: setGlobalData,
+    childProps: childProps
 }) => {
   const { actions, setNew, _new , _edit, setEdit, editLoading, fields, editPostConsultationsActivity, api, loading} = usePostConsultationsActivity(global, setGlobalData);
 
@@ -36,6 +37,7 @@ const PostConsultationsActivity = ({
       {/* Crear Datos de Exploracion Fisica */}
       {(_new && !_edit)&&
           <NewPostConsultationsActivity
+              childProps={childProps}
               global={global}
               setGlobalData={setGlobalData}
               actions={actions}

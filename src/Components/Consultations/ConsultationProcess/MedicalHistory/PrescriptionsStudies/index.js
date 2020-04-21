@@ -6,7 +6,8 @@ import Diagnosis from './Diagnosis';
 
 const PrescriptionsStudies = ({
     global: global,
-    setGlobalData: setGlobalData
+    setGlobalData: setGlobalData,
+    childProps: childProps
 }) => {
 
   return (
@@ -14,6 +15,7 @@ const PrescriptionsStudies = ({
       <MDBRow className="mb-4">
         <MDBCard style={{width: '100%'}}>
           <Diagnosis
+            childProps={childProps}
             global={global}
             setGlobalData={setGlobalData}
         />
@@ -22,6 +24,7 @@ const PrescriptionsStudies = ({
       <MDBRow>
         <MDBCard style={{width: '100%'}}>
           <PostConsultationsActivity
+            childProps={childProps}
             global={global}
             setGlobalData={setGlobalData}
         />

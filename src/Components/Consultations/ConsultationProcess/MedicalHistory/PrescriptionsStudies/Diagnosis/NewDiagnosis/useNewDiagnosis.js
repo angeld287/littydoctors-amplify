@@ -7,7 +7,7 @@ import { updateMedicalHistoryDiForGlobal } from '../../../../../../../graphql/cu
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import Swal from 'sweetalert2';
 
-const useNewPostConsultationsActivity = (global, setGlobalData, setNew) => {
+const useNewPostConsultationsActivity = (childProps, global, setGlobalData, setNew) => {
     const [ loading, setLoading ] = useState(false);
     const [ loadingButton, setLoadingButton ] = useState(false);
     const { register, handleSubmit, errors, formState } = useForm();
@@ -53,6 +53,9 @@ const useNewPostConsultationsActivity = (global, setGlobalData, setNew) => {
         di.diagnosisTypeId = type.value;
         di.diagnosisEvolutionId = evolution.value;
         di.diagnosisDiagnosisId = diagnosis.value;
+        di.doctor = childProps.state.doctorusername;
+        di.secretary = childProps.state.secretary;
+        di.patient = global.patient.username;
         const cdi = await API.graphql(graphqlOperation(createDiagnosis, {input: di} )).catch( e => {console.log(e); setLoadingButton(false); throw new SyntaxError("Error GraphQL"); });
 
         dimh.id = global.medicalConsultation.medicalHistory.id;

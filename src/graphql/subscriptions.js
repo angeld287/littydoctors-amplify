@@ -1592,7 +1592,7 @@ export const onCreatePatient = /* GraphQL */ `
         items {
           id
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1640,7 +1640,7 @@ export const onUpdatePatient = /* GraphQL */ `
         items {
           id
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1688,7 +1688,7 @@ export const onDeletePatient = /* GraphQL */ `
         items {
           id
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1789,7 +1789,7 @@ export const onCreatePatientHistory = /* GraphQL */ `
           comment
           risk_factor
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1808,7 +1808,7 @@ export const onCreatePatientHistory = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -1819,7 +1819,7 @@ export const onCreatePatientHistory = /* GraphQL */ `
           alive
           comment
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1837,13 +1837,13 @@ export const onCreatePatientHistory = /* GraphQL */ `
         caesarean_sections
         contraceptive_method
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
       }
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -1862,7 +1862,7 @@ export const onUpdatePatientHistory = /* GraphQL */ `
           comment
           risk_factor
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1881,7 +1881,7 @@ export const onUpdatePatientHistory = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -1892,7 +1892,7 @@ export const onUpdatePatientHistory = /* GraphQL */ `
           alive
           comment
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1910,13 +1910,13 @@ export const onUpdatePatientHistory = /* GraphQL */ `
         caesarean_sections
         contraceptive_method
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
       }
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -1935,7 +1935,7 @@ export const onDeletePatientHistory = /* GraphQL */ `
           comment
           risk_factor
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1954,7 +1954,7 @@ export const onDeletePatientHistory = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -1965,7 +1965,7 @@ export const onDeletePatientHistory = /* GraphQL */ `
           alive
           comment
           doctor
-          secretaty
+          secretary
           patient
           createdAt
           owner
@@ -1983,13 +1983,13 @@ export const onDeletePatientHistory = /* GraphQL */ `
         caesarean_sections
         contraceptive_method
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
       }
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2015,7 +2015,7 @@ export const onCreateNonPathologicalHistory = /* GraphQL */ `
       comment
       risk_factor
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2041,7 +2041,7 @@ export const onUpdateNonPathologicalHistory = /* GraphQL */ `
       comment
       risk_factor
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2067,7 +2067,7 @@ export const onDeleteNonPathologicalHistory = /* GraphQL */ `
       comment
       risk_factor
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2102,7 +2102,7 @@ export const onCreatePathologicalHistory = /* GraphQL */ `
         nextToken
       }
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2137,7 +2137,7 @@ export const onUpdatePathologicalHistory = /* GraphQL */ `
         nextToken
       }
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2172,7 +2172,7 @@ export const onDeletePathologicalHistory = /* GraphQL */ `
         nextToken
       }
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2203,7 +2203,7 @@ export const onCreateFamilyHistory = /* GraphQL */ `
       }
       comment
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2234,7 +2234,7 @@ export const onUpdateFamilyHistory = /* GraphQL */ `
       }
       comment
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2265,7 +2265,7 @@ export const onDeleteFamilyHistory = /* GraphQL */ `
       }
       comment
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2294,7 +2294,7 @@ export const onCreateFamilyDetailsDiseases = /* GraphQL */ `
         }
         comment
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2337,7 +2337,7 @@ export const onUpdateFamilyDetailsDiseases = /* GraphQL */ `
         }
         comment
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2380,7 +2380,7 @@ export const onDeleteFamilyDetailsDiseases = /* GraphQL */ `
         }
         comment
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2474,7 +2474,7 @@ export const onCreateGynecoObstetricHistory = /* GraphQL */ `
       caesarean_sections
       contraceptive_method
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2494,7 +2494,7 @@ export const onUpdateGynecoObstetricHistory = /* GraphQL */ `
       caesarean_sections
       contraceptive_method
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2514,7 +2514,7 @@ export const onDeleteGynecoObstetricHistory = /* GraphQL */ `
       caesarean_sections
       contraceptive_method
       doctor
-      secretaty
+      secretary
       patient
       createdAt
       owner
@@ -2597,7 +2597,7 @@ export const onCreatePatientAllergies = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2634,7 +2634,7 @@ export const onUpdatePatientAllergies = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2671,7 +2671,7 @@ export const onDeletePatientAllergies = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2708,7 +2708,7 @@ export const onCreatePatientMedications = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2746,7 +2746,7 @@ export const onUpdatePatientMedications = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -2784,7 +2784,7 @@ export const onDeletePatientMedications = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -3138,9 +3138,6 @@ export const onCreatePostConsultActMedAnalysis = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3192,9 +3189,6 @@ export const onUpdatePostConsultActMedAnalysis = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3246,9 +3240,6 @@ export const onDeletePostConsultActMedAnalysis = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3376,9 +3367,6 @@ export const onCreateMedicalAnalysis = /* GraphQL */ `
       }
       deleted
       deletedAt
-      doctor
-      secretaty
-      patient
       createdAt
       owner
     }
@@ -3402,9 +3390,6 @@ export const onUpdateMedicalAnalysis = /* GraphQL */ `
       }
       deleted
       deletedAt
-      doctor
-      secretaty
-      patient
       createdAt
       owner
     }
@@ -3428,9 +3413,6 @@ export const onDeleteMedicalAnalysis = /* GraphQL */ `
       }
       deleted
       deletedAt
-      doctor
-      secretaty
-      patient
       createdAt
       owner
     }
@@ -3471,9 +3453,6 @@ export const onCreatePostConsultActSurgicalInt = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3516,9 +3495,6 @@ export const onUpdatePostConsultActSurgicalInt = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3561,9 +3537,6 @@ export const onDeletePostConsultActSurgicalInt = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3588,7 +3561,7 @@ export const onCreatePathologicalHistorySurgicalInt = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -3605,9 +3578,6 @@ export const onCreatePathologicalHistorySurgicalInt = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3632,7 +3602,7 @@ export const onUpdatePathologicalHistorySurgicalInt = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -3649,9 +3619,6 @@ export const onUpdatePathologicalHistorySurgicalInt = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3676,7 +3643,7 @@ export const onDeletePathologicalHistorySurgicalInt = /* GraphQL */ `
           nextToken
         }
         doctor
-        secretaty
+        secretary
         patient
         createdAt
         owner
@@ -3693,9 +3660,6 @@ export const onDeletePathologicalHistorySurgicalInt = /* GraphQL */ `
         }
         deleted
         deletedAt
-        doctor
-        secretaty
-        patient
         createdAt
         owner
       }
@@ -3728,9 +3692,6 @@ export const onCreateSurgicalIntervention = /* GraphQL */ `
       }
       deleted
       deletedAt
-      doctor
-      secretaty
-      patient
       createdAt
       owner
     }
@@ -3761,9 +3722,6 @@ export const onUpdateSurgicalIntervention = /* GraphQL */ `
       }
       deleted
       deletedAt
-      doctor
-      secretaty
-      patient
       createdAt
       owner
     }
@@ -3794,9 +3752,6 @@ export const onDeleteSurgicalIntervention = /* GraphQL */ `
       }
       deleted
       deletedAt
-      doctor
-      secretaty
-      patient
       createdAt
       owner
     }

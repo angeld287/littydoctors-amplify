@@ -5034,7 +5034,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5203,7 +5203,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5412,7 +5412,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -5668,7 +5668,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5967,39 +5967,6 @@
           "deprecationReason" : null
         }, {
           "name" : "deletedAt",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "doctor",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "patient",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -7625,39 +7592,6 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "doctor",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "patient",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
           "name" : "createdAt",
           "description" : null,
           "args" : [ ],
@@ -8388,7 +8322,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -8769,7 +8703,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -8953,7 +8887,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -9025,7 +8959,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -11140,7 +11074,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -11469,7 +11403,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -12143,33 +12077,6 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
           "name" : "createdAt",
           "description" : null,
           "type" : {
@@ -12295,33 +12202,6 @@
           "defaultValue" : null
         }, {
           "name" : "deletedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -20726,7 +20606,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -20798,7 +20678,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -20891,7 +20771,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21026,7 +20906,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21125,7 +21005,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -21254,7 +21134,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21344,7 +21224,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21389,7 +21269,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -21482,7 +21362,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21572,7 +21452,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -21653,7 +21533,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -21764,7 +21644,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -22328,7 +22208,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -22445,7 +22325,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -22610,7 +22490,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "secretaty",
+          "name" : "secretary",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -24805,33 +24685,6 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
           "name" : "createdAt",
           "description" : null,
           "type" : {
@@ -24878,33 +24731,6 @@
           "defaultValue" : null
         }, {
           "name" : "deletedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -25007,33 +24833,6 @@
           "defaultValue" : null
         }, {
           "name" : "deletedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -25534,33 +25333,6 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
           "name" : "createdAt",
           "description" : null,
           "type" : {
@@ -25607,33 +25379,6 @@
           "defaultValue" : null
         }, {
           "name" : "deletedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -25736,33 +25481,6 @@
           "defaultValue" : null
         }, {
           "name" : "deletedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "doctor",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "secretaty",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "patient",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -30464,23 +30182,6 @@
         "onFragment" : false,
         "onField" : false
       }, {
-        "name" : "deprecated",
-        "description" : null,
-        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
-        "args" : [ {
-          "name" : "reason",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : "\"No longer supported\""
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
         "name" : "aws_cognito_user_pools",
         "description" : "Tells the service this field/object has access authorized by a Cognito User Pools token.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
@@ -30497,6 +30198,23 @@
             }
           },
           "defaultValue" : null
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "deprecated",
+        "description" : null,
+        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
+        "args" : [ {
+          "name" : "reason",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : "\"No longer supported\""
         } ],
         "onOperation" : false,
         "onFragment" : false,

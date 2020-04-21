@@ -221,9 +221,23 @@ const usePhysicalExploration = (childProps, patientData, global, setGlobalData) 
     const createsPhysicalExploration = async (o) => {
         //const _items = global.medicalConsultation.medicalHistory.familyHistory.items;
         const fixed_fields = ['general_exploration', 'breathing', 'pulse', 'blood_pressure', 'temperature', 'head', 'neck', 'thorax', 'abdomen', 'members', 'genitals'];
-        const vsinput = {}
-        const reinput = {};
-        const peinput = {};
+
+
+        const vsinput = {
+            doctor: childProps.state.doctorusername,
+            secretary: childProps.state.secretary,
+            patient: global.patient.username
+        }
+        const reinput = {
+            doctor: childProps.state.doctorusername,
+            secretary: childProps.state.secretary,
+            patient: global.patient.username
+        };
+        const peinput = {
+            doctor: childProps.state.doctorusername,
+            secretary: childProps.state.secretary,
+            patient: global.patient.username
+        };
         const mhinput = {};
 
         //signos vitales
