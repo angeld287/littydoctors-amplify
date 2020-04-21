@@ -95,6 +95,9 @@ const useConsultations = () => {
         const mhinput = {};
         mhinput.reason = reason === null || reason === "" ? "N/A" : reason;
         mhinput.medicalHistoryPatientId = _patient.id;
+        mhinput.doctor = state.doctorusername;
+        mhinput.secretary = state.secretary;
+        mhinput.patientname = _patient.username;
         const cmh = await API.graphql(graphqlOperation(createMedicalHistory, {input: mhinput} )).catch( e => { console.log(e); setLoadingButton(false); throw new SyntaxError("Error GraphQL");});
         
         const input = { 

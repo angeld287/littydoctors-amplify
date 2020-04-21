@@ -12,6 +12,7 @@ import TooltipButton from '../../../../../TooltipButton';
 
 
 const NewPatientHistory = ({
+    childProps: childProps,
     global: global,
     setGlobalData: setGlobalData,
     setHasPatientHistory:  setHasPatientHistory,
@@ -33,7 +34,7 @@ const NewPatientHistory = ({
     familyActions,
     medicationActions,
     loading,
-  } = useNewPatientHistory(global, setGlobalData, setHasPatientHistory, setPatientHistory);
+  } = useNewPatientHistory(global, setGlobalData, setHasPatientHistory, setPatientHistory, childProps);
 
   if (loading) {
     return (

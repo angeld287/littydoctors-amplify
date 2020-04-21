@@ -26,7 +26,7 @@ import Swal from 'sweetalert2';
 
 import TooltipButton from '../../../../../TooltipButton';
 
-const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPatientHistory) => {
+const useNewPatientHistory = (global, setGlobalData, setHasPatientHistory, setPatientHistory, childProps) => {
     const [ loading, setLoading ] = useState(false);
     const [ loadingButton, setLoadingButton ] = useState(false);
     const [ error, setError ] = useState(false);
