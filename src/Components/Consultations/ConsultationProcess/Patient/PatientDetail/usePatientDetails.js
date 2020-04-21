@@ -83,6 +83,7 @@ const UsePatientDetails = (childProps, patient, global, setGlobalData) => {
                     setData(data);
                     global.consultationsHistory = true;
                     global.consultationsHistoryData = data;
+                    global.consultationsHistoryData.medicalHistoryItems = items;
                     setGlobalData(global);
                     setLoadingHistory(false);
                     setLoading(false);
