@@ -14,31 +14,31 @@ const Reports = () => {
         <MDBRow>
             <MDBCol md="6" className="mt-3">
                 <MDBCard>
-                    <ChartsPage/>
+                    <ChartsPage title="Grafico de Lineas"/>
                 </MDBCard>
             </MDBCol>
             <MDBCol md="6" className="mt-3">
                 <MDBCard>
-                    <PolygonCharts/>
+                    <PolygonCharts title="Grafico de Radar"/>
                 </MDBCard>
             </MDBCol>
         </MDBRow>
         <MDBRow>
             <MDBCol className="mt-3">
                 <MDBCard>
-                    <ChartsPagePro/>
+                    <ChartsPagePro title="Grafico de Objetivo"/>
                 </MDBCard>
             </MDBCol>
         </MDBRow>
         <MDBRow>
             <MDBCol md="6" className="mt-3">
                 <MDBCard>
-                    <HorizontalBarChart/>
+                    <HorizontalBarChart title="Grafico de Barras Horizontal"/>
                 </MDBCard>
             </MDBCol>
             <MDBCol md="6" className="mt-3">
                 <MDBCard>
-                    <PieChart/>
+                    <PieChart title="Grafico de Pastel"/>
                 </MDBCard>
             </MDBCol>
         </MDBRow>

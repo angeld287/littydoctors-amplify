@@ -103,7 +103,9 @@ const useConsultationProcess = () => {
                             regionalExplorationFields: [],
                             regionalExplorationFieldsLoaded: false,
                             consultationsHistory: false,
-                            consultationsHistoryData: {},
+                            consultationsHistoryData: {
+                                medicalHistoryItems: []
+                            },
                         });
                         setHasPatientHistory(r.data.getMedicalConsultation.patient.patientHistory.items.length === 0 ? false : true);
                         setPatientData(r.data.getMedicalConsultation.patient);

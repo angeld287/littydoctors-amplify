@@ -177,7 +177,7 @@ const usePhysicalExploration = (childProps, patientData, global, setGlobalData) 
         const fieldsList = (<MDBRow className="mb-3"><MDBCol>{fieldsListLeft}</MDBCol><MDBCol>{fieldsListRigth}</MDBCol></MDBRow>);
 
         setFieldsForm(fieldsList);
-        setLoading(false);
+        //setLoading(false);
     }
 
     const onSubmit = (i) => {
@@ -227,20 +227,20 @@ const usePhysicalExploration = (childProps, patientData, global, setGlobalData) 
         const mhinput = {};
 
         //signos vitales
-        if(o.blood_pressure !== ""){vsinput.blood_pressure = o.blood_pressure}
-        if(o.breathing !== ""){vsinput.breathing = o.breathing}
-        if(o.pulse !== ""){vsinput.pulse = o.pulse}
-        if(o.temperature !== ""){vsinput.temperature = o.temperature}
+        if(o.blood_pressure !== ""){vsinput.blood_pressure = o.blood_pressure}else{vsinput.blood_pressure = '0/0 mm/Hg'}
+        if(o.breathing !== ""){vsinput.breathing = o.breathing}else{vsinput.breathing = 0}
+        if(o.pulse !== ""){vsinput.pulse = o.pulse}else{vsinput.pulse = 0}
+        if(o.temperature !== ""){vsinput.temperature = o.temperature}else{vsinput.temperature = 0}
         const cvs = await API.graphql(graphqlOperation(createVitalSign, {input: vsinput} )).catch( e => { console.log(e); setLoading(false);  throw new SyntaxError("Error GraphQL"); });
 
 
         //exploracion regional
-        if(o.head !== ""){reinput.head = o.head}
-        if(o.neck !== ""){reinput.neck = o.neck}
-        if(o.thorax !== ""){reinput.thorax = o.thorax}
-        if(o.abdomen !== ""){reinput.abdomen = o.abdomen}
-        if(o.members !== ""){reinput.members = o.members}
-        if(o.genitals !== ""){reinput.genitals = o.genitals}
+        if(o.head !== ""){reinput.head = o.head}else{reinput.head = 'N/A'}
+        if(o.neck !== ""){reinput.neck = o.neck}else{reinput.neck = 'N/A'}
+        if(o.thorax !== ""){reinput.thorax = o.thorax}else{reinput.thorax = 'N/A'}
+        if(o.abdomen !== ""){reinput.abdomen = o.abdomen}else{reinput.abdomen = 'N/A'}
+        if(o.members !== ""){reinput.members = o.members}else{reinput.members = 'N/A'}
+        if(o.genitals !== ""){reinput.genitals = o.genitals}else{reinput.genitals = 'N/A'}
         
         const crx = await API.graphql(graphqlOperation(createRegionalExploration, {input: reinput} )).catch( e => { console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
         const dfer = [];

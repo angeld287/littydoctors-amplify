@@ -355,6 +355,16 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
         medicalHistory {
           id
           reason
+          physicalExploration {
+            id
+            vitalsign {
+              id
+              blood_pressure
+              breathing
+              pulse
+              temperature
+            }
+          }
         }
         state  
         createdAt 

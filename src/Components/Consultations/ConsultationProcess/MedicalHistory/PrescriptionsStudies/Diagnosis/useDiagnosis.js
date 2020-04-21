@@ -16,8 +16,6 @@ const useDiagnosis = (global, setGlobalData) => {
     const [ _edit, setEdit ] = useState(false);
     const [ editLoading, setEditLoading ] = useState(false);
     const [ api, setApi ] = useState([]);
-    const [ items, setItems ] = useState([]);
-    const [ table, setTable ] = useState([]);
 
   useEffect(() => {
         let didCancel = false;
@@ -82,11 +80,9 @@ const useDiagnosis = (global, setGlobalData) => {
             setLoading(true);
             fetch();
         }else{
-            //const __items = global.medicalHistory.postConsultationActivities.medicalPrescriptions.items.sort(sortAlph);
-            //const __table = global.medicalHistory.postConsultationActivities.medicalPrescriptions.table;
-            //setApi(global.medicalHistory.postConsultationActivities.api);
-            //setItems(__items);
-            //setTable(__table);
+            setApi(global.medicalHistory.diagnosis.api);
+            setLoadingButton(false);
+            setLoading(false);
         }
 
         return () => {
