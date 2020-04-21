@@ -11,12 +11,13 @@ import Select from 'react-select';
 import TooltipButton from '../../../../../../TooltipButton';
 
 const NewDiagnosis = ({
+    childProps: childProps,
     global: global,
     setGlobalData: setGlobalData,
     setNew: setNew,
     api : api,
 }) => {
-  const { fields, loading, handleSubmit, onSubmit, formState, register} = useNewDiagnosis(global, setGlobalData, setNew);
+  const { fields, loading, handleSubmit, onSubmit, formState, register} = useNewDiagnosis(childProps, global, setGlobalData, setNew);
   
   useEffect(() => {
       let didCancel = false;

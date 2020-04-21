@@ -321,7 +321,7 @@ type PatientHistory
     familyHistory: [FamilyHistory] @connection
     gynecoObstetricHistory: GynecoObstetricHistory @connection
     doctor: String
-    secretaty: String
+    secretary: String
     patient: String
     createdAt: String
 }
@@ -345,7 +345,7 @@ type NonPathologicalHistory
     comment: String
     risk_factor: String
     doctor: String
-    secretaty: String
+    secretary: String
     patient: String
     createdAt: String
 }
@@ -367,7 +367,7 @@ type PathologicalHistory
     patientMedications: [PatientMedications] @connection(name: "pm")
     patientAllergies: [PatientAllergies] @connection(name: "pa")
     doctor: String
-    secretaty: String
+    secretary: String
     patient: String
     createdAt: String
 }
@@ -390,7 +390,7 @@ type FamilyHistory
     diseases: [FamilyDetailsDiseases] @connection(name: "fdd")
     comment: String
     doctor: String
-    secretaty: String
+    secretary: String
     patient: String
     createdAt: String
 }
@@ -445,7 +445,7 @@ type GynecoObstetricHistory
     caesarean_sections: String
     contraceptive_method: String
     doctor: String
-    secretaty: String
+    secretary: String
     patient: String
     createdAt: String
 }
@@ -623,9 +623,6 @@ type MedicalAnalysis
     medicalAnalysis: [PostConsultActMedAnalysis] @connection(name: "mapca")
     deleted: Boolean
     deletedAt: String
-    doctor: String
-    secretaty: String
-    patient: String
     createdAt: String
 }
 
@@ -665,9 +662,6 @@ type SurgicalIntervention
     pathologicalHistory: [PathologicalHistorySurgicalInt] @connection(name: "siph")
     deleted: Boolean
     deletedAt: String
-    doctor: String
-    secretaty: String
-    patient: String
     createdAt: String
 }
 

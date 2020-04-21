@@ -8,7 +8,8 @@ import EditDiagnosis from './EditDiagnosis';
 
 const Diagnosis = ({
     global: global,
-    setGlobalData: setGlobalData
+    setGlobalData: setGlobalData,
+    childProps: childProps
 }) => {
   const { actions, setNew, _new , _edit, setEdit, editLoading, fields, api, loading} = useDiagnosis(global, setGlobalData);
 
@@ -21,6 +22,7 @@ const Diagnosis = ({
       {/* Crear Datos de Exploracion Fisica */}
       {(_new && !_edit)&&
           <NewDiagnosis
+              childProps={childProps}
               global={global}
               setGlobalData={setGlobalData}
               actions={actions}
