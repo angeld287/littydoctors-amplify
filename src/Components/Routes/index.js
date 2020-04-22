@@ -31,8 +31,8 @@ export const Routes = ({ childProps }) => (
     <ProtectedRouteCompany exact path="/reports" render={() => <Reports childProps={childProps}/>} props={childProps} />
     <ProtectedRouteCompany exact path="/consultations" render={() => <Consultations childProps={childProps} />} props={childProps} />
 
-    <ProtectedAdmin exact path="/consultations/process/:consultation/:patient" render={() => <ConsultationProcess childProps={childProps} />} props={childProps} />
-    <ProtectedCardiology exact path="/consultations/cardiology/:consultation/:patient" render={() => <ConsultationProcess childProps={childProps} />} props={childProps} />
+    <ProtectedRouteCompany exact path="/consultations/process/:consultation/:patient" render={() => <ConsultationProcess childProps={childProps} />} props={childProps} />
+    {/* <ProtectedCardiology exact path="/consultations/cardiology/:consultation/:patient" render={() => <ConsultationProcess childProps={childProps} />} props={childProps} /> */}
     <Route exact path="/template" render={() => <Template />} />
   </Switch>
 );

@@ -107,9 +107,9 @@ class CustomSignIn extends Component {
                       </MDBCol>
                     </MDBRow>
                   </MDBCardBody>
-                  <MDBModalFooter className="mx-5 pt-3 mb-1">
+                  {/* <MDBModalFooter className="mx-5 pt-3 mb-1">
                     <p className="grey-text d-flex justify-content-end" style={smallStyle}>No estas registrado? <button onClick={() => this.gotoSignUp()} className="blue-text ml-1"> Registrate como Paciente</button></p>
-                  </MDBModalFooter>
+                  </MDBModalFooter> */}
                 </MDBCard>
               </MDBCol>
             </MDBRow>
