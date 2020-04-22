@@ -11,7 +11,7 @@ import HeaderLinks from '../HeaderLinks';
 
 import {Routes, ProppedRoute, ProtectedRoute, ProtectedRouteCompany} from '../Routes';
 
-import { listConsultingRoomsSecretary, listConsultingRooms } from '../../graphql/custom-queries';
+import { listConsultingRoomsSecretary, listConsultingRooms, listPatientsForAppjs } from '../../graphql/custom-queries';
 
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 
@@ -53,6 +53,7 @@ export default class App extends Component {
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
                 speciality: result.data.listConsultingRooms.items[0].doctor.speciality.name,
+                specialityid: result.data.listConsultingRooms.items[0].doctor.speciality.id,
                 image: result.data.listConsultingRooms.items[0].doctor.image,
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
@@ -111,6 +112,25 @@ export default class App extends Component {
           console.log('There was an error: ' + err);
         });
       }
+      else if(roll === 'client'){
+        API.graphql(graphqlOperation(listPatientsForAppjs)).then( result =>{
+            this.setState({
+                username: result.data.listPatients.items[0].username,
+                email: result.data.listPatients.items[0].email,
+                phonenumber: result.data.listPatients.items[0].phone,
+                name: result.data.listPatients.items[0].name,
+                patientid: result.data.listPatients.items[0].id,
+                approved_terms_conditions: result.data.listPatients.items[0].approved_terms_conditions,
+                loading: false,
+            });
+        }).catch( err => {
+          this.setState({
+              error: true,
+              loading: false,
+          });
+          console.log('There was an error: ' + err);
+        });
+      }
     }).catch(err => {
       console.log('There was an error: ' + err);
       this.setState({
@@ -150,7 +170,7 @@ export default class App extends Component {
 
     return (
       <div> 
-          {(!this.state.loading && !this.state.error) &&
+          {!this.state.loading &&
             <div className="App">
               <HeaderLinks childProps={childProps}/>
               <Routes childProps={childProps} />
@@ -160,9 +180,6 @@ export default class App extends Component {
             <MDBBox display="flex" justifyContent="center" className="mt-5">
               <MDBSpinner big/>
             </MDBBox>
-          }
-          {this.state.error &&
-            <MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mt-5"><h2>Ha ocurrido un error</h2></MDBBox></MDBContainer>
           }
       </div>
     );

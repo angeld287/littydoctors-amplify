@@ -45,6 +45,8 @@
         ]
     },
     "useDefault": "default",
-    "userPoolGroupList": [],
+    "userPoolGroupList": [
+        "m"
+    ],
     "dependsOn": []
 }

@@ -2,8 +2,8 @@ import React from "react";
 import { Pie } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 
-class PieChart extends React.Component {
-  state = {
+const PieChart = ({title: title}) => {
+  const state = {
     dataPie: {
       labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
       datasets: [
@@ -30,14 +30,12 @@ class PieChart extends React.Component {
     }
   }
 
-  render() {
     return (
       <MDBContainer>
-        <h3 className="mt-5">Pie chart</h3>
-        <Pie data={this.state.dataPie} options={{ responsive: true }} />
+        {(title === undefined || title !== null) && <h3 className="mt-5">{title}</h3>}
+        <Pie data={state.dataPie} options={{ responsive: true }} />
       </MDBContainer>
     );
-  }
 }
 
 export default PieChart;

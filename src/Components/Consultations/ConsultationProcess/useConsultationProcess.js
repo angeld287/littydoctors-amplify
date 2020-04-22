@@ -86,6 +86,9 @@ const useConsultationProcess = () => {
                             postConsultationActivities: {
                                 notEmpty: false,
                             },
+                            diagnosis: {
+                                notEmpty: false,
+                            }
                         };
                         
                         setGlobal({
@@ -96,15 +99,19 @@ const useConsultationProcess = () => {
                             patientHistory: patientHistory,
                             medicalConsultation: r.data.getMedicalConsultation,
                             pendingAnalysis: [],
+                            pendingAnalysisFields: [],
+                            regionalExplorationFields: [],
+                            regionalExplorationFieldsLoaded: false,
                             consultationsHistory: false,
-                            consultationsHistoryData: {},
+                            consultationsHistoryData: {
+                                medicalHistoryItems: []
+                            },
                         });
                         setHasPatientHistory(r.data.getMedicalConsultation.patient.patientHistory.items.length === 0 ? false : true);
                         setPatientData(r.data.getMedicalConsultation.patient);
                         setConsultationObject(r.data.getMedicalConsultation);
                         let _consultation = r.data.getMedicalConsultation;
                         setLoading(false);                        
-                        //console.log(r.data.getMedicalConsultation);
                         //global.patient.PatientHistory
                     })
                     .catch((err) => { 

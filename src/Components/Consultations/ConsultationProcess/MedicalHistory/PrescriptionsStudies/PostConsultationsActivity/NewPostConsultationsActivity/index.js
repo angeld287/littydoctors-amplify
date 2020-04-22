@@ -8,15 +8,16 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 
-import TooltipButton from '../../../../../TooltipButton';
+import TooltipButton from '../../../../../../TooltipButton';
 
 const NewPostConsultationsActivity = ({
+    childProps: childProps,
     global: global,
     setGlobalData: setGlobalData,
     setNew: setNew,
     api : api,
 }) => {
-  const { editObject, edit, toggle, table, loadingButton, editMedicalPrescription, removeMedicalPrescription, _createMedicalPrescription, setPrescriptionMedication, modal, setModal, items, register, loading, handleSubmit, onSubmit, formState, setMedicalAnalysis, setSurgicalIntervention } = useNewPostConsultationsActivity(global, setGlobalData, setNew);
+  const { editObject, edit, toggle, table, loadingButton, editMedicalPrescription, removeMedicalPrescription, _createMedicalPrescription, setPrescriptionMedication, modal, setModal, items, register, loading, handleSubmit, onSubmit, formState, setMedicalAnalysis, setSurgicalIntervention } = useNewPostConsultationsActivity(childProps, global, setGlobalData, setNew);
   
   useEffect(() => {
       let didCancel = false;

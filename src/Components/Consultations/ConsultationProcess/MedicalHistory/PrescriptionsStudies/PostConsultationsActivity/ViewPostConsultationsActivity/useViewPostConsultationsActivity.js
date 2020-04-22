@@ -2,14 +2,14 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
 import useForm from 'react-hook-form';
-import { listMedicalAnalysiss, listSurgicalInterventions, listMedicines } from '../../../../../../graphql/queries';
+import { listMedicalAnalysiss, listSurgicalInterventions, listMedicines } from '../../../../../../../graphql/queries';
 import { createPostConsultActMedAnalysis, createMedicalPrescription, createPostConsultActSurgicalInt, createPostConsultationsActivity,
-        updateMedicalConsultation } from '../../../../../../graphql/mutations';
-import { updateMedicalConsultationForPCAGlobal } from '../../../../../../graphql/custom-mutations';
+        updateMedicalConsultation } from '../../../../../../../graphql/mutations';
+import { updateMedicalConsultationForPCAGlobal } from '../../../../../../../graphql/custom-mutations';
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import Swal from 'sweetalert2';
 
-import { Template } from '../../../../../Reports/Prescriptions/Template_1';
+import { Template } from '../../../../../../Reports/Prescriptions/Template_1';
 
 import moment from 'moment';
 

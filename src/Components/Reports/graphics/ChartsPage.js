@@ -2,8 +2,8 @@ import React from "react";
 import { Line } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 
-class ChartsPage extends React.Component {
-  state = {
+const ChartsPage = ({state: state, title: title, options: options}) => {
+  const _state = {
     dataLine: {
       labels: ["January", "February", "March", "April", "May", "June", "July"],
       datasets: [
@@ -53,14 +53,12 @@ class ChartsPage extends React.Component {
     }
   };
 
-  render() {
-    return (
-      <MDBContainer>
-        <h3 className="mt-5">Line chart</h3>
-        <Line data={this.state.dataLine} options={{ responsive: true }} />
-      </MDBContainer>
-    );
-  }
+  return (
+    <MDBContainer>
+      {(title === undefined || title !== null) && <h3 className="mt-5">{title}</h3>}
+      <Line data={state === undefined || state === null ? _state.dataLine : state.dataLine} options={options === null || undefined ? { responsive: true } : options} />
+    </MDBContainer>
+  );
 }
 
 export default ChartsPage;

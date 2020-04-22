@@ -7,11 +7,10 @@ import {
   MDBSimpleChart
 } from "mdbreact";
 
-class ChartsPagePro extends React.Component {
-  render() {
+const ChartsPagePro = ({title: title}) => {
     return (
       <MDBContainer>
-        <h3 className="mt-5">Minimalistic charts</h3>
+        {(title === undefined || title !== null) && <h3 className="mt-5">{title}</h3>}
         <div style={{ marginTop: "100px" }}>
           <MDBContainer>
             <MDBRow className="text-center">
@@ -71,7 +70,6 @@ class ChartsPagePro extends React.Component {
         </div>
       </MDBContainer>
     );
-  }
 }
 
 export default ChartsPagePro;

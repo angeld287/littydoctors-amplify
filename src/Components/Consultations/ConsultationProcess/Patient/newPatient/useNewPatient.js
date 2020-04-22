@@ -5,6 +5,8 @@ import { listReligions } from '../../../../../graphql/queries';
 
 import { API, graphqlOperation } from 'aws-amplify';
 
+import awsmobile from '../../../../../aws-exports'
+
 const useNewPatient = () => {
     const [ _loading, _setLoading ] = useState(true);
     const [ error, setError ] = useState(false);
@@ -13,6 +15,8 @@ const useNewPatient = () => {
     const [ api, setApi ] = useState ("");
     const [ religion, setreligion ] = useState ("");
     const [ address, setaddress ] = useState ("");
+    const [ age, setAge ] = useState (0);
+    const [ monthAge, setMonthAge ] = useState (0);
     const [ id_card, setid_card ] = useState ("");
     const [ marital_status, setmarital_status ] = useState ("");
     const [ sex, setsex ] = useState ("");
@@ -49,6 +53,43 @@ const useNewPatient = () => {
         //setlocation(location);
       };
 
+      const Exist = async (username, email) => {
+
+        const apiOptions = {};
+        apiOptions['headers'] = {
+            'Content-Type': 'application/json'
+        };
+        apiOptions['body'] = {
+          UserPoolId: awsmobile.aws_user_pools_id,
+          email: email,
+          Username: username
+        };
+    
+        const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
+    
+        return (resultP);
+      }
+
+      const CognitoCreateUser = async (data) => {
+
+        const apiOptions = {};
+        apiOptions['headers'] = {
+            'Content-Type': 'application/json'
+        };
+        apiOptions['body'] = {
+          UserPoolId: awsmobile.aws_user_pools_id,
+          email: data.email,
+          Username: data.username,
+          name: data.name,
+          phone_number: data.phone,
+          Password: data.temporary_password,
+        };
+    
+        const resultP = await API.post('ApiForLambda', '/createUser', apiOptions); 
+    
+        return resultP;
+      }
+
       const handleSelect = location => {
         setlocation(location);
       };
@@ -76,7 +117,7 @@ const useNewPatient = () => {
                 
                 api = {
                     religions: _religions_,
-                    sexs: [{value: 'MAN', label: 'Hombre'}, {value: 'WOMAN', label: 'Mujer'}],
+                    sexs: [{value: 'MALE', label: 'Hombre'}, {value: 'FEMALE', label: 'Mujer'}],
                     maritalstatus: [{value: 'MARRIED', label: 'Casado(a)'}, {value: 'SINGLE', label: 'Soltero(a)'}, {value: 'DIVORCED', label: 'Divorciado(a)'}, {value: 'WIDOWED', label: 'Viudo(a)'}],
                 };
 
@@ -104,7 +145,7 @@ const useNewPatient = () => {
 
 
 
-    return { birthdate, setBirthdate, register, handleSubmit, errors, formState, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange };
+    return { CognitoCreateUser, Exist, monthAge, setMonthAge, age, setAge, birthdate, setBirthdate, register, handleSubmit, errors, formState, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange };
 };
 
 export default useNewPatient;

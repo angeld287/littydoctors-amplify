@@ -38,7 +38,7 @@ const PatientFinder = ({childProps: childProps}) => {
                       </MDBPopover>);
 
     const btn = !isActionValid ? Validbtn : Poperbtn;
-//peach-gradient
+//"/consultations/"+ childProps.state.speciality +"/null/"+newPatientName
     return (
       <MDBContainer>
         <MDBRow>
@@ -52,7 +52,7 @@ const PatientFinder = ({childProps: childProps}) => {
                 onChange={(newValue) => {setPatient(newValue);}}
                 onInputChange={v => setNewPatientName(v)}
                 noOptionsMessage={() => {
-                  return <p>El paciente no existe...  <Link href={"/consultations/"+ childProps.state.speciality +"/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+                  return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
                 }}
               />
             <br/>
@@ -73,7 +73,7 @@ const PatientFinder = ({childProps: childProps}) => {
                     {patient != null ? patient.name : "N/A"}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    {patient != null ? patient.email : "N/A"}
+                   {/*  {patient != null ? patient.email : "N/A"} */}
                   </Typography>
                   <Typography component="h5" variant="h5">
                     {patient != null ? patient.age : "00"}

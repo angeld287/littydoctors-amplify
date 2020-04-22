@@ -3,12 +3,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
 import useForm from 'react-hook-form';
 import { createPostConsultActMedAnalysis, createMedicalPrescription, createPostConsultActSurgicalInt, createPostConsultationsActivity,
-        updateMedicalConsultation } from '../../../../../../graphql/mutations';
-import { updateMedicalConsultationForPCAGlobal } from '../../../../../../graphql/custom-mutations';
+        updateMedicalConsultation } from '../../../../../../../graphql/mutations';
+import { updateMedicalConsultationForPCAGlobal } from '../../../../../../../graphql/custom-mutations';
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import Swal from 'sweetalert2';
 
-const useNewPostConsultationsActivity = (global, setGlobalData, setNew) => {
+const useNewPostConsultationsActivity = (childProps, global, setGlobalData, setNew) => {
     const [ loading, setLoading ] = useState(false);
     const [ loadingButton, setLoadingButton ] = useState(false);
     const [ error, setError ] = useState(false);
@@ -102,10 +102,14 @@ const useNewPostConsultationsActivity = (global, setGlobalData, setNew) => {
     const onSubmit = async (i) => {
             setLoading(true);
 
-            const mpitems = [];
+            const pcainput = {
+                doctor: childProps.state.doctorusername,
+                secretary: childProps.state.secretary,
+                patient: global.patient.username
+            };
             const maitems = [];
             const siitems = [];
-            const pca = await API.graphql(graphqlOperation(createPostConsultationsActivity, {input: {}} )).catch( e => { console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
+            const pca = await API.graphql(graphqlOperation(createPostConsultationsActivity, {input: pcainput} )).catch( e => { console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
 
             //createMedicalPrescription
             if (items !== undefined) {
@@ -118,6 +122,9 @@ const useNewPostConsultationsActivity = (global, setGlobalData, setNew) => {
                     input.postConsultationsActivityMedicalpresId = pca.data.createPostConsultationsActivity.id;
                     input.medicalPrescriptionMedicationsId = e.medication.value;
                     input.date = new Date();
+                    input.doctor = childProps.state.doctorusername;
+                    input.secretary = childProps.state.secretary;
+                    input.patient = global.patient.username;
     
                     const pcama = await API.graphql(graphqlOperation(createMedicalPrescription, {input: input} )).catch( e => { console.log(e); setLoading(false); throw new SyntaxError("Error GraphQL"); });
                 });

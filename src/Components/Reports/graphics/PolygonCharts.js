@@ -3,8 +3,8 @@ import { Radar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 
 
-class PolygonCharts extends React.Component {
-  state = {
+const PolygonCharts = ({state: state, options: options, title: title}) => {
+  const _state = {
     dataRadar: {
       labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
       datasets: [
@@ -25,15 +25,12 @@ class PolygonCharts extends React.Component {
 
   }
 
-
-render() {
-    return (
-      <MDBContainer>
-        <h3 className="mt-5">Radar chart</h3>
-        <Radar data={this.state.dataRadar} options={{ responsive: true }} />
-      </MDBContainer>
-    );
-  }
+  return (
+    <MDBContainer>
+      {(title === undefined || title !== null) && <h3 className="mt-5">{title}</h3>}
+      <Radar data={state === null || state === undefined ? _state.dataRadar: state.dataRadar} options={options === null || undefined ? { responsive: true } : options} />
+    </MDBContainer>
+  );
 }
 
 export default PolygonCharts;

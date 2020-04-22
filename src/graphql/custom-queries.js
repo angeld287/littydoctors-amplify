@@ -131,6 +131,8 @@ export const getMedicalConsultation = /* GraphQL */ `
       patient {
         id
         name
+        owner
+        approved_terms_conditions
         username
         email
         phone
@@ -156,6 +158,7 @@ export const getMedicalConsultation = /* GraphQL */ `
                 id
                 frequency
                 comment
+                risk_factor
                 type {
                   id
                   name
@@ -248,9 +251,11 @@ export const getMedicalConsultation = /* GraphQL */ `
             id
             state
             date
+            file
             medicalAnalysis{
               id
               name
+              code
             }
           }
         }
@@ -269,6 +274,23 @@ export const getMedicalConsultation = /* GraphQL */ `
       medicalHistory {
         id
         reason
+        diagnosis {
+          id
+          type {
+            id
+            name
+          }
+          evolution {
+            id
+            name
+          }
+          diagnosis {
+            id
+            name
+          }
+          commentary
+          createdAt
+        }
         physicalExploration {
           id
           general_exploration
@@ -291,7 +313,16 @@ export const getMedicalConsultation = /* GraphQL */ `
               abdomen
               members
               genitals
-              others
+              others {
+                items{
+                  id
+                  field {
+                    id
+                    name
+                  }
+                  value
+                }
+              }
               doctor
               secretary
               patient
@@ -324,6 +355,16 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
         medicalHistory {
           id
           reason
+          physicalExploration {
+            id
+            vitalsign {
+              id
+              blood_pressure
+              breathing
+              pulse
+              temperature
+            }
+          }
         }
         state  
         createdAt 
@@ -349,9 +390,21 @@ export const listMedicalConsultationsForHistory = /* GraphQL */ `
               id
               state
               date
+              file
+              results {
+                items{
+                  id
+                  field {
+                    id
+                    name
+                  }
+                  value
+                }
+              }
               medicalAnalysis{
                 id
                 name
+                code
               }
             }
           }
@@ -465,6 +518,7 @@ export const getPatientForGlobal = /* GraphQL */ `
               id
               frequency
               comment
+              risk_factor
               type {
                 id
                 name
@@ -535,6 +589,46 @@ export const getPatientForGlobal = /* GraphQL */ `
           }
         }
       }
+    }
+  }
+`;
+
+export const listPatientsForAppjs = /* GraphQL */ `
+  query ListPatients(
+    $filter: ModelPatientFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPatients(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        username
+        email
+        phone
+        phone_id
+        weight
+        height
+        size
+        age
+        sex
+        image
+        id_card
+        religion {
+          id
+          name
+          owner
+        }
+        address
+        code
+        temporary_password
+        marital_status
+        birthdate
+        approved_terms_conditions
+        createdAt
+        owner
+      }
+      nextToken
     }
   }
 `;

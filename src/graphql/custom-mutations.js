@@ -174,6 +174,7 @@ export const createNonPathologicalHistoryForGlobal = /* GraphQL */ `
       id
       frequency
       comment
+      risk_factor
       type {
         id
         name
@@ -193,6 +194,7 @@ export const updateNonPathologicalHistoryForGlobal = /* GraphQL */ `
       id
       frequency
       comment
+      risk_factor
       type {
         id
         name
@@ -248,6 +250,192 @@ export const updateMedicalConsultationForPCAGlobal = /* GraphQL */ `
             }
           }
         }
+      }
+    }
+  }
+`;
+
+export const updatePostConsultActMedAnalysisForGlobal = /* GraphQL */ `
+  mutation UpdatePostConsultActMedAnalysis(
+    $input: UpdatePostConsultActMedAnalysisInput!
+    $condition: ModelPostConsultActMedAnalysisConditionInput
+  ) {
+    updatePostConsultActMedAnalysis(input: $input, condition: $condition) {
+      id
+      state
+      date
+      results {
+        items{
+          id
+          field {
+            id
+            name
+          }
+          value
+        }
+        nextToken
+      }
+      file
+      pcActivities {
+        id
+        medicalpres {
+          nextToken
+        }
+        medicalAnalysis {
+          nextToken
+        }
+        surgicalIntervention {
+          nextToken
+        }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      medicalAnalysis {
+        id
+        name
+        code
+        medicalAnalysis {
+          nextToken
+        }
+        createdAt
+        owner
+      }
+      createdAt
+    }
+  }
+`;
+
+export const createPhysicalExplorationForGlobal = /* GraphQL */ `
+  mutation CreatePhysicalExploration(
+    $input: CreatePhysicalExplorationInput!
+    $condition: ModelPhysicalExplorationConditionInput
+  ) {
+    createPhysicalExploration(input: $input, condition: $condition) {
+      id
+      general_exploration
+      vitalsign {
+        id
+        blood_pressure
+        breathing
+        pulse
+        temperature
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      regionalExploration {
+        id
+        head
+        neck
+        thorax
+        abdomen
+        members
+        genitals
+        others {
+          items{
+            id
+            field {
+              id
+              name
+            }
+            value
+          }
+        }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const updatePhysicalExplorationForGlobal = /* GraphQL */ `
+  mutation UpdatePhysicalExploration(
+    $input: UpdatePhysicalExplorationInput!
+    $condition: ModelPhysicalExplorationConditionInput
+  ) {
+    updatePhysicalExploration(input: $input, condition: $condition) {
+      id
+      general_exploration
+      vitalsign {
+        id
+        blood_pressure
+        breathing
+        pulse
+        temperature
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      regionalExploration {
+        id
+        head
+        neck
+        thorax
+        abdomen
+        members
+        genitals
+        others {
+          items{
+            id
+            field {
+              id
+              name
+            }
+            value
+          }
+        }
+        doctor
+        secretary
+        patient
+        createdAt
+        owner
+      }
+      doctor
+      secretary
+      patient
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const updateMedicalHistoryDiForGlobal = /* GraphQL */ `
+  mutation UpdateMedicalHistory(
+    $input: UpdateMedicalHistoryInput!
+    $condition: ModelMedicalHistoryConditionInput
+  ) {
+    updateMedicalHistory(input: $input, condition: $condition) {
+      id
+      diagnosis {
+        id
+        type {
+          id
+          name
+        }
+        evolution {
+          id
+          name
+        }
+        diagnosis {
+          id
+          name
+        }
+        commentary
       }
     }
   }

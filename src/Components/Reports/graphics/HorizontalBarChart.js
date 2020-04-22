@@ -2,8 +2,8 @@ import React from 'react';
 import { HorizontalBar } from 'react-chartjs-2';
 import { MDBContainer } from 'mdbreact';
 
-class HorizontalBarChart extends React.Component {
-  state = {
+const HorizontalBarChart = ({title: title}) => {
+  const state = {
     dataHorizontal: {
       labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Grey'],
       datasets: [
@@ -35,17 +35,15 @@ class HorizontalBarChart extends React.Component {
     }
   };
 
-  render() {
     return (
       <MDBContainer>
-        <h3 className='mt-5'>Bar chart</h3>
+        {(title === undefined || title !== null) && <h3 className="mt-5">{title}</h3>}
         <HorizontalBar
-          data={this.state.dataHorizontal}
+          data={state.dataHorizontal}
           options={{ responsive: true }}
         />
       </MDBContainer>
     );
-  }
 }
 
 export default HorizontalBarChart;

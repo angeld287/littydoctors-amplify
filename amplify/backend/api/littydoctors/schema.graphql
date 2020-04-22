@@ -13,6 +13,9 @@ type ConsultingRoom
     doctor: Doctor @connection
     secretary: String!
     location: Location @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type Location 
@@ -26,6 +29,9 @@ type Location
     ]){
     id: ID!
     name: String!
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type Doctor 
@@ -48,6 +54,9 @@ type Doctor
     sex: String!
     consultingroom: ConsultingRoom @connection
     image: String!
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type Rejection 
@@ -164,7 +173,7 @@ type Subscription {
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
 enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
-enum Sex { MAN WOMAN }
+enum Sex { MAN WOMAN MALE FEMALE }
 
 #Medical Consultation Process BackEnd definition
 
@@ -212,6 +221,7 @@ type MedicalHistory
     reason: String
     patient: Patient @connection
     physicalExploration: PhysicalExploration @connection
+    diagnosis: Diagnosis @connection
     doctor: String
     secretary: String
     patientname: String
@@ -229,6 +239,7 @@ type Patient
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: owner, ownerField: "username", operations: [update, read] }
     ]) {
     id: ID!
     name: String!
@@ -241,12 +252,18 @@ type Patient
     size: String
     age: String
     sex: Sex
+    image: String
     id_card: String
     religion: Religion @connection
     address: String
+    code: String
+    temporary_password: String
     marital_status: MaritalStatus
     birthdate: String
+    approved_terms_conditions: String
     patientHistory: [PatientHistory] @connection
+    deleted: Boolean
+    deletedAt: String
     createdAt: String
 }
 
@@ -261,9 +278,13 @@ type Religion
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: groups, groups: ["client"], operations: [read] }
     ]) {
     id: ID!
     name: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type Specialty
@@ -280,6 +301,10 @@ type Specialty
     ]) {
     id: ID!
     name: String
+    code: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 
@@ -295,6 +320,9 @@ type PatientHistory
     pathologicalHistory: PathologicalHistory @connection
     familyHistory: [FamilyHistory] @connection
     gynecoObstetricHistory: GynecoObstetricHistory @connection
+    doctor: String
+    secretary: String
+    patient: String
     createdAt: String
 }
 
@@ -315,6 +343,10 @@ type NonPathologicalHistory
     active: Boolean
     frequency: String
     comment: String
+    risk_factor: String
+    doctor: String
+    secretary: String
+    patient: String
     createdAt: String
 }
 
@@ -334,6 +366,9 @@ type PathologicalHistory
     surgicalInterventions: [PathologicalHistorySurgicalInt] @connection(name: "phsi")
     patientMedications: [PatientMedications] @connection(name: "pm")
     patientAllergies: [PatientAllergies] @connection(name: "pa")
+    doctor: String
+    secretary: String
+    patient: String
     createdAt: String
 }
 
@@ -354,6 +389,9 @@ type FamilyHistory
     alive: Boolean
     diseases: [FamilyDetailsDiseases] @connection(name: "fdd")
     comment: String
+    doctor: String
+    secretary: String
+    patient: String
     createdAt: String
 }
 
@@ -380,6 +418,8 @@ type Disease
     name: String
     description: String
     familyDetails: [FamilyDetailsDiseases] @connection(name: "dfd")
+    deleted: Boolean
+    deletedAt: String
     createdAt: String
 }
 
@@ -404,6 +444,9 @@ type GynecoObstetricHistory
     abortions: String
     caesarean_sections: String
     contraceptive_method: String
+    doctor: String
+    secretary: String
+    patient: String
     createdAt: String
 }
 
@@ -423,6 +466,8 @@ type Allergy
     name: String
     description: String
     patients: [PatientAllergies] @connection(name: "ap")
+    deleted: Boolean
+    deletedAt: String
     createdAt: String
 }
 
@@ -521,9 +566,43 @@ type PostConsultActMedAnalysis @model(queries: null) {
   id: ID!
   state: State # se colocara un estado que espesificara si el analisis se realizo o no
   date: String
+  results: [OthersFields] @connection
+  file: String
   pcActivities: PostConsultationsActivity @connection(name: "pcama")
   medicalAnalysis: MedicalAnalysis @connection(name: "mapca")
   createdAt: String
+}
+
+type OthersFields
+    @model 
+    @auth(rules: [
+        { allow: owner },
+    ]) {
+    id: ID!
+    field: Field @connection
+    value: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type Field
+    @model 
+    @auth(rules: [
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    modules: [String]
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type MedicalAnalysis
@@ -542,6 +621,8 @@ type MedicalAnalysis
     name: String
     code: String
     medicalAnalysis: [PostConsultActMedAnalysis] @connection(name: "mapca")
+    deleted: Boolean
+    deletedAt: String
     createdAt: String
 }
 
@@ -579,6 +660,8 @@ type SurgicalIntervention
     description: String
     surgicalIntervention: [PostConsultActSurgicalInt] @connection(name: "sipca")
     pathologicalHistory: [PathologicalHistorySurgicalInt] @connection(name: "siph")
+    deleted: Boolean
+    deletedAt: String
     createdAt: String
 }
 
@@ -649,7 +732,7 @@ type RegionalExploration
     abdomen: String
     members: String
     genitals: String
-    others: String
+    others: [OthersFields] @connection
     doctor: String
     secretary: String
     patient: String
@@ -669,5 +752,27 @@ type Category
     name: String
     description: String
     module: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type Diagnosis
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        { allow: groups, groups: ["admin"] }
+        { allow: groups, groups: ["doctor"], operations: [read] },
+        { allow: groups, groups: ["secretary"], operations: [read] },
+    ]) {
+    id: ID!
+    type: Category @connection
+    evolution: Category @connection
+    diagnosis: Disease @connection
+    commentary: String
+    doctor: String
+    secretary: String
+    patient: String
     createdAt: String
 }

@@ -9,7 +9,8 @@ import EditPostConsultationsActivity from './EditPostConsultationsActivity';
 
 const PostConsultationsActivity = ({
     global: global,
-    setGlobalData: setGlobalData
+    setGlobalData: setGlobalData,
+    childProps: childProps
 }) => {
   const { actions, setNew, _new , _edit, setEdit, editLoading, fields, editPostConsultationsActivity, api, loading} = usePostConsultationsActivity(global, setGlobalData);
 
@@ -29,13 +30,14 @@ const PostConsultationsActivity = ({
       };
   }, []);
 
-  if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>)
+  if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5 mb-3"><MDBSpinner big/></MDBBox></MDBContainer>)
   
   return (
     <MDBContainer>
       {/* Crear Datos de Exploracion Fisica */}
       {(_new && !_edit)&&
           <NewPostConsultationsActivity
+              childProps={childProps}
               global={global}
               setGlobalData={setGlobalData}
               actions={actions}

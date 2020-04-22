@@ -95,6 +95,9 @@ const useConsultations = () => {
         const mhinput = {};
         mhinput.reason = reason === null || reason === "" ? "N/A" : reason;
         mhinput.medicalHistoryPatientId = _patient.id;
+        mhinput.doctor = state.doctorusername;
+        mhinput.secretary = state.secretary;
+        mhinput.patientname = _patient.username;
         const cmh = await API.graphql(graphqlOperation(createMedicalHistory, {input: mhinput} )).catch( e => { console.log(e); setLoadingButton(false); throw new SyntaxError("Error GraphQL");});
         
         const input = { 
@@ -112,7 +115,7 @@ const useConsultations = () => {
         .then((r) => {
             var consultationid = r.data.createMedicalConsultation.id
             setLoadingButton(false);
-            window.location.href = "/consultations/"+ state.speciality +"/"+ consultationid +"/"+ _patient.id;
+            window.location.href = "/consultations/process/"+ consultationid +"/"+ _patient.id;
         }).catch((err) => { 
             console.log("Ocurrio un error al crear la consulta medica: ",err);
             setLoadingButton(false);

@@ -19,7 +19,7 @@ const NonPathologicalHistory = ({
   const [ id, setId ] = useState("");
   const [ type, setType ] = useState([]);
   const [ frequency, setFrequency ] = useState([]);
-  const [ duration, setDuration ] = useState("");
+  const [ riskFactor, setRiskFactor ] = useState(0);
   const [ comment, setComment ] = useState("");
 
   const frequencies = [];
@@ -39,17 +39,31 @@ const NonPathologicalHistory = ({
           setId(nonPathEditObject.id);
           setType(nonPathEditObject.type);          
           setFrequency(nonPathEditObject.frequency);
+          setRiskFactor(nonPathEditObject.risk_factor);
           setComment(nonPathEditObject.comment);
         }else{
           setId("");
           setType("");          
           setFrequency("");
+          setRiskFactor(0);
           setComment("");
           
         }
   }, []);
 
   const save = (create) => {
+    if (riskFactor > 100 || riskFactor < 1) {
+        //Swal.fire('Campo Obligatorio', 'Favor completar el campo Lugar de Evento', 'error');
+        Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'El Factor de Riesgo debe ser no mayor que 100 y mayor que 0',
+              showConfirmButton: false,
+              timer: 1500
+        });
+        return
+    }
+
     if ((frequency.length < 1) || (type.length < 1)) {
         //Swal.fire('Campo Obligatorio', 'Favor completar el campo Lugar de Evento', 'error');
         Swal.fire({
@@ -68,6 +82,7 @@ const NonPathologicalHistory = ({
            frequency: frequency,
            type: type,
            comment: comment,
+           risk_factor: riskFactor,
            doctor: "String",
            secretary: "String",
            patient: "String",
@@ -80,6 +95,7 @@ const NonPathologicalHistory = ({
           frequency: frequency,
           type: type,
           comment: comment,
+          risk_factor: riskFactor,
           doctor: "String",
           secretary: "String",
           patient: "String",
@@ -95,14 +111,26 @@ const NonPathologicalHistory = ({
     <MDBContainer>
         <MDBModalHeader toggle={toggleNonPath}>Crear Antecedente No Patologico</MDBModalHeader>
         <MDBModalBody>
-<label htmlFor="type" className="mt-2" >Tipo</label>
-          <Select id="type" options={types} defaultValue={types[tindex]} onChange={ (v) => {setType(v)}} />
-          <label htmlFor="frequency" className="mt-2" >Frecuencia</label>
-          <Select id="frequency" options={frequencies} defaultValue={frequencies[findex]} onChange={ (v) => {setFrequency(v)}}/>
-          <div className="form-group">
-            <label htmlFor="comment">Comentario</label>
-            <textarea name="comment" className="form-control" id="comment" rows="3" value={comment} onChange={ (e) => {setComment(e.target.value)}}></textarea>
-          </div>
+          <MDBContainer>
+            <MDBRow className="mb-3" style={{width: '100%'}}>
+              <MDBCol >
+                <label htmlFor="type" className="mt-2" >Tipo</label>
+                <Select id="type" options={types} defaultValue={types[tindex]} onChange={ (v) => {setType(v)}} />
+              </MDBCol>
+              <MDBCol >
+                <label htmlFor="frequency" className="mt-2" >Frecuencia</label>
+                <Select id="frequency" options={frequencies} defaultValue={frequencies[findex]} onChange={ (v) => {setFrequency(v)}}/>
+              </MDBCol>
+            </MDBRow>
+            <div className="form-group">  
+              <label htmlFor="risk_factor">Factor de Riesgo (%)</label>
+              <input name="risk_factor" className="form-control" id="risk_factor" max="100" value={riskFactor} onChange={ (e) => {setRiskFactor(e.target.value)}}></input>
+            </div>
+            <div className="form-group">
+              <label htmlFor="comment">Comentario</label>
+              <textarea name="comment" className="form-control" id="comment" rows="3" value={comment} onChange={ (e) => {setComment(e.target.value)}}></textarea>
+            </div>
+          </MDBContainer>
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={toggleNonPath}>Cancelar</MDBBtn>

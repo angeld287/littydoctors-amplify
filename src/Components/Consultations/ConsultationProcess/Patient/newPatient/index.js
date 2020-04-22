@@ -9,6 +9,8 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
 
+import { uuidv2 } from '../../../../../Functions/uuid';
+
 import PlacesAutocomplete from 'react-places-autocomplete';
 
 const NewPatient = (
@@ -21,7 +23,30 @@ const NewPatient = (
                       }
                    ) => {
 
-  const { register, setBirthdate, handleSubmit, formState, birthdate, newPatient, errors, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange } = useNewPatient();
+  const { CognitoCreateUser, Exist, setMonthAge, age, setAge, register, setBirthdate, handleSubmit, formState, birthdate, newPatient, errors, _loading, _setLoading, name, setName, fields, api, handleSelect, handleChange } = useNewPatient();
+
+  const _setAge = (d) =>{
+    const y = moment(new Date()).format('YYYY') - moment(d).format('YYYY');
+    const m = moment(new Date()).format('MM') - moment(d).format('MM');
+    setAge(calcAge(d));
+    setMonthAge(m);
+
+    setBirthdate(d)
+  }
+
+  const calcAge = (dateString) => {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+  }
+
+  const adult = (age > 17);
 
   const onSubmit = async (input) => {
         _setLoading(true);
@@ -29,20 +54,16 @@ const NewPatient = (
         var date = moment(new Date()).format('YYYY-MM-DD');
         var bdate = moment(birthdate).format('YYYY-MM-DD');
 
-        const filetrLimit = {
-          filter: {
-            or: [
-              {username: {eq: String(input.username) }}, 
-            ]
-          },
-          limit: 400
-        };
+        const exist = await Exist(input.username, input.email);
 
-        var patient = await API.graphql(graphqlOperation(listPatients, filetrLimit));
-
-
-        if(patient.data.listPatients.items.length !== 0){
+        if(exist.body.cognito.username){
             Swal.fire('Nombre de Usuario Existente', 'Favor agregar otro nombre de usuario, dado que este ya existe', 'error');
+            _setLoading(false);
+            return
+        }
+
+        if(exist.body.cognito.email){
+            Swal.fire('Email Existente', 'El email ya esta asociado a una cuenta', 'error');
             _setLoading(false);
             return
         }
@@ -82,15 +103,24 @@ const NewPatient = (
         input.marital_status = fields.marital_status.marital_status;
         input.sex = fields.sex.sex;
         input.patientReligionId = fields.religion.religion;
-        API.graphql(graphqlOperation(createPatient, { input: input }))
-        .then((r) => {
-            createConsultation(childProps.state, r.data.createPatient, reason);
-        })
-        .catch((err) => { 
-            console.log(err);
-            _setLoading(false);
-        })
-        
+        if(!adult){input.id_card = null;}
+        input.approved_terms_conditions = false;
+        input.temporary_password = uuidv2();
+        input.code = moment(new Date()).format('YYYYMMDDHHmmSSssss')+"_"+input.username;
+
+
+        const cognito = await CognitoCreateUser(input);
+
+        if (cognito.body.code === undefined) {
+          API.graphql(graphqlOperation(createPatient, { input: input }))
+          .then((r) => {
+              createConsultation(childProps.state, r.data.createPatient, reason);
+          })
+          .catch((err) => { 
+              console.log(err);
+              _setLoading(false);
+          })
+        }
     }
 
     const searchOptions = {
@@ -109,7 +139,7 @@ const NewPatient = (
                     <MDBIcon icon="user" size="2x"/>
                   </MDBCol>
                   <MDBCol md="11">
-                    <input name="username" placeholder="Nombre de Usuario" autoComplete="off" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
+                    <input name="username" placeholder="Nombre de Usuario" title="entre 8 y 20 caracteres, no espacios en blanco" pattern="^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$" autoComplete="off" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
                     {errors.username && <span className="text-danger mb-2">{errors.username.message}</span>}
                   </MDBCol>
                 </MDBRow>
@@ -126,7 +156,7 @@ const NewPatient = (
                     <MDBIcon icon="envelope" size="2x"/>
                   </MDBCol>
                   <MDBCol md="11">
-                    <input name="email" placeholder="Email" autoComplete="off" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
+                    <input name="email" placeholder="Email" pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" autoComplete="off" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
                     {errors.email && <span className="text-danger mb-2">{errors.email.message}</span>}
                   </MDBCol>
                 </MDBRow>
@@ -136,11 +166,12 @@ const NewPatient = (
                     <MDBIcon icon="phone" size="2x"/>
                   </MDBCol>
                   <MDBCol md="11">
-                    <input name="phone" placeholder="Telefono" autoComplete="off" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
+                    <input name="phone" placeholder="Telefono" autoComplete="off" pattern="^[+]*[0-9]{11}$" title="Agregar (+1) mas el numero telefono. Ej: +18491220022" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
                     {errors.phone && <span className="text-danger mb-2">{errors.phone.message}</span>}
                   </MDBCol>
                 </MDBRow>
                 <br />
+                {adult && 
                 <MDBRow>
                   <MDBCol md="1" >
                     <MDBIcon icon="id-card" size="2x"/>
@@ -149,10 +180,10 @@ const NewPatient = (
                     <input name="id_card" placeholder="Cedula" autoComplete="off" className="form-control" ref={register({ required: { message: 'Este campo es requerido', value: true } })}/>
                     {errors.id_card && <span className="text-danger mb-2">{errors.id_card.message}</span>}
                   </MDBCol>
-                </MDBRow>
+                </MDBRow>}
                </MDBCol>
                <MDBCol>
-                 <MDBRow style={{marginLeft: 3}}><MDBIcon icon="birthday-cake" size="2x" style={{marginTop: 20}}/><MDBDatePicker style={{marginLeft: 20}} icon="birthday-cake" getValue={d => setBirthdate(d)} /></MDBRow>
+                  <MDBRow style={{marginLeft: 3}}><MDBIcon icon="birthday-cake" size="2x" style={{marginTop: 20}}/><MDBDatePicker style={{marginLeft: 20}} icon="birthday-cake" getValue={d => _setAge(d)} /><div className="">{age+ " Año(s) de Edad"}</div></MDBRow>
                 <br />
                 <MDBRow>
                   <MDBCol md="1" >

@@ -11,7 +11,8 @@ import Select from 'react-select';
 const NewPhysicalExploration = ({
     global: global,
     setGlobalData: setGlobalData,
-    actions: actions
+    actions: actions,
+    fieldsForm: fieldsForm
 }) => {
   //const { register, loading, handleSubmit, onSubmit, formState } = usePhysicalExploration(global, setGlobalData);
   const [ mm, setmm ] = useState("");
@@ -99,8 +100,10 @@ const NewPhysicalExploration = ({
             </MDBCol>
           </MDBRow>
           <div className="form-group">
-            <label htmlFor="others">Otro</label>
-            <textarea name="others"  className="form-control" id="others" rows="3" ref={actions.register}></textarea>
+            <label htmlFor="others">Exploracion Fisica por Especialidad</label>
+            <MDBCard>
+              <MDBContainer className="m-1">{fieldsForm}</MDBContainer>
+            </MDBCard>
           </div>
           <div className="text-center py-4 mt-3">
               {!actions.loading && <TooltipButton helperMessage={"Crear Exploracion Fisica"} component={addBtn} placement="top"/>}

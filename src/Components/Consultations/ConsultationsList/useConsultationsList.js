@@ -89,7 +89,7 @@ const useConsultationsList = (childProps) => {
     }
 
     const redirectToConsultation = (consultation, patient) => {
-        window.location.href = "/consultations/"+ childProps.state.speciality +"/"+consultation+"/"+patient;
+        window.location.href = "/consultations/process/"+consultation+"/"+patient;
     }
 
     return { loading, consultations, error, ctable, itable };
