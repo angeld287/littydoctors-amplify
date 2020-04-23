@@ -32,6 +32,9 @@
         "categories": {
             "auth": {
                 "littydoctors0f1e523f": {}
+            },
+            "function": {
+                "CognitoActions": {}
             }
         }
     }
