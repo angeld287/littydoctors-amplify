@@ -9,10 +9,11 @@ import ChartSection2 from './sections/ChartSection2';
 import MapSection from './sections/MapSection';
 import ModalSection from './sections/ModalSection';
 
-const Patients =  () => {
+const DashboardPage =  () => {
   return (
     <React.Fragment>
       <BreadcrumSection />
+      <AdminCardSection1 />
       <ChartSection1 />
       <TableSection />
       <ChartSection2 />
@@ -25,4 +26,4 @@ const Patients =  () => {
   )
 }
 
-export default Patients;
+export default DashboardPage;

@@ -3,10 +3,13 @@ import { MDBMask, MDBRow, MDBCol, MDBBtn, MDBView, MDBContainer } from "mdbreact
 import "./IntroductionPage.css";
 
 import PricingPlans from './PricingPlans';
+import EcommercePage from './PricingPlans/index2';
 import TeamPage from './Team';
 import ContactPage from './ContactUs';
+import MissionVisionValues from './MissionVisionValues';
 
 import iphones from './../../images/iphones.png';
+import laptop from './../../images/laptop.png';
 
 class IntroductionPage extends Component {
   state = {
@@ -18,6 +21,10 @@ class IntroductionPage extends Component {
       collapsed: !this.state.collapsed
     });
   };
+
+  redirectTo = (route) => {
+    window.location.href = route;
+  }
 
   render() {
     return (
@@ -80,19 +87,18 @@ class IntroductionPage extends Component {
                   </h1>
                   <hr className="hr-light" />
                   <h6 className="mb-4">
-                    Somos especialistas en desarrollo de aplicaciones mobiles y web 
-                    basadas en la automatizacion de los procesos de consultas medicas. 
-                    Nuestra mision es hacer que el doctor se sienta comodo con el producto 
-                    que utliza. Nuestra vision es llevar el producto a todos los doctores 
-                    de republica dominicana.
+                    Aplicación Web para manejar el Registro Electrónico de Salud (EHR) de los paciente y el proceso de consultas médicas. Este es un software portable, esto quiere decir que se puede acceder desde laptops, desktops, tablets o mobiles. Es un sistema que genera datos estadísticos de todas las formas gráficas posibles (gráficos de línea, pastel, radar, barras, etc..)
                   </h6>
-                  <MDBBtn color="white">
-                    <a target="_blank" href="https://play.google.com/store/apps/details?id=com.aangelesmdconsultations">Aplicacion Mobile Android</a>
+                  <MDBBtn color="white" onClick={ e => {e.preventDefault(); this.redirectTo("/patients")}} >
+                    <a /* href="https://play.google.com/store/apps/details?id=com.aangelesmdconsultations" */>Ver Mas</a>
+                  </MDBBtn>
+                  <MDBBtn color="white" onClick={ e => {e.preventDefault(); this.redirectTo("/signin")}}>
+                    <a>Iniciar Sesion</a>
                   </MDBBtn>
                 </div>
                 <MDBCol md="6" xl="5" className="mt-xl-5">
                   <img
-                    src={iphones}
+                    src={laptop}
                     alt=""
                     className="img-fluid"
                   />
@@ -115,7 +121,10 @@ class IntroductionPage extends Component {
           </MDBRow>
         </MDBContainer>
         <MDBContainer>
-          <PricingPlans/>
+          <MissionVisionValues/>
+        </MDBContainer>
+        <MDBContainer>
+          <EcommercePage/>
         </MDBContainer>
         <MDBContainer>
           <TeamPage/>

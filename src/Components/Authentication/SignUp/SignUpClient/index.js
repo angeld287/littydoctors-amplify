@@ -69,7 +69,7 @@ class ClientSignUp extends Component {
   } */
 
   openPDF = async () => {
-    const file = await Storage.get('LEGAL_DOCUMENTS/TERMS_CONDITIONS.pdf');
+    const file = 'https://littydoctorsbucket1115546-dev.s3.amazonaws.com/public/LEGAL_DOCUMENTS/TERMS_CONDITIONS.pdf'; //await Storage.get('LEGAL_DOCUMENTS/TERMS_CONDITIONS.pdf');
     var win = window.open(file, '_blank');
     win.focus();
   }
