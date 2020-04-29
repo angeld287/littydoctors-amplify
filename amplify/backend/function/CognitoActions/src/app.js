@@ -9,11 +9,12 @@ See the License for the specific language governing permissions and limitations 
 
 
 
-var express = require('express')
-var bodyParser = require('body-parser')
-var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+var express = require('express');
+var bodyParser = require('body-parser');
+var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 var AWS = require('aws-sdk');
-
+var origins_prod = "https://littydoctors.com";
+var origins_dev = "https://ds0wb4bd1k4ec.cloudfront.net"; // ["https://ds0wb4bd1k4ec.cloudfront.net/", "https://littydoctors.com/"];
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
@@ -21,7 +22,10 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 
 // Enable CORS for all methods
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
+  var origin = req.get('origin');
+  const origins = origin === origins_dev ? origins_dev : origins_prod;
+
+  res.header("Access-Control-Allow-Origin", origins)
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
   next()
 });
@@ -47,6 +51,7 @@ app.get('/addUserToGroup/*', function(req, res) {
 
 app.post('/addUserToGroup', async function(req, res) {
   try {
+    var origin = req.get('origin');
 
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
     const _response = null;
@@ -58,27 +63,11 @@ app.post('/addUserToGroup', async function(req, res) {
 
     _response = await cognitoidentityserviceprovider.adminAddUserToGroup(params).promise();
 
-    var response = {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*"
-        },
-        body: _response
-    };
-
-    res.json({success: 'post call succeed!', url: req.url, body: response})
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": (origin === origins_dev ? origins_dev : origins_prod) }, body: _response })
 
   } catch (error) {
 
-    var response = {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*"
-        },
-        body: error
-    };
-
-    res.json({success: 'post call succeed!', url: req.url, body: response})
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": (origin === origins_dev ? origins_dev : origins_prod) }, body: error })
 
   }
 });
@@ -86,7 +75,9 @@ app.post('/addUserToGroup', async function(req, res) {
 app.post('/verifyIfUserExist', async function(req, res) {
 
   try {
-
+    var origin = req.get('origin');
+    const origins = origin === origins_dev ? origins_dev : origins_prod;
+    
     AWS.config.update({region: 'us-east-1'});
 
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
@@ -104,16 +95,18 @@ app.post('/verifyIfUserExist', async function(req, res) {
     params.Filter = 'username=\"'+req.body.Username+'\"';
     const cusername = await cognitoidentityserviceprovider.listUsers(params).promise();
 
-    res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": "*" }, body: {cognito:{email: (cemail.Users.length > 0), username: (cusername.Users.length > 0)}} })
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": origins }, body: { cognito:{email: (cemail.Users.length > 0), username: (cusername.Users.length > 0)}} })
 
   } catch (error) {
-    res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": "*" }, body: error })
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": origins }, body: error })
   }
 
 });
 
 app.post('/createUser', async function(req, res) {
   try {
+    var origin = req.get('origin');
+    const origins = origin === origins_dev ? origins_dev : origins_prod;
 
     AWS.config.update({region: 'us-east-1'});
 
@@ -149,7 +142,7 @@ app.post('/createUser', async function(req, res) {
     };
 
     cognitoidentityserviceprovider.adminCreateUser(params, async (err, data) => {
-        if (err) res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": "*" }, body: err })
+        if (err) res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": origins }, body: err })
         else {
           const params_group = {
             GroupName: "client",
@@ -158,11 +151,11 @@ app.post('/createUser', async function(req, res) {
           };
       
           _response = await cognitoidentityserviceprovider.adminAddUserToGroup(params_group).promise();
-          res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": "*" }, body: _response })
+          res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": origins }, body: _response })
         }
     });
   } catch (error) {
-    res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": "*" }, body: error })
+    res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": origins }, body: error })
   }
   
 });
