@@ -62,8 +62,8 @@
 				"Runtime": "nodejs10.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-littydoctors-prod-00459-deployment",
-					"S3Key": "amplify-builds/CognitoActions-7048586770797351456b-build.zip"
+					"S3Bucket": "amplify-littydoctors-dev-115546-deployment",
+					"S3Key": "amplify-builds/CognitoActions-786f51616a6343444e52-build.zip"
 				}
 			}
 		},

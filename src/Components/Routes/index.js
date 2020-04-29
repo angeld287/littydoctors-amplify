@@ -15,22 +15,23 @@ import Error from '../Error'
 import IntroductionPage from '../IntroductionPage';
 import ConsultationProcess from '../Consultations/ConsultationProcess';
 import Consultations from '../Consultations/index';
+import Patients from '../Patients';
 
 import {Template} from '../Reports/Prescriptions/Template_1';
 
 export const Routes = ({ childProps }) => (
   <Switch>
     <Route exact path="/" render={() => <IntroductionPage/>} />
+    <Route exact path="/patients" render={() => <Patients/>} />
+    <Route exact path="/reports" render={() => <Reports/>} />
     <ProppedRoute exact path="/signin" render={AuthComponent} props={childProps} />
     <ProppedRoute exact path="/error" render={() => <Error childProps={childProps}/>} props={childProps} />
     <ProtectedRoute exact path="/subscribe" render={() => <ConfigureProfile childProps={childProps}/>} props={childProps} />
     <ProtectedRoute exact path="/profile" render={() => <Profile childProps={childProps}/>} props={childProps} />
-
+    {/* <ProtectedRoute exact path="/patients" render={() => <Patients childProps={childProps}/>} props={childProps} />
+    <ProtectedRouteCompany exact path="/reports" render={() => <Reports childProps={childProps}/>} props={childProps} /> */}
     <ProtectedRoute exact path="/medicalappointmentsmanagement" render={() => <MedicalAppointmentsManagement childProps={childProps}/>} props={childProps} />
-
-    <ProtectedRouteCompany exact path="/reports" render={() => <Reports childProps={childProps}/>} props={childProps} />
     <ProtectedRouteCompany exact path="/consultations" render={() => <Consultations childProps={childProps} />} props={childProps} />
-
     <ProtectedRouteCompany exact path="/consultations/process/:consultation/:patient" render={() => <ConsultationProcess childProps={childProps} />} props={childProps} />
     {/* <ProtectedCardiology exact path="/consultations/cardiology/:consultation/:patient" render={() => <ConsultationProcess childProps={childProps} />} props={childProps} /> */}
     <Route exact path="/template" render={() => <Template />} />
