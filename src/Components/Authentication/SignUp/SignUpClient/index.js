@@ -51,19 +51,20 @@ class ClientSignUp extends Component {
     return new Date().getFullYear();
   }
 
-/*   testAPILambda = async () => {
+  /* testAPILambda = async () => {
 
     const apiOptions = {};
+
     apiOptions['headers'] = {
         'Content-Type': 'application/json'
     };
+    
     apiOptions['body'] = {
       UserPoolId: awsmobile.aws_user_pools_id,
-      email: "danielangelesangelestoribio@gmail.com",
-      Username: "jcallejon"
+      Username: 'littydoctors'
     };
 
-    const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
+    const resultP = await API.post('ApiForLambda', '/addUserToGroup', apiOptions);
 
     console.log(resultP);
   } */
@@ -96,13 +97,11 @@ class ClientSignUp extends Component {
     const { username, password, phone_num, birthdate, sex, email, name} = this.state;
 
     Auth.signIn(username, password).then(user => {
-        const phone_number = "+1"+phone_num;
-
         const input = {         
           name: name,
           username: username,
           email: email,
-          phone: phone_number,
+          phone: phone_num,
           sex: sex,
           approved_terms_conditions: true,
           birthdate: birthdate,
@@ -148,7 +147,7 @@ class ClientSignUp extends Component {
 
       API.post('ApiForLambda', '/addUserToGroup', apiOptions)
       .then( r => {
-        this.insertPatientInfo();
+          this.insertPatientInfo();
       }).catch((err) => { // Error response
           this.setState({ error: err, loadingConfirmation:false });
           console.log(err);
@@ -177,19 +176,7 @@ class ClientSignUp extends Component {
     
     const { username, email, password, phone_num, name, terms_conditions, sex, birthdate } = this.state;
 
-    const phone_number = "+1"+phone_num;
-
-    const exist = await this.Exist(username, email);
-
-    if (exist.body.cognito.username) {
-      this.setState({loading: false, error: { message: "Este nombre de usuario ya existe, debe utilizar otro"}});
-      return
-    }
-    
-    if (exist.body.cognito.email) {
-      this.setState({loading: false, error: { message: "El email ya esta asociado a una cuenta"}});
-      return
-    }
+    const phone_number = phone_num;
 
     if (!terms_conditions) {
       this.setState({loading: false, error: { message: "Debe Aceptar los Terminos y Condiciones"}});
@@ -203,6 +190,18 @@ class ClientSignUp extends Component {
 
     if (birthdate === null) {
       this.setState({loading: false, error: { message: "Debe seleccionar la fecha de nacimiento"}});
+      return
+    }
+
+    const exist = await this.Exist(username, email);
+
+    if (exist.body.cognito.username) {
+      this.setState({loading: false, error: { message: "Este nombre de usuario ya existe, debe utilizar otro"}});
+      return
+    }
+    
+    if (exist.body.cognito.email) {
+      this.setState({loading: false, error: { message: "El email ya esta asociado a una cuenta"}});
       return
     }
 
@@ -279,7 +278,9 @@ class ClientSignUp extends Component {
 
 
                           <MDBInput label="Nombre Completo" value={name} onChange={event => this.setState(updateByPropertyName("name", event.target.value)) } group type="text" validate error="wrong" success="right" required/> 
-                          <MDBInput label="Numero de Telefono" value={phone_num} pattern="^[+]*[0-9]{11}$" title="Agregar (+1) mas el numero telefono. Ej: +18491220022" onChange={event => this.setState(updateByPropertyName("phone_num", event.target.value)) } group type="number" validate error="wrong" success="right" required/>
+                          
+                          <MDBInput label="Numero de Telefono" value={phone_num} pattern="^[+]*[0-9]{11}$" title="Agregar (+1) mas el numero telefono. Ej: +18491220022" onChange={event => this.setState(updateByPropertyName("phone_num", event.target.value)) } group required/>
+                          
                           <MDBRow>
                             <MDBCol>
                               <MDBFormInline className="mb-4">
@@ -310,7 +311,7 @@ class ClientSignUp extends Component {
                           <MDBFormInline><MDBInput className="mt-4 mb-4" label="Aceptar Terminos y Condiciones" checked={terms_conditions} onChange={this.onClickRadioTC} type="checkbox" id="terms_conditions" /><TooltipButton helperMessage={"Ver Terminos y Condiciones"} component={showPdf} placement="top"></TooltipButton></MDBFormInline>
 
                           <div className="text-center pt-5 mb-3">
-                           {/*  <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}
+                            {/* <MDBBtn onClick={this.testAPILambda}>test</MDBBtn> */}
                             {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} type="submit">Registrarse</MDBBtn>}
                             {loading && <MDBSpinner small />}
                             {(!(error === null) || (error === '')) &&

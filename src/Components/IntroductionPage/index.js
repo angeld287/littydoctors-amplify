@@ -7,6 +7,7 @@ import EcommercePage from './PricingPlans/index2';
 import TeamPage from './Team';
 import ContactPage from './ContactUs';
 import MissionVisionValues from './MissionVisionValues';
+import Features from './Features';
 
 import iphones from './../../images/iphones.png';
 import laptop from './../../images/laptop.png';
@@ -119,6 +120,9 @@ class IntroductionPage extends Component {
               </p>
             </MDBCol>
           </MDBRow>
+        </MDBContainer>
+        <MDBContainer>
+          <Features/>
         </MDBContainer>
         <MDBContainer>
           <MissionVisionValues/>
