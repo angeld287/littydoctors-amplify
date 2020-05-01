@@ -19,6 +19,15 @@ export const getConsultingRoom = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -131,6 +140,18 @@ export const getDoctor = /* GraphQL */ `
         id
         name
         code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
         deleted
         deletedAt
         createdAt
@@ -186,6 +207,15 @@ export const listDoctors = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -347,6 +377,15 @@ export const getMedicalAppointment = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -556,6 +595,15 @@ export const getMedicalConsultation = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -1092,6 +1140,18 @@ export const getSpecialty = /* GraphQL */ `
       id
       name
       code
+      subSpecialty {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
       deleted
       deletedAt
       createdAt
@@ -1106,6 +1166,42 @@ export const listSpecialtys = /* GraphQL */ `
     $nextToken: String
   ) {
     listSpecialtys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getSubSpecialty = /* GraphQL */ `
+  query GetSubSpecialty($id: ID!) {
+    getSubSpecialty(id: $id) {
+      id
+      name
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const listSubSpecialtys = /* GraphQL */ `
+  query ListSubSpecialtys(
+    $filter: ModelSubSpecialtyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSubSpecialtys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         name

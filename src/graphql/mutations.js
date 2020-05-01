@@ -22,6 +22,15 @@ export const createConsultingRoom = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -74,6 +83,15 @@ export const updateConsultingRoom = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -118,6 +136,15 @@ export const deleteConsultingRoom = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -216,6 +243,18 @@ export const createDoctor = /* GraphQL */ `
         id
         name
         code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
         deleted
         deletedAt
         createdAt
@@ -272,6 +311,18 @@ export const updateDoctor = /* GraphQL */ `
         id
         name
         code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
         deleted
         deletedAt
         createdAt
@@ -325,6 +376,18 @@ export const deleteDoctor = /* GraphQL */ `
       username
       email
       speciality {
+        id
+        name
+        code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
         id
         name
         code
@@ -567,6 +630,15 @@ export const createMedicalAppointment = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -688,6 +760,15 @@ export const updateMedicalAppointment = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -825,6 +906,15 @@ export const deleteMedicalAppointment = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -938,6 +1028,15 @@ export const createMedicalConsultation = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -1098,6 +1197,15 @@ export const updateMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -1242,6 +1350,15 @@ export const deleteMedicalConsultation = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -1963,6 +2080,18 @@ export const createSpecialty = /* GraphQL */ `
       id
       name
       code
+      subSpecialty {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
       deleted
       deletedAt
       createdAt
@@ -1979,6 +2108,18 @@ export const updateSpecialty = /* GraphQL */ `
       id
       name
       code
+      subSpecialty {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
       deleted
       deletedAt
       createdAt
@@ -1992,6 +2133,66 @@ export const deleteSpecialty = /* GraphQL */ `
     $condition: ModelSpecialtyConditionInput
   ) {
     deleteSpecialty(input: $input, condition: $condition) {
+      id
+      name
+      code
+      subSpecialty {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const createSubSpecialty = /* GraphQL */ `
+  mutation CreateSubSpecialty(
+    $input: CreateSubSpecialtyInput!
+    $condition: ModelSubSpecialtyConditionInput
+  ) {
+    createSubSpecialty(input: $input, condition: $condition) {
+      id
+      name
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const updateSubSpecialty = /* GraphQL */ `
+  mutation UpdateSubSpecialty(
+    $input: UpdateSubSpecialtyInput!
+    $condition: ModelSubSpecialtyConditionInput
+  ) {
+    updateSubSpecialty(input: $input, condition: $condition) {
+      id
+      name
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const deleteSubSpecialty = /* GraphQL */ `
+  mutation DeleteSubSpecialty(
+    $input: DeleteSubSpecialtyInput!
+    $condition: ModelSubSpecialtyConditionInput
+  ) {
+    deleteSubSpecialty(input: $input, condition: $condition) {
       id
       name
       code

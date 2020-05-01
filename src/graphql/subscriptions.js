@@ -30,6 +30,15 @@ export const onCreateMedicalAppointment = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -168,6 +177,15 @@ export const onUpdateMedicalAppointment = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -286,6 +304,15 @@ export const onCreateConsultingRoom = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -335,6 +362,15 @@ export const onUpdateConsultingRoom = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -376,6 +412,15 @@ export const onDeleteConsultingRoom = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -462,6 +507,18 @@ export const onCreateDoctor = /* GraphQL */ `
         id
         name
         code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
         deleted
         deletedAt
         createdAt
@@ -515,6 +572,18 @@ export const onUpdateDoctor = /* GraphQL */ `
         id
         name
         code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
         deleted
         deletedAt
         createdAt
@@ -565,6 +634,18 @@ export const onDeleteDoctor = /* GraphQL */ `
       username
       email
       speciality {
+        id
+        name
+        code
+        subSpecialty {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
         id
         name
         code
@@ -760,6 +841,15 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -912,6 +1002,15 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
           createdAt
           owner
         }
+        subspeciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
         sex
         consultingroom {
           id
@@ -1053,6 +1152,15 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
         username
         email
         speciality {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        subspeciality {
           id
           name
           code
@@ -1744,6 +1852,18 @@ export const onCreateSpecialty = /* GraphQL */ `
       id
       name
       code
+      subSpecialty {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
       deleted
       deletedAt
       createdAt
@@ -1757,6 +1877,18 @@ export const onUpdateSpecialty = /* GraphQL */ `
       id
       name
       code
+      subSpecialty {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
       deleted
       deletedAt
       createdAt
@@ -1767,6 +1899,57 @@ export const onUpdateSpecialty = /* GraphQL */ `
 export const onDeleteSpecialty = /* GraphQL */ `
   subscription OnDeleteSpecialty($owner: String) {
     onDeleteSpecialty(owner: $owner) {
+      id
+      name
+      code
+      subSpecialty {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onCreateSubSpecialty = /* GraphQL */ `
+  subscription OnCreateSubSpecialty($owner: String) {
+    onCreateSubSpecialty(owner: $owner) {
+      id
+      name
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onUpdateSubSpecialty = /* GraphQL */ `
+  subscription OnUpdateSubSpecialty($owner: String) {
+    onUpdateSubSpecialty(owner: $owner) {
+      id
+      name
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onDeleteSubSpecialty = /* GraphQL */ `
+  subscription OnDeleteSubSpecialty($owner: String) {
+    onDeleteSubSpecialty(owner: $owner) {
       id
       name
       code

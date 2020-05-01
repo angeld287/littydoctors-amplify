@@ -470,6 +470,9 @@ export const listConsultingRooms = /* GraphQL */ `
           sex
           image
           owner
+          subspeciality {
+            name
+          }
           speciality {
             id
             name

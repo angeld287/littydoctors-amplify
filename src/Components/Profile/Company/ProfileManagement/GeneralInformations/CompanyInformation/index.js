@@ -72,7 +72,7 @@ const CompanyInformation = ({ company: company }) => {
                   <div className="md-form">
                     <MDBInput
                       icon="stethoscope"
-                      label={company.speciality}
+                      label={company.speciality+" | "+ company.subspeciality}
                       iconClass="grey-text"
                       type="text"
                       disabled

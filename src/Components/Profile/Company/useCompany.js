@@ -36,11 +36,14 @@ const useCompany = () => {
                     doctorname: companyApi.data.listConsultingRooms.items[0].doctor.name,
                     doctorusername: companyApi.data.listConsultingRooms.items[0].doctor.username,
                     speciality: companyApi.data.listConsultingRooms.items[0].doctor.speciality.name,
+                    subspeciality: companyApi.data.listConsultingRooms.items[0].doctor.subspeciality.name,
                     image: companyApi.data.listConsultingRooms.items[0].doctor.image,
                     email: companyApi.data.listConsultingRooms.items[0].doctor.email,
                     location: companyApi.data.listConsultingRooms.items[0].location.name,
                     secretary: companyApi.data.listConsultingRooms.items[0].secretary,
                 };
+                console.log(companyApi);
+                
                 setCompany(company)
                 setSubscriptionData(null);
                 

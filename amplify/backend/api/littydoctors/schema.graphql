@@ -50,10 +50,11 @@ type Doctor
     name: String!
     username: String!
     email: String!
-    speciality: Specialty @connection
-    sex: String!
+    speciality: Specialty! @connection
+    subspeciality: SubSpecialty! @connection
+    sex: Sex!
     consultingroom: ConsultingRoom @connection
-    image: String!
+    image: String
     deleted: Boolean
     deletedAt: String
     createdAt: String
@@ -173,7 +174,7 @@ type Subscription {
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
 enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
-enum Sex { MAN WOMAN MALE FEMALE }
+enum Sex { MALE FEMALE }
 
 #Medical Consultation Process BackEnd definition
 
@@ -296,7 +297,28 @@ type Specialty
         # Admin users can access any operation.
         { allow: groups, groups: ["admin"] },
 
-        { allow: groups, groups: ["doctor"], operations: [update, read] }
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    subSpecialty: [SubSpecialty] @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type SubSpecialty
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
     ]) {
     id: ID!

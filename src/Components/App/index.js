@@ -131,6 +131,11 @@ export default class App extends Component {
           console.log('There was an error: ' + err);
         });
       }
+      else if(roll === 'admin'){
+        this.setState({
+            loading: false,
+        });
+      }
     }).catch(err => {
       console.log('There was an error: ' + err);
       this.setState({
