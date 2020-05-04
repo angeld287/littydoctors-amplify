@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBCardBody, MDBCardTitle, MDBCardText, MDBTabPane, MDBTabContent,
+import { MDBContainer, MDBBox, MDBSpinner, MDBCardBody, MDBCardTitle, MDBCardText, MDBTabPane, MDBTabContent,
 MDBNav, MDBNavItem, MDBIcon, MDBBtn } from "mdbreact";
 
 import { Redirect } from 'react-router'
@@ -13,6 +13,8 @@ import useCompany from './useCompany'
 
 const CompanyUserProfile = () => {
     const { doctorname, error, loading, activeItemVerticalPills, setActiveItemVerticalPills, subscriptionData, toggleVerticalPills, company } = useCompany();
+
+    if (loading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>)
 
     let subsmanage;
     if (subscriptionData !== null) {
