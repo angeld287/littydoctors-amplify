@@ -24,7 +24,7 @@ import { Redirect } from 'react-router'
 //import PricingPlans from './PricingPlans'
 //import PaymentMethod from './PaymentMethod'
 
-import { createDoctor, createConsultingRoom, createLocation, updateDoctor } from '../../../../../graphql/mutations';
+import { createDoctor, createConsultingRoom, createLocation, updateDoctor, createDoctorSpecialities, createDoctorSubSpecialities, createDoctorSsSecond } from '../../../../../graphql/mutations';
 import { listSpecialitys } from '../../../../../graphql/custom-queries';
 
 const updateByPropertyName = (propertyName, value) => () => ({
@@ -242,7 +242,6 @@ class ConfigureProfile extends Component {
     }else{
       this.insertUserProfileData();
     }
-    
   }
 
   createCustomer = () => {
@@ -307,7 +306,6 @@ class ConfigureProfile extends Component {
     try {
       const _specialtys = await API.graphql(graphqlOperation(listSpecialitys, {limit: 400}));
       const _items = _specialtys.data.listSpecialitys.items;
-      console.log(_items);
       
       const items = [];
       _items.forEach(e => {
@@ -371,8 +369,8 @@ class ConfigureProfile extends Component {
         name: this.state.name, //this.state.name,
         email: this.state.email,
         username: this.state.username,
-        doctorSpecialityId: this.state.speciality,
-        doctorSubspecialityId: this.state.subspeciality,
+        //doctorSpecialityId: this.state.speciality,
+        //doctorSubspecialityId: this.state.subspeciality,
         sex: this.state.sex.value,
         image: this.state.croppedImage
       }
@@ -382,7 +380,20 @@ class ConfigureProfile extends Component {
       this.setState({ consultingRoomLocationId: data.data.createLocation.id});
       //API.graphql(graphqlOperation(createStripe, stripeInsert)).then( data =>{
         //this.setState({ consultingRoomStripeId: 'data.data.createStripe.id'});
-        API.graphql(graphqlOperation(createDoctor, doctorInsert)).then( data =>{
+        API.graphql(graphqlOperation(createDoctor, doctorInsert)).then( async data =>{
+          const did = data.data.createDoctor.id;
+          try {
+            const speci = {doctorSpecialitiesDoctorId: did, doctorSpecialitiesSpecialityId: this.state._specialty.value};
+
+            const cspe = await API.graphql(graphqlOperation(createDoctorSpecialities, { input: speci}));
+            const csubpe = this.state._subspecialty !== null ? await API.graphql(graphqlOperation(createDoctorSubSpecialities, { input: {doctorSubSpecialitiesDoctorId: did, doctorSubSpecialitiesSubspecialityId: this.state._subspecialty.value}})) : "";
+            const csubspesec = this.state._subspecialtysec !== null ? await API.graphql(graphqlOperation(createDoctorSsSecond, { input: {doctorSSSecondDoctorId: did, doctorSSSecondSubspecialitysecId: this.state._subspecialtysec.value}})) : "";
+
+          } catch (error) {
+            console.log(error);
+            this.setState({ error: error, loading: false });
+          }
+
           this.setState({ consultingRoomDoctorId: data.data.createDoctor.id});
             API.graphql(graphqlOperation(createConsultingRoom, {
               input:{

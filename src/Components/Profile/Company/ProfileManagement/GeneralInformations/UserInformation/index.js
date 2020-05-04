@@ -4,6 +4,9 @@ import { MDBCol, MDBRow, MDBModalFooter, MDBCard, MDBCardUp, MDBCardBody, MDBAva
 import image_back from '../../../../../../images/modern-blue-medical-background.jpg';
 
 import { Storage } from "aws-amplify";
+import F_image from '../../../../../../images/icon-dra.png';
+import M_image from '../../../../../../images/icon-dr.png';
+
 import { S3Image } from 'aws-amplify-react';
 
 
@@ -16,27 +19,34 @@ const UserInformation = ({ company: company }) => {
       const _specs = [];
       const _ss = company.subspecialities
       const _sss = company.subspecialitiessec
-    console.log(company.subspecialities);
     
       company.specialities.forEach(s => {
         const data = {};
         data.spe = s.speciality.name;
-          s.speciality.subSpeciality.items.forEach(ss => {
-            console.log(_ss.findIndex(ss_ => ss_.subspeciality.id === ss.id));
+          if (_ss.length > 0) {
+            s.speciality.subSpeciality.items.forEach(ss => {
             
-            const _sso = _ss[_ss.findIndex(ss_ => ss_.subspeciality.id === ss.id)];
-            if (ss.subSpeciality.items.length > 0) {
-              ss.subSpeciality.items.forEach(sss => {              
-                const _ssso = _sss[_sss.findIndex(sss_ => sss_.subspecialitysec.id === sss.id)];
-                data.sssec = data.sssec !== undefined ?  data.sssec+" - "+_ssso.subspecialitysec.name : "- "+_ssso.subspecialitysec.name
-              });
-              data.subesp = data.sssec !== undefined ? _sso.subspeciality.name +" ("+data.sssec+" )" : _sso.subspeciality.name;
-              _specs.push({spe: s.speciality.name, sub: data.subesp});
-            }else{
-              data.subesp = _sso.subspeciality.name; 
-              _specs.push({spe: s.speciality.name, sub: data.subesp});
-            }
-          });
+              const _sso = _ss[_ss.findIndex(ss_ => ss_.subspeciality.id === ss.id)];
+              if (_sso !== undefined) {
+                if (ss.subSpeciality.items.length > 0) {
+                  ss.subSpeciality.items.forEach(sss => {   
+                    const index_ssso = _sss.findIndex(sss_ => sss_.subspecialitysec.id === sss.id);  
+                    if (index_ssso !== -1) {
+                      const _ssso = _sss[_sss.findIndex(sss_ => sss_.subspecialitysec.id === sss.id)];
+                      data.sssec = data.sssec !== undefined ?  data.sssec+" - "+_ssso.subspecialitysec.name : "- "+_ssso.subspecialitysec.name
+                    }         
+                  });
+                  data.subesp = data.sssec !== undefined ? _sso.subspeciality.name +" ("+data.sssec+" )" : _sso.subspeciality.name;
+                  _specs.push({spe: s.speciality.name, sub: data.subesp});
+                }else{
+                  data.subesp = _sso.subspeciality.name; 
+                  _specs.push({spe: s.speciality.name, sub: data.subesp});
+                }
+              }            
+            });
+          }else{
+            _specs.push({spe: s.speciality.name, sub: ""});
+          }
       });
 
       setspecs(_specs)
@@ -49,9 +59,6 @@ const UserInformation = ({ company: company }) => {
   }, []);
 
   const {image, sex} = company
-
-  const F_image = "https://lh3.googleusercontent.com/proxy/wZnkKM30pKo_zEfJkj2QoeXos6yrZUMi_sSvHgLfX8_rL8y3e-YZpjqvRaBchnCws8mUaBXN4ahb9QltBf11_33WYJogBhHbUkGbwVwCcyBl2GxqaQGV67_tVdfA-GBGElYd89ZhJa_QgadjTt6Ac9v1OYmuZEuqd7Oi3l0omO81GAs"
-  const M_image = "https://neumoexpertosdotorg.files.wordpress.com/2015/10/icon-doctor.png";
   const image_ = sex !== undefined ? (sex === 'MALE' ? M_image : F_image) : null;
 
   const _image = (image !== null && image !== undefined)?(<S3Image imgKey={image} height="100" width="60" alt="" className="rounded-circle" />):(
@@ -60,7 +67,7 @@ const UserInformation = ({ company: company }) => {
 
   const list = (specs !== null)?([].concat(specs)
     .map((item,i)=> 
-        <li key={i}>{item.spe+" | "+item.sub}</li>
+        <li key={i}>{item.sub === "" ? item.spe : item.spe+" | "+item.sub}</li>
     )):(<div></div>)
 
 

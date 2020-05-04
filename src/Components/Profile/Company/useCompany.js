@@ -29,8 +29,6 @@ const useCompany = () => {
             }
 
             if (!didCancel) {
-                console.log(companyApi);
-                
                 if(companyApi.data.listConsultingRooms.items[0] === undefined) {window.location.href = "/subscribe";}
                 setDoctorname(companyApi.data.listConsultingRooms.items[0].doctor.username);
                 const spe = companyApi.data.listConsultingRooms.items[0].doctor.specialities.items;
