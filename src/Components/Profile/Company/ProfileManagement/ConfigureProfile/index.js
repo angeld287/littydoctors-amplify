@@ -25,7 +25,7 @@ import { Redirect } from 'react-router'
 //import PaymentMethod from './PaymentMethod'
 
 import { createDoctor, createConsultingRoom, createLocation, updateDoctor } from '../../../../../graphql/mutations';
-import { listSpecialtys } from '../../../../../graphql/queries';
+import { listSpecialitys } from '../../../../../graphql/custom-queries';
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
@@ -45,12 +45,12 @@ class ConfigureProfile extends Component {
       formActivePanel1: 1,
       formActivePanel1Changed: false,
       username: this.props.childProps.state.username,
-      name: this.props.childProps.state.name,
+      name: '',
       email: this.props.childProps.state.email,
       stripe_plan_id: "plan_EnLie0bS3CW27X",
       stripe_plan_name: "Basic plan",
       specialty: "",
-      sex: "dummy",
+      sex: null,
       location: "",
       stripe_source_token: 'tok_visa',//"",
       stripe_customer_id: "",
@@ -59,6 +59,7 @@ class ConfigureProfile extends Component {
       secretary: "dummy",
       loading: false,
       pageLoading: true,
+      pageError: false,
       error: "",
       pictures: [],
       image: null,
@@ -71,8 +72,17 @@ class ConfigureProfile extends Component {
       previewSource: null,
       key: null,
       specialities: [],
+      _specialty: {},
       speciality: "",
       specialityName: "",
+      subspecialities: [],
+      _subspecialty: {},
+      subspeciality: null,
+      subspecialityName: "",
+      subspecialitiessec: [],
+      _subspecialtysec: {},
+      subspecialitysec: null,
+      subspecialitysecName: "",
     }
 
     this.handleSetPlan = this.handleSetPlan.bind(this);
@@ -216,17 +226,23 @@ class ConfigureProfile extends Component {
 
   handleSubmission = () => {
     this.setState({ loading: true });
-    Storage.put("DOCTORS/"+this.state.username+".png", this.state.croppedImage, {
-        contentType: 'image/png'
-    })
-    .then (result =>{
-      this.setState({croppedImage: result.key})
+    
+    if (this.state.croppedImage !== null) {
+      Storage.put("DOCTORS/"+this.state.username+".png", this.state.croppedImage, {
+          contentType: 'image/png'
+      })
+      .then (result =>{
+        this.setState({croppedImage: result.key})
+        this.insertUserProfileData();
+      })
+      .catch((err) => { // Error response
+          this.setState({ loading: false });
+          console.log(err);
+      });
+    }else{
       this.insertUserProfileData();
-    })
-    .catch((err) => { // Error response
-        this.setState({ loading: false });
-        console.log(err);
-    });
+    }
+    
   }
 
   createCustomer = () => {
@@ -254,18 +270,56 @@ class ConfigureProfile extends Component {
   };
 
   setspeciality = (e) => {
-    this.setState({speciality: e.value, specialityName: e.label})
+    this.setState({speciality: e.value, specialityName: e.label, _specialty: e, subspecialities: [], subspeciality: null, subspecialityName: "", _subspecialty: null, subspecialitiessec: [], subspecialitysec: null, subspecialitysecName: "", _subspecialtysec: null});
+    const items = [];
+    e.subspecialities.forEach(ss => {
+        var item = {value: ss.id, label: ss.name, subspecialitiessec: ss.subSpeciality.items};
+        items.push(item);
+    });
+    this.setState({subspecialities: items});
+  }
+
+  setsubspeciality = (e) => {
+    if (e !== null) {
+        this.setState({subspeciality: e.value, subspecialityName: e.label, _subspecialty: e, subspecialitiessec: [], subspecialitysec: null, subspecialitysecName: "", _subspecialtysec: null})
+        const items = [];
+        e.subspecialitiessec.forEach(ss => {
+            var item = {value: ss.id, label: ss.name};
+            items.push(item);
+        });
+        this.setState({subspecialitiessec: items});      
+    }
+  }
+
+  setsubspecialitysec = (e) => {
+    if (e !== null) {
+        this.setState({subspecialitysec: e.value, subspecialitysecName: e.label, _subspecialtysec: e})   
+    }
+  }
+
+  setsex = (e) => {
+    if (e !== null) {
+        this.setState({sex: e})      
+    }
   }
 
   setSpecialityList = async () => {
-
-      const _specialtys = await API.graphql(graphqlOperation(listSpecialtys, {limit: 400}));
+    try {
+      const _specialtys = await API.graphql(graphqlOperation(listSpecialitys, {limit: 400}));
+      const _items = _specialtys.data.listSpecialitys.items;
+      console.log(_items);
+      
       const items = [];
-      _specialtys.data.listSpecialtys.items.forEach(e => {
-        var item = {value: e.id, label: e.name};
+      _items.forEach(e => {
+        var item = {value: e.id, label: e.name, subspecialities: e.subSpeciality.items};
         items.push(item);
       });
       this.setState({specialities: items, pageLoading: false});
+
+    } catch (error) {
+      this.setState({pageLoading: false, pageError: true});
+      console.log(error);
+    } 
   }
 
   subscribeCustomer = () => {
@@ -318,7 +372,8 @@ class ConfigureProfile extends Component {
         email: this.state.email,
         username: this.state.username,
         doctorSpecialityId: this.state.speciality,
-        sex: this.state.sex,
+        doctorSubspecialityId: this.state.subspeciality,
+        sex: this.state.sex.value,
         image: this.state.croppedImage
       }
     }
@@ -373,15 +428,18 @@ class ConfigureProfile extends Component {
 
 render() {
 
-  const { specialty, location, redirect, error, loading, name, croppedImage, specialities, pageLoading, specialityName } = this.state
+  const { subspecialitiessec, _subspecialtysec, sex, pageError, location, redirect, error, loading, name, croppedImage, specialities, pageLoading, speciality, _specialty, _subspecialty, subspecialities, subspeciality } = this.state
   //const image = (croppedImage !== null)?(<img src={croppedImage} height="200" width="200" className="img-fluid" alt="" />):(null);
-  const complete = (!(location === '') && !(specialityName === '') && !(croppedImage === null)/*  && !(stripe_source_token === '') */)
+  const complete = (!(location === '') && !(speciality === '') && !(name === '') && !(sex === null) /*  && !(stripe_source_token === '') */)
   const validation = (complete && (error === ''))
 
   const profileData = {
       username: this.state.username,
+      name: this.state.name,
       email: this.state.email,
       speciality: this.state.specialityName,
+      sex: this.state.sex === null ? "" : this.state.sex.value,
+      subspeciality: this.state.subspecialityName,
       location: this.state.location,
       stripe_customer_id: this.state.stripe_customer_id,
       stripe_subscription_id: this.state.stripe_subscription_id,
@@ -400,29 +458,65 @@ render() {
     types: ['establishment']
   }
 
+  const sexs = [{value: "MALE", label: "Masculino"}, {value: "FEMALE", label: "Femenino"}]
+
   if (pageLoading) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><MDBSpinner big/></MDBBox></MDBContainer>)
+  if (pageError) return (<MDBContainer><MDBBox display="flex" justifyContent="center" className="mt-5"><h2>Ha Ocurrido un Error</h2></MDBBox></MDBContainer>)
 
   return (
     <MDBContainer>
       <h2 className="text-center font-weight-bold pt-4 pb-5 mb-2"><strong>Formulario de Registro</strong></h2>
       <MDBStepper icon>
-        <MDBStep far icon="folder-open" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStep>
-        {/* <MDBStep icon="pencil-alt" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStep>
-        <MDBStep icon="photo" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStep> */}
-        <MDBStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(4)}></MDBStep>
+        <MDBStep far icon="folder-open" stepName="Informacion Basica" onClick={this.swapFormActive(1)(1)}></MDBStep>
+        {/* <MDBStep icon="pencil-alt" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStep> */}
+        <MDBStep icon="image" stepName="Imagen de Perfil" onClick={this.swapFormActive(1)(3)}></MDBStep>
+        <MDBStep icon="check" stepName="Finalizar" onClick={this.swapFormActive(1)(4)}></MDBStep>
       </MDBStepper>
         <MDBRow>
           {this.state.formActivePanel1 === 1 &&
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4">
-              <strong>Informacion Basica</strong></h3>
-            <MDBInput label="Nombre Completo" className="mt-4" value={name} onChange={event => this.setState(updateByPropertyName("name", event.target.value)) }/>
-            
+            <strong>Informacion Basica</strong></h3>
+
+            <MDBRow className="mb-3 mt-5" style={{width: '100%'}}>
+              <MDBCol md="7">
+                <MDBInput label="Nombre Completo" className="mt-4" value={name} onChange={event => this.setState(updateByPropertyName("name", event.target.value)) }/>
+              </MDBCol>
+              <MDBCol md="5">
+                <div className="mt-4">
+                  <Select id="sex" placeholder="Sexo" defaultValue={sex} options={sexs} onChange={ (v) => {this.setsex(v)}} />
+                </div>
+              </MDBCol>
+            </MDBRow>            
             
             {/* <MDBInput label="Especialidad" className="mt-4" autoFocus={this.calculateAutofocus(1)} value={specialty} onChange={event => this.setState(updateByPropertyName("specialty", event.target.value)) }/> */}
-            
-            <Select id="speciality" placeholder="Epecialidad" options={specialities} onChange={ (v) => {this.setspeciality(v)}} />
+            <MDBRow className="mb-3 mt-5" style={{width: '100%'}}>
+              <MDBCol md="3">
+                <label htmlFor="evolution" className="mt-2" >Especialidad:</label>
+              </MDBCol>
+              <MDBCol md="9">
+                <Select id="speciality" placeholder="Epecialidad" defaultValue={_specialty} options={specialities} onChange={ (v) => {this.setspeciality(v)}} />
+              </MDBCol>
+            </MDBRow>
 
+            <MDBRow className="mb-3" style={{width: '100%'}}>
+              <MDBCol md="3">
+                <label htmlFor="evolution" className="mt-2" >Sub-Especialidad:</label>
+              </MDBCol>
+              <MDBCol md="9">
+                <Select id="subspeciality" placeholder="Sub-Epecialidad" value={_subspecialty} options={subspecialities} onChange={ (v) => {this.setsubspeciality(v)}} />
+              </MDBCol>
+            </MDBRow>
+
+            <MDBRow className="mb-5" style={{width: '100%'}}>
+              <MDBCol md="3">
+                <label htmlFor="evolution" className="mt-2" >Segunda Sub-Especialidad:</label>
+              </MDBCol>
+              <MDBCol md="9">
+                <Select id="subspeciality" placeholder="Sub-Epecialidad" value={_subspecialtysec} options={subspecialitiessec} onChange={ (v) => {this.setsubspecialitysec(v)}} />
+              </MDBCol>
+            </MDBRow>
+            
               <PlacesAutocomplete
                 value={this.state.location}
                 onChange={this.handleChange}
@@ -462,13 +556,6 @@ render() {
                   </div>
                 )}
               </PlacesAutocomplete>
-                <ImageUploader
-                    withIcon={true}
-                    buttonText='Agrege una Imagen de Perfil'
-                    onChange={this.onDrop}
-                    imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                    maxFileSize={5242880}
-                />
 
                 {/* 
                 <S3Image imgKey={key}/>
@@ -483,29 +570,41 @@ render() {
                       type="file" accept='image/*'
                       onChange={(e) => this.onChange(e)}
                   />*/}
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
           </MDBCol>)}
 
           {/*this.state.formActivePanel1 === 2 &&
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4"><strong>Select a plan</strong></h3>
             <PricingPlans handleSetPlan={this.handleSetPlan}/>
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
-          </MDBCol>)
-          this.state.formActivePanel1 === 3 &&
-          (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4"><strong>Payment Method</strong></h3>
             <PaymentMethod handleSetCard={this.handleSetCard}/>
             <br/>
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(2)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
           </MDBCol>)*/}
+          {this.state.formActivePanel1 === 3 &&
+          (<MDBCol md="12">
+            <h3 className="font-weight-bold pl-0 my-4"><strong>Imangen de Perfil</strong></h3>
+            <br/>
+
+
+            <ImageUploader
+                    withIcon={true}
+                    buttonText='Agrege una Imagen de Perfil (opcional)'
+                    onChange={this.onDrop}
+                    imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                    maxFileSize={5242880}
+            />
+
+            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn>
+          </MDBCol>)}
           {this.state.formActivePanel1 === 4 && 
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4"><strong>Review</strong></h3>
             <CompanyProfile profileData={profileData}/>
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
             <MDBBtn color="success" rounded className="float-right" disabled={!validation} onClick={this.handleSubmission}>Subscribe</MDBBtn>
             {loading && <MDBSpinner />}
           </MDBCol>)}

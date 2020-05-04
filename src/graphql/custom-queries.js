@@ -470,12 +470,44 @@ export const listConsultingRooms = /* GraphQL */ `
           sex
           image
           owner
-          subspeciality {
-            name
+          specialities {
+            items {
+              id
+              speciality {
+                id
+                name
+                subSpeciality {
+                  items {
+                    id
+                    name
+                    subSpeciality {
+                      items {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-          speciality {
-            id
-            name
+          subspecialities {
+            items {
+              id
+              subspeciality {
+                id
+                name
+              }
+            }
+          }
+          subspecialitiessec {
+            items {
+              id
+              subspecialitysec{
+                id
+                name
+              }
+            }
           }
         }
         secretary
@@ -628,6 +660,39 @@ export const listPatientsForAppjs = /* GraphQL */ `
         marital_status
         birthdate
         approved_terms_conditions
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+
+export const listSpecialitys = /* GraphQL */ `
+  query ListSpecialitys(
+    $filter: ModelSpecialityFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSpecialitys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        code
+        subSpeciality {
+          items{
+            id
+            name
+            subSpeciality {
+              items {
+                id
+                name
+              }
+            }
+          }
+        }
+        deleted
+        deletedAt
         createdAt
         owner
       }

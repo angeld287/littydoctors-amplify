@@ -69,7 +69,7 @@ const CompanyInformation = ({ company: company }) => {
                       id="form-email"
                     />
                   </div>
-                  <div className="md-form">
+                  {/* <div className="md-form">
                     <MDBInput
                       icon="stethoscope"
                       label={company.speciality+" | "+ company.subspeciality}
@@ -78,7 +78,7 @@ const CompanyInformation = ({ company: company }) => {
                       disabled
                       id="form-email"
                     />
-                  </div>
+                  </div> */}
                   <div className="md-form">
                     <MDBInput
                       icon="user-nurse"

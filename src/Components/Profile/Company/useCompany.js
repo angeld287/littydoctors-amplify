@@ -29,22 +29,29 @@ const useCompany = () => {
             }
 
             if (!didCancel) {
+                console.log(companyApi);
+                
                 if(companyApi.data.listConsultingRooms.items[0] === undefined) {window.location.href = "/subscribe";}
                 setDoctorname(companyApi.data.listConsultingRooms.items[0].doctor.username);
+                const spe = companyApi.data.listConsultingRooms.items[0].doctor.specialities.items;
+                const subespe = companyApi.data.listConsultingRooms.items[0].doctor.subspecialities.items;
+                const subespesec = companyApi.data.listConsultingRooms.items[0].doctor.subspecialitiessec.items;
+                
                 const company = {
                     id: companyApi.data.listConsultingRooms.items[0].id,
                     doctorname: companyApi.data.listConsultingRooms.items[0].doctor.name,
                     doctorusername: companyApi.data.listConsultingRooms.items[0].doctor.username,
-                    speciality: companyApi.data.listConsultingRooms.items[0].doctor.speciality.name,
-                    subspeciality: companyApi.data.listConsultingRooms.items[0].doctor.subspeciality.name,
+                    specialities: spe,
+                    subspecialities: subespe,
+                    subspecialitiessec: subespesec,
                     image: companyApi.data.listConsultingRooms.items[0].doctor.image,
                     email: companyApi.data.listConsultingRooms.items[0].doctor.email,
                     location: companyApi.data.listConsultingRooms.items[0].location.name,
                     secretary: companyApi.data.listConsultingRooms.items[0].secretary,
+                    sex: companyApi.data.listConsultingRooms.items[0].doctor.sex,
                 };
-                console.log(companyApi);
                 
-                setCompany(company)
+                setCompany(company);
                 setSubscriptionData(null);
                 
                 setLoading(false);

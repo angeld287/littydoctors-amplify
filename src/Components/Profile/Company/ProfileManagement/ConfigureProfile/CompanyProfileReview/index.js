@@ -3,7 +3,7 @@ import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBIcon, MDBInput, MDBAlert } fro
 
 class CompanyUserProfile extends Component {
     render(){
-      const { username, speciality, email, location, stripe_plan_name, croppedImage } = this.props.profileData
+      const { username, speciality, subspeciality, email, location, stripe_plan_name, croppedImage, name, sex } = this.props.profileData
 
       const data = String(location);
       const locationUrl = data.split(' ').join('%20');
@@ -15,10 +15,13 @@ class CompanyUserProfile extends Component {
                   <MDBCard>
                     <MDBCardBody>
                       <div className="form-header blue accent-1">
-                        <img src={croppedImage} height="60" width="70" alt="" className="rounded-circle" />
+                        {/* <img src={croppedImage} height="60" width="70" alt="" className="rounded-circle" /> */}
                         <h3 className="mt-2">
                           <MDBIcon icon="user" />   {username}
                         </h3>
+                        <h5 className="mt-2">
+                          {sex === 'MALE' ? "Dr. " : "Dra. "}{name}
+                        </h5>
                       </div>
                       <div className="md-form">
                         <MDBInput
@@ -41,7 +44,7 @@ class CompanyUserProfile extends Component {
                       <div className="md-form">
                         <MDBInput
                           readOnly
-                          value={"Plan Seleccionado: " + stripe_plan_name}
+                          value={"Sub Especialidad: " + subspeciality}
                           iconClass="grey-text"
                           type="text"
                           id="form-subject"
@@ -101,11 +104,11 @@ class CompanyUserProfile extends Component {
               </MDBRow>
               {!this.props.profileData.complete && 
               <MDBAlert color="danger" >
-                  Some required fields are not completed
+                  Algunos campos requeridos no se han completado. Verifique que los siguientes campos no esten vacios: Nombre, Especialidad, Sexo y Ubicación de Consultorio.
               </MDBAlert>}
               {this.props.profileData.backEndError && 
               <MDBAlert color="danger" >
-                  There are an application error, please contact your software vendor. {this.props.profileData.error}
+                  Hubo un error. Por favor contacte al soporte técnico enviando el siguiente error: {this.props.profileData.error}
               </MDBAlert>}
               
             </section>
