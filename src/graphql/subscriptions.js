@@ -21,14 +21,14 @@ export const onCreateMedicalAppointment = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -159,14 +159,14 @@ export const onUpdateMedicalAppointment = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -277,14 +277,14 @@ export const onCreateConsultingRoom = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -326,14 +326,14 @@ export const onUpdateConsultingRoom = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -375,14 +375,14 @@ export const onDeleteConsultingRoom = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -458,14 +458,23 @@ export const onCreateDoctor = /* GraphQL */ `
       name
       username
       email
-      speciality {
-        id
-        name
-        code
-        deleted
-        deletedAt
-        createdAt
-        owner
+      specialities {
+        items {
+          id
+        }
+        nextToken
+      }
+      subspecialities {
+        items {
+          id
+        }
+        nextToken
+      }
+      subspecialitiessec {
+        items {
+          id
+        }
+        nextToken
       }
       sex
       consultingroom {
@@ -511,14 +520,23 @@ export const onUpdateDoctor = /* GraphQL */ `
       name
       username
       email
-      speciality {
-        id
-        name
-        code
-        deleted
-        deletedAt
-        createdAt
-        owner
+      specialities {
+        items {
+          id
+        }
+        nextToken
+      }
+      subspecialities {
+        items {
+          id
+        }
+        nextToken
+      }
+      subspecialitiessec {
+        items {
+          id
+        }
+        nextToken
       }
       sex
       consultingroom {
@@ -564,14 +582,23 @@ export const onDeleteDoctor = /* GraphQL */ `
       name
       username
       email
-      speciality {
-        id
-        name
-        code
-        deleted
-        deletedAt
-        createdAt
-        owner
+      specialities {
+        items {
+          id
+        }
+        nextToken
+      }
+      subspecialities {
+        items {
+          id
+        }
+        nextToken
+      }
+      subspecialitiessec {
+        items {
+          id
+        }
+        nextToken
       }
       sex
       consultingroom {
@@ -603,6 +630,699 @@ export const onDeleteDoctor = /* GraphQL */ `
         owner
       }
       image
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onCreateDoctorSpecialities = /* GraphQL */ `
+  subscription OnCreateDoctorSpecialities {
+    onCreateDoctorSpecialities {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      speciality {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        subSpeciality {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onUpdateDoctorSpecialities = /* GraphQL */ `
+  subscription OnUpdateDoctorSpecialities {
+    onUpdateDoctorSpecialities {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      speciality {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        subSpeciality {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onDeleteDoctorSpecialities = /* GraphQL */ `
+  subscription OnDeleteDoctorSpecialities {
+    onDeleteDoctorSpecialities {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      speciality {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        subSpeciality {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onCreateSpeciality = /* GraphQL */ `
+  subscription OnCreateSpeciality($owner: String) {
+    onCreateSpeciality(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      subSpeciality {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onUpdateSpeciality = /* GraphQL */ `
+  subscription OnUpdateSpeciality($owner: String) {
+    onUpdateSpeciality(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      subSpeciality {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onDeleteSpeciality = /* GraphQL */ `
+  subscription OnDeleteSpeciality($owner: String) {
+    onDeleteSpeciality(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      subSpeciality {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onCreateDoctorSubSpecialities = /* GraphQL */ `
+  subscription OnCreateDoctorSubSpecialities {
+    onCreateDoctorSubSpecialities {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        subSpeciality {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onUpdateDoctorSubSpecialities = /* GraphQL */ `
+  subscription OnUpdateDoctorSubSpecialities {
+    onUpdateDoctorSubSpecialities {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        subSpeciality {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onDeleteDoctorSubSpecialities = /* GraphQL */ `
+  subscription OnDeleteDoctorSubSpecialities {
+    onDeleteDoctorSubSpecialities {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspeciality {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        subSpeciality {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onCreateSubSpeciality = /* GraphQL */ `
+  subscription OnCreateSubSpeciality($owner: String) {
+    onCreateSubSpeciality(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      subSpeciality {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onUpdateSubSpeciality = /* GraphQL */ `
+  subscription OnUpdateSubSpeciality($owner: String) {
+    onUpdateSubSpeciality(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      subSpeciality {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onDeleteSubSpeciality = /* GraphQL */ `
+  subscription OnDeleteSubSpeciality($owner: String) {
+    onDeleteSubSpeciality(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      subSpeciality {
+        items {
+          id
+          name
+          code
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onCreateDoctorSsSecond = /* GraphQL */ `
+  subscription OnCreateDoctorSsSecond {
+    onCreateDoctorSSSecond {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspecialitysec {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onUpdateDoctorSsSecond = /* GraphQL */ `
+  subscription OnUpdateDoctorSsSecond {
+    onUpdateDoctorSSSecond {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspecialitysec {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onDeleteDoctorSsSecond = /* GraphQL */ `
+  subscription OnDeleteDoctorSsSecond {
+    onDeleteDoctorSSSecond {
+      id
+      doctor {
+        id
+        name
+        username
+        email
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
+        }
+        sex
+        consultingroom {
+          id
+          secretary
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+        image
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      subspecialitysec {
+        id
+        name
+        code
+        doctors {
+          nextToken
+        }
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+    }
+  }
+`;
+export const onCreateSubSpecialitySecond = /* GraphQL */ `
+  subscription OnCreateSubSpecialitySecond($owner: String) {
+    onCreateSubSpecialitySecond(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onUpdateSubSpecialitySecond = /* GraphQL */ `
+  subscription OnUpdateSubSpecialitySecond($owner: String) {
+    onUpdateSubSpecialitySecond(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const onDeleteSubSpecialitySecond = /* GraphQL */ `
+  subscription OnDeleteSubSpecialitySecond($owner: String) {
+    onDeleteSubSpecialitySecond(owner: $owner) {
+      id
+      name
+      code
+      doctors {
+        items {
+          id
+        }
+        nextToken
+      }
       deleted
       deletedAt
       createdAt
@@ -751,14 +1471,14 @@ export const onCreateMedicalConsultation = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -903,14 +1623,14 @@ export const onUpdateMedicalConsultation = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -1052,14 +1772,14 @@ export const onDeleteMedicalConsultation = /* GraphQL */ `
         name
         username
         email
-        speciality {
-          id
-          name
-          code
-          deleted
-          deletedAt
-          createdAt
-          owner
+        specialities {
+          nextToken
+        }
+        subspecialities {
+          nextToken
+        }
+        subspecialitiessec {
+          nextToken
         }
         sex
         consultingroom {
@@ -1731,45 +2451,6 @@ export const onDeleteReligion = /* GraphQL */ `
     onDeleteReligion(owner: $owner) {
       id
       name
-      deleted
-      deletedAt
-      createdAt
-      owner
-    }
-  }
-`;
-export const onCreateSpecialty = /* GraphQL */ `
-  subscription OnCreateSpecialty($owner: String) {
-    onCreateSpecialty(owner: $owner) {
-      id
-      name
-      code
-      deleted
-      deletedAt
-      createdAt
-      owner
-    }
-  }
-`;
-export const onUpdateSpecialty = /* GraphQL */ `
-  subscription OnUpdateSpecialty($owner: String) {
-    onUpdateSpecialty(owner: $owner) {
-      id
-      name
-      code
-      deleted
-      deletedAt
-      createdAt
-      owner
-    }
-  }
-`;
-export const onDeleteSpecialty = /* GraphQL */ `
-  subscription OnDeleteSpecialty($owner: String) {
-    onDeleteSpecialty(owner: $owner) {
-      id
-      name
-      code
       deleted
       deletedAt
       createdAt

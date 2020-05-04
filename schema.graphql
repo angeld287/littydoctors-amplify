@@ -13,6 +13,9 @@ type ConsultingRoom
     doctor: Doctor @connection
     secretary: String!
     location: Location @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type Location 
@@ -26,6 +29,9 @@ type Location
     ]){
     id: ID!
     name: String!
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type Doctor 
@@ -44,10 +50,98 @@ type Doctor
     name: String!
     username: String!
     email: String!
-    speciality: String!
-    sex: String!
+    specialities: [DoctorSpecialities!] @connection(name: "ds")
+    subspecialities: [DoctorSubSpecialities] @connection(name: "dss")
+    subspecialitiessec: [DoctorSSSecond] @connection(name: "dsss")
+    sex: Sex!
     consultingroom: ConsultingRoom @connection
-    image: String!
+    image: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type DoctorSpecialities @model(queries: null) {
+  id: ID!
+  doctor: Doctor @connection(name: "ds")
+  speciality: Speciality @connection(name: "sd")
+}
+
+type Speciality
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    doctors: [DoctorSpecialities] @connection(name: "sd")
+    subSpeciality: [SubSpeciality] @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type DoctorSubSpecialities @model(queries: null) {
+  id: ID!
+  doctor: Doctor @connection(name: "dss")
+  subspeciality: SubSpeciality @connection(name: "ssd")
+}
+
+type SubSpeciality
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    doctors: [DoctorSubSpecialities] @connection(name: "ssd")
+    subSpeciality: [SubSpecialitySecond] @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type DoctorSSSecond @model(queries: null) {
+  id: ID!
+  doctor: Doctor @connection(name: "dsss")
+  subspecialitysec: SubSpecialitySecond @connection(name: "ssds")
+}
+
+type SubSpecialitySecond
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    doctors: [DoctorSSSecond] @connection(name: "ssds")
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type Rejection 
@@ -163,6 +257,8 @@ type Subscription {
 }
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
+enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
+enum Sex { MALE FEMALE }
 
 #Medical Consultation Process BackEnd definition
 
@@ -184,9 +280,12 @@ type MedicalConsultation
     patient: Patient @connection
     postConsultationsActivity: PostConsultationsActivity @connection
     medicalHistory: MedicalHistory @connection
+    state: State
     doctorname: String
     secretary: String
     patientname: String
+    finalizedAt: String
+    startedAt: String
     createdAt: String
 }
 
@@ -207,9 +306,11 @@ type MedicalHistory
     reason: String
     patient: Patient @connection
     physicalExploration: PhysicalExploration @connection
+    diagnosis: Diagnosis @connection
     doctor: String
     secretary: String
     patientname: String
+    createdAt: String
 }
 
 type Patient 
@@ -223,6 +324,7 @@ type Patient
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: owner, ownerField: "username", operations: [update, read] }
     ]) {
     id: ID!
     name: String!
@@ -234,12 +336,23 @@ type Patient
     height: String
     size: String
     age: String
+    sex: Sex
+    image: String
+    id_card: String
+    religion: Religion @connection
+    address: String
+    code: String
+    temporary_password: String
+    marital_status: MaritalStatus
     birthdate: String
-    patientHistory: PatientHistory @connection
+    approved_terms_conditions: String
+    patientHistory: [PatientHistory] @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
-#Antecedentes del paciente
-type PatientHistory
+type Religion
     @model 
     @auth(rules: [
         # Defaults to use the "owner" field.
@@ -250,12 +363,31 @@ type PatientHistory
 
         { allow: groups, groups: ["doctor"], operations: [update, read] }
         { allow: groups, groups: ["secretary"], operations: [read] }
+        { allow: groups, groups: ["client"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+#Antecedentes del paciente
+type PatientHistory
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
     ]) {
     id: ID!
     nonPathologicalHistory: [NonPathologicalHistory] @connection
     pathologicalHistory: PathologicalHistory @connection
     familyHistory: [FamilyHistory] @connection
     gynecoObstetricHistory: GynecoObstetricHistory @connection
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String
 }
 
 type NonPathologicalHistory 
@@ -275,6 +407,11 @@ type NonPathologicalHistory
     active: Boolean
     frequency: String
     comment: String
+    risk_factor: String
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String
 }
 
 type PathologicalHistory
@@ -293,6 +430,10 @@ type PathologicalHistory
     surgicalInterventions: [PathologicalHistorySurgicalInt] @connection(name: "phsi")
     patientMedications: [PatientMedications] @connection(name: "pm")
     patientAllergies: [PatientAllergies] @connection(name: "pa")
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String
 }
 
 type FamilyHistory
@@ -312,12 +453,17 @@ type FamilyHistory
     alive: Boolean
     diseases: [FamilyDetailsDiseases] @connection(name: "fdd")
     comment: String
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String
 }
 
 type FamilyDetailsDiseases @model(queries: null) {
   id: ID!
   family: FamilyHistory @connection(name: "fdd")
   diseases: Disease @connection(name: "dfd")
+  createdAt: String
 }
 
 type Disease
@@ -336,6 +482,9 @@ type Disease
     name: String
     description: String
     familyDetails: [FamilyDetailsDiseases] @connection(name: "dfd")
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type GynecoObstetricHistory
@@ -359,6 +508,10 @@ type GynecoObstetricHistory
     abortions: String
     caesarean_sections: String
     contraceptive_method: String
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String
 }
 
 type Allergy
@@ -377,18 +530,24 @@ type Allergy
     name: String
     description: String
     patients: [PatientAllergies] @connection(name: "ap")
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type PatientAllergies @model(queries: null) {
   id: ID!
   pathologicalHistory: PathologicalHistory @connection(name: "pa")
   allergies: Allergy @connection(name: "ap")
+  createdAt: String
 }
 
 type PatientMedications @model(queries: null) {
   id: ID!
   pathologicalHistory: PathologicalHistory @connection(name: "pm")
   medications: Medicine @connection(name: "mp")
+  drug_concentration: String
+  createdAt: String
 }
 
 type Medicine
@@ -410,6 +569,7 @@ type Medicine
     drug_concentration: String #500mg, 200mg, 50mg 
     chemical_composition: String
     #mp: [MedicalPrescriptionsMedications] @connection(name: "mmp")
+    createdAt: String
 }
 
 type PostConsultationsActivity
@@ -432,6 +592,7 @@ type PostConsultationsActivity
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 type MedicalPrescription
@@ -456,6 +617,7 @@ type MedicalPrescription
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 """ type MedicalPrescriptionsMedications @model(queries: null) {
@@ -468,8 +630,43 @@ type PostConsultActMedAnalysis @model(queries: null) {
   id: ID!
   state: State # se colocara un estado que espesificara si el analisis se realizo o no
   date: String
+  results: [OthersFields] @connection
+  file: String
   pcActivities: PostConsultationsActivity @connection(name: "pcama")
   medicalAnalysis: MedicalAnalysis @connection(name: "mapca")
+  createdAt: String
+}
+
+type OthersFields
+    @model 
+    @auth(rules: [
+        { allow: owner },
+    ]) {
+    id: ID!
+    field: Field @connection
+    value: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type Field
+    @model 
+    @auth(rules: [
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    modules: [String]
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type MedicalAnalysis
@@ -488,6 +685,9 @@ type MedicalAnalysis
     name: String
     code: String
     medicalAnalysis: [PostConsultActMedAnalysis] @connection(name: "mapca")
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type PostConsultActSurgicalInt @model(queries: null) {
@@ -496,6 +696,7 @@ type PostConsultActSurgicalInt @model(queries: null) {
   date: String
   pcActivities: PostConsultationsActivity @connection(name: "pcasi")
   surgicalIntervention: SurgicalIntervention @connection(name: "sipca")
+  createdAt: String
 }
 
 type PathologicalHistorySurgicalInt @model(queries: null) {
@@ -503,6 +704,7 @@ type PathologicalHistorySurgicalInt @model(queries: null) {
   date: String
   pathologicalHistory: PathologicalHistory @connection(name: "phsi")
   surgicalIntervention: SurgicalIntervention @connection(name: "siph")
+  createdAt: String
 }
 
 type SurgicalIntervention
@@ -522,6 +724,9 @@ type SurgicalIntervention
     description: String
     surgicalIntervention: [PostConsultActSurgicalInt] @connection(name: "sipca")
     pathologicalHistory: [PathologicalHistorySurgicalInt] @connection(name: "siph")
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
 }
 
 type PhysicalExploration
@@ -544,6 +749,7 @@ type PhysicalExploration
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 type VitalSign
@@ -567,6 +773,7 @@ type VitalSign
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
 type RegionalExploration
@@ -589,13 +796,14 @@ type RegionalExploration
     abdomen: String
     members: String
     genitals: String
-    others: String
+    others: [OthersFields] @connection
     doctor: String
     secretary: String
     patient: String
+    createdAt: String
 }
 
-type Category
+type Category 
     @model 
     @auth(rules: [
         # Defaults to use the "owner" field.
@@ -608,4 +816,27 @@ type Category
     name: String
     description: String
     module: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type Diagnosis
+    @model
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+        { allow: groups, groups: ["admin"] }
+        { allow: groups, groups: ["doctor"], operations: [read] },
+        { allow: groups, groups: ["secretary"], operations: [read] },
+    ]) {
+    id: ID!
+    type: Category @connection
+    evolution: Category @connection
+    diagnosis: Disease @connection
+    commentary: String
+    doctor: String
+    secretary: String
+    patient: String
+    createdAt: String
 }

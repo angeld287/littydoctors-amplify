@@ -52,8 +52,7 @@ export default class App extends Component {
                 doctorid: result.data.listConsultingRooms.items[0].doctor.id,
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
-                speciality: result.data.listConsultingRooms.items[0].doctor.speciality.name,
-                specialityid: result.data.listConsultingRooms.items[0].doctor.speciality.id,
+                speciality: result.data.listConsultingRooms.items[0].doctor.specialities,
                 image: result.data.listConsultingRooms.items[0].doctor.image,
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
@@ -73,14 +72,12 @@ export default class App extends Component {
             })
           }
           
-           
         }).catch( err => {
           this.setState({
               error: true,
               loading: false,
           });
-          console.log('There was an error: ', err);
-
+          console.log(err);
         });
 
       }else if(roll === 'secretary'){
@@ -129,6 +126,11 @@ export default class App extends Component {
               loading: false,
           });
           console.log('There was an error: ' + err);
+        });
+      }
+      else if(roll === 'admin'){
+        this.setState({
+            loading: false,
         });
       }
     }).catch(err => {

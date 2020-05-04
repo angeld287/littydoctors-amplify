@@ -50,10 +50,95 @@ type Doctor
     name: String!
     username: String!
     email: String!
-    speciality: Specialty @connection
-    sex: String!
+    specialities: [DoctorSpecialities!] @connection(name: "ds")
+    subspecialities: [DoctorSubSpecialities] @connection(name: "dss")
+    subspecialitiessec: [DoctorSSSecond] @connection(name: "dsss")
+    sex: Sex!
     consultingroom: ConsultingRoom @connection
-    image: String!
+    image: String
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type DoctorSpecialities @model(queries: null) {
+  id: ID!
+  doctor: Doctor @connection(name: "ds")
+  speciality: Speciality @connection(name: "sd")
+}
+
+type Speciality
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    doctors: [DoctorSpecialities] @connection(name: "sd")
+    subSpeciality: [SubSpeciality] @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type DoctorSubSpecialities @model(queries: null) {
+  id: ID!
+  doctor: Doctor @connection(name: "dss")
+  subspeciality: SubSpeciality @connection(name: "ssd")
+}
+
+type SubSpeciality
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    doctors: [DoctorSubSpecialities] @connection(name: "ssd")
+    subSpeciality: [SubSpecialitySecond] @connection
+    deleted: Boolean
+    deletedAt: String
+    createdAt: String
+}
+
+type DoctorSSSecond @model(queries: null) {
+  id: ID!
+  doctor: Doctor @connection(name: "dsss")
+  subspecialitysec: SubSpecialitySecond @connection(name: "ssds")
+}
+
+type SubSpecialitySecond
+    @model 
+    @auth(rules: [
+        # Defaults to use the "owner" field.
+        { allow: owner },
+
+        # Admin users can access any operation.
+        { allow: groups, groups: ["admin"] },
+
+        { allow: groups, groups: ["doctor"], operations: [read] }
+        { allow: groups, groups: ["secretary"], operations: [read] }
+    ]) {
+    id: ID!
+    name: String
+    code: String
+    doctors: [DoctorSSSecond] @connection(name: "ssds")
     deleted: Boolean
     deletedAt: String
     createdAt: String
@@ -173,7 +258,7 @@ type Subscription {
 
 enum State { INSERTED APPROVED CONFIRMED PRESENT IN_PROCESS FINISHED REJECTED CANCELED DONE NOT_DONE }
 enum MaritalStatus { MARRIED SINGLE DIVORCED WIDOWED }
-enum Sex { MAN WOMAN MALE FEMALE }
+enum Sex { MALE FEMALE }
 
 #Medical Consultation Process BackEnd definition
 
@@ -286,27 +371,6 @@ type Religion
     deletedAt: String
     createdAt: String
 }
-
-type Specialty
-    @model 
-    @auth(rules: [
-        # Defaults to use the "owner" field.
-        { allow: owner },
-
-        # Admin users can access any operation.
-        { allow: groups, groups: ["admin"] },
-
-        { allow: groups, groups: ["doctor"], operations: [update, read] }
-        { allow: groups, groups: ["secretary"], operations: [read] }
-    ]) {
-    id: ID!
-    name: String
-    code: String
-    deleted: Boolean
-    deletedAt: String
-    createdAt: String
-}
-
 
 #Antecedentes del paciente
 type PatientHistory
