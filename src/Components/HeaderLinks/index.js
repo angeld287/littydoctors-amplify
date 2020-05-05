@@ -29,8 +29,8 @@ const HeaderLinks = ({childProps: childProps}) => {
                 </MDBNavItem>
                 {(childProps.state.user_roll === 'doctor' && childProps.state.speciality !== undefined) && <MDBNavItem><MDBNavLink to="/consultations">Consultas Medicas</MDBNavLink></MDBNavItem>}
                 {/* {(this.props.childProps.state.user_roll === 'secretary' || this.props.childProps.state.user_roll === 'doctor') && <MDBNavItem ><MDBNavLink to="/medicalappointmentsmanagement">Citas</MDBNavLink></MDBNavItem>} */}
-                <MDBNavItem ><MDBNavLink to="/patients">Pacientes</MDBNavLink></MDBNavItem>
-                <MDBNavItem ><MDBNavLink to="/reports">Reportes</MDBNavLink></MDBNavItem>
+                {(childProps.state.user_roll === 'doctor' || childProps.state.user_roll === 'secretary') && <MDBNavItem ><MDBNavLink to="/patients">Pacientes</MDBNavLink></MDBNavItem>}
+                {(childProps.state.user_roll === 'doctor') && <MDBNavItem ><MDBNavLink to="/reports">Reportes</MDBNavLink></MDBNavItem>}
               </MDBNavbarNav>
               {!childProps.isLoggedIn &&<MDBNavbarNav right><MDBNavItem><MDBNavLink to="/profile">LogIn</MDBNavLink></MDBNavItem></MDBNavbarNav>}
               {childProps.isLoggedIn &&
