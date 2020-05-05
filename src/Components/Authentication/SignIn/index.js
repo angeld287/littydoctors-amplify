@@ -118,6 +118,7 @@ class CustomSignIn extends Component {
   };
 
   onSubmit = event => {
+    event.preventDefault();
     const { email, password } = this.state;
     this.setState({ loading: true });
     Auth.signIn(email, password)
@@ -146,8 +147,6 @@ class CustomSignIn extends Component {
         }
         this.setState(updateByPropertyName("error", err));
       });
-
-    event.preventDefault();
   };
 
   render() {
@@ -172,7 +171,7 @@ class CustomSignIn extends Component {
                         <MDBInput label="Your username" value={email} onChange={event => this.setState(updateByPropertyName("email", event.target.value)) } group type="text" validate error="wrong" success="right"/>
                         <MDBInput label="Your password" value={password} onChange={event => this.setState(updateByPropertyName("password", event.target.value))} group type="password" validate containerClass="mb-0"/>
                         <div className="text-center pt-3 mb-3">
-                          {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} onClick={this.onSubmit()}>Sign in</MDBBtn>}
+                          {!loading && <MDBBtn gradient="blue" rounded className="btn-block z-depth-1a" disabled={isInvalid} onClick={this.onSubmit}>Sign in</MDBBtn>}
                           {loading && <MDBSpinner />}
                           {error !== null &&
                           <MDBAlert color="danger">{error && <p>{error.message}</p>}</MDBAlert>}

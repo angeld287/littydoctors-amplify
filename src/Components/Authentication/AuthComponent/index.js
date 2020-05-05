@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 
 
-import { ConfirmSignUp, Authenticator, SignIn, SignUp } from 'aws-amplify-react';
-import aws_exports from '../../../aws-exports.js'; 
+import { Authenticator, SignIn, SignUp } from 'aws-amplify-react';
 import CustomSignIn from '../SignIn';
 import CustomSignUp from '../SignUp';
-import CustomConfirmSignUp from '../CustomConfirmSignUp';
 
 import queryString from 'query-string';
 

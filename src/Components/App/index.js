@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 
-import { MDBBox, MDBSpinner, MDBContainer } from "mdbreact";
-
-import {
-  BrowserRouter as Router,
-  Route
-} from 'react-router-dom';
+import { MDBBox, MDBSpinner } from "mdbreact";
 
 import HeaderLinks from '../HeaderLinks';
 
-import {Routes, ProppedRoute, ProtectedRoute, ProtectedRouteCompany} from '../Routes';
+import {Routes} from '../Routes';
 
 import { listConsultingRoomsSecretary, listConsultingRooms, listPatientsForAppjs } from '../../graphql/custom-queries';
 
@@ -131,6 +126,7 @@ export default class App extends Component {
       else if(roll === 'admin'){
         this.setState({
             loading: false,
+            error: false,
         });
       }
     }).catch(err => {
