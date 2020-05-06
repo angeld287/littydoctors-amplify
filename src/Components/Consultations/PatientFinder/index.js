@@ -13,8 +13,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
 const PatientFinder = ({childProps: childProps}) => { 
-    const { createConsultation, loading, error, patients, setPatient, patient,
-    loadingButton, newPatientName,  setNewPatientName, setReason, reason} = useConsultations();
+    const { createConsultation, loading, error, patients, setPatient, patient, loadingSearch,
+    loadingButton, newPatientName,  setNewPatientName, setReason, reason, name, setName, findPatientByName, noOptionsActions} = useConsultations();
     const classes = useStyles();
 
     const setReasonAll = (r) => {
@@ -49,13 +49,16 @@ const PatientFinder = ({childProps: childProps}) => {
             <br/>
               <Select 
                 options={patients}
-                onChange={(newValue) => {setPatient(newValue);}}
+                onChange={(newValue) => setPatient(newValue)}
                 onInputChange={v => setNewPatientName(v)}
+                isLoading={loadingSearch}
                 noOptionsMessage={() => {
-                  return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+                  return noOptionsActions()
                 }}
               />
             <br/>
+            <input type="text" value={name} onChange={e => {e.preventDefault(); setName(e.target.value)}}></input>
+            <button onClick={findPatientByName}>find</button>
             <br/>
           </MDBCol>
         </MDBRow>

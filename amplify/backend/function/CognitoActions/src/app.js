@@ -23,7 +23,7 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 // Enable CORS for all methods
 app.use(function(req, res, next) {
   var origin = req.get('origin');
-  const origins = origin === origins_dev ? origins_dev : origins_prod;
+  const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
 
   res.header("Access-Control-Allow-Origin", origins)
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -63,7 +63,7 @@ app.post('/addUserToGroup', async function(req, res) {
 
     _response = await cognitoidentityserviceprovider.adminAddUserToGroup(params).promise();
 
-    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": (origin === origins_dev ? origins_dev : origins_prod) }, body: _response })
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": "*" }, body: _response })
 
   } catch (error) {
 
@@ -76,7 +76,7 @@ app.post('/verifyIfUserExist', async function(req, res) {
 
   try {
     var origin = req.get('origin');
-    const origins = origin === origins_dev ? origins_dev : origins_prod;
+    const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
     
     AWS.config.update({region: 'us-east-1'});
 
@@ -103,10 +103,49 @@ app.post('/verifyIfUserExist', async function(req, res) {
 
 });
 
+app.post('/findUser', async function(req, res) {
+
+  try {
+    var origin = req.get('origin');
+    const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
+    
+    AWS.config.update({region: 'us-east-1'});
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+    //COGNITO
+    var params = {
+      UserPoolId: req.body.UserPoolId,
+      AttributesToGet: [
+        'email',
+        'phone_number',
+        'name',
+        'gender',
+        'custom:approvedtc',
+        'custom:_birthdate',
+        'custom:code',
+      ]
+    };
+
+    if (req.body.filterBy === 'email') { params.Filter = 'email^=\"'+req.body.value+'\"';}
+    if (req.body.filterBy === 'name') { params.Filter = 'name^=\"'+req.body.value+'\"';}
+    if (req.body.filterBy === 'phone_number') { params.Filter = 'phone_number^=\"'+req.body.value+'\"';}
+    if (req.body.filterBy === 'code') { params.Filter = 'custom:code^=\"'+req.body.value+'\"';}
+
+    const result = await cognitoidentityserviceprovider.listUsers(params).promise();
+
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": "*" }, body: result })
+
+  } catch (error) {
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": origins }, body: error })
+  }
+
+});
+
 app.post('/createUser', async function(req, res) {
   try {
     var origin = req.get('origin');
-    const origins = origin === origins_dev ? origins_dev : origins_prod;
+    const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
 
     AWS.config.update({region: 'us-east-1'});
 
@@ -136,6 +175,22 @@ app.post('/createUser', async function(req, res) {
             {
                 Name: 'phone_number', /* required */
                 Value: req.body.phone_number
+            },
+            {
+                Name: 'gender', /* required */
+                Value: req.body.gender
+            },
+            {
+                Name: 'custom:approvedtc', /* required */
+                Value: req.body.approvedtc
+            },
+            {
+                Name: 'custom:_birthdate', /* required */
+                Value: req.body.birthdate
+            },
+            {
+                Name: 'custom:code', /* required */
+                Value: req.body.code
             }
             /* more items */
         ]

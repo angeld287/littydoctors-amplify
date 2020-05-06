@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {listPatients} from './../../graphql/queries';
 import { createMedicalConsultation, createMedicalHistory } from '../../graphql/mutations';
 import { API, graphqlOperation } from 'aws-amplify';
 import { filterByValue } from '../../Functions/filterArray';
 import moment from 'moment';
+import Link from '@material-ui/core/Link';
+
+import awsmobile from '../../aws-exports'
 
 
 const useConsultations = () => {
     const [ loading, setLoading ] = useState(true);
+    const [ loadingSearch, setLoadingSearch ] = useState(false);
     const [ loadingButton, setLoadingButton ] = useState(false);
     const [ error, setError ] = useState(false);
     const [ patients, setPatients ] = useState([]);
@@ -16,6 +20,12 @@ const useConsultations = () => {
     const [ newPatient, setNewPatient ] = useState(false);
     const [ newPatientName, setNewPatientName ] = useState("");
     const [ reason, setReason ] = useState("");
+    const [ name, setName ] = useState("");
+
+    const apiOptions = {
+        headers: {'Content-Type': 'application/json' },
+        body: { UserPoolId: awsmobile.aws_user_pools_id }
+    };
 
 
     useEffect(() => {
@@ -122,7 +132,40 @@ const useConsultations = () => {
         });
     }
 
-    return { createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName, setReason, reason};
+    const findPatientByName = async () => {
+        apiOptions.body.filterBy = 'name';
+        apiOptions.body.value = name;
+        
+        const resultP = await API.post('ApiForLambda', '/findUser', apiOptions); 
+        console.log(resultP);
+        
+        return resultP;
+    }
+
+    const noOptionsActions = () => {
+        setLoadingSearch(true);
+        
+        apiOptions.body.filterBy = 'name';
+        apiOptions.body.value = newPatientName;
+
+        API.post('ApiForLambda', '/findUser', apiOptions).then( r => {
+            console.log(r);
+            
+            setLoadingSearch(false);
+            if (r.body.Users.length > 0) {
+                console.log(r);
+            }else{
+                return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+            }
+        }).catch( e => {
+            console.log(e);
+            setLoadingSearch(false);
+        });
+        //setLoadingSearch(false);
+        return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+    }
+
+    return { loadingSearch, noOptionsActions, findPatientByName, name, setName, createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName, setReason, reason};
 };
 
 export default useConsultations;
