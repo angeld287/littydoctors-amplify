@@ -23,7 +23,7 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 // Enable CORS for all methods
 app.use(function(req, res, next) {
   var origin = req.get('origin');
-  const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
+  const origins = origin === origins_dev ? origins_dev : origins_prod;
 
   res.header("Access-Control-Allow-Origin", origins)
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -63,7 +63,7 @@ app.post('/addUserToGroup', async function(req, res) {
 
     _response = await cognitoidentityserviceprovider.adminAddUserToGroup(params).promise();
 
-    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": "*" }, body: _response })
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": (origin === origins_dev ? origins_dev : origins_prod) }, body: _response })
 
   } catch (error) {
 
@@ -76,7 +76,7 @@ app.post('/verifyIfUserExist', async function(req, res) {
 
   try {
     var origin = req.get('origin');
-    const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
+    const origins = origin === origins_dev ? origins_dev : origins_prod;
     
     AWS.config.update({region: 'us-east-1'});
 
@@ -107,7 +107,7 @@ app.post('/findUser', async function(req, res) {
 
   try {
     var origin = req.get('origin');
-    const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
+    const origins = origin === origins_dev ? origins_dev : origins_prod;
     
     AWS.config.update({region: 'us-east-1'});
 
@@ -135,7 +135,7 @@ app.post('/findUser', async function(req, res) {
 
     const result = await cognitoidentityserviceprovider.listUsers(params).promise();
 
-    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": "*" }, body: result })
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": origins }, body: result })
 
   } catch (error) {
     res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": origins }, body: error })
@@ -146,7 +146,7 @@ app.post('/findUser', async function(req, res) {
 app.post('/createUser', async function(req, res) {
   try {
     var origin = req.get('origin');
-    const origins = "*";//origin === origins_dev ? origins_dev : origins_prod;
+    const origins = origin === origins_dev ? origins_dev : origins_prod;
 
     AWS.config.update({region: 'us-east-1'});
 
@@ -240,7 +240,7 @@ app.post('/updateUserAttribute', async function(req, res) {
 
     _response = await cognitoidentityserviceprovider.adminUpdateUserAttributes(params).promise();
 
-    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": "*" }, body: _response })
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": (origin === origins_dev ? origins_dev : origins_prod) }, body: _response })
 
   } catch (error) {
 
