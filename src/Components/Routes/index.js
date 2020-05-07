@@ -117,25 +117,6 @@ export const Admin = ({ render: C, props: childProps, ...rest }) => (
   />
 );
 
-export const Cardiology = ({ render: C, props: childProps, ...rest }) => (
-  <Route
-    {...rest}
-    render={rProps =>
-      (childProps.isLoggedIn) ? (
-          (childProps.state.user_roll === "doctor" || childProps.state.user_roll === "admin") ? (
-            (childProps.state.speciality === "cardiology" || childProps.state.user_roll === "admin") ? ( <C {...rProps} {...childProps} />) : (<Redirect to="/profile"/>)
-          ) : (<Redirect to="/profile"/>)
-      ) : (
-        <Redirect
-          to={`/signin?redirect=${rProps.location.pathname}${
-            rProps.location.search
-          }`}
-        />
-      )
-    }
-  />
-);
-
 export const ProtectedRoute = ({ render: C, props: childProps, ...rest }) => (
   <Route
     {...rest}

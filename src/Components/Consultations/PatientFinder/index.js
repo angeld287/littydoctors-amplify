@@ -40,7 +40,6 @@ const PatientFinder = ({childProps: childProps}) => {
                       </MDBPopover>);
 
     const btn = !isActionValid ? Validbtn : Poperbtn;
-//"/consultations/"+ childProps.state.speciality +"/null/"+newPatientName
     return (
       <MDBContainer>
         <MDBRow>

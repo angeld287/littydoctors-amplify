@@ -200,6 +200,7 @@ const useConsultations = () => {
                                     input.sex = inputFromCognito.gender;
                                     input.approved_terms_conditions = false;
                                     input.code = inputFromCognito['custom:code'];
+                                    input.approved_terms_conditions = true;
                                     const pdata = {value: 'to_create', label: input.name, id: 'to_create', name: input.name, age: null, email: input.email, phone: input.phone, username: u.Username, image: "https://asociaciondenutriologia.org/img/default_user.png"};
                                     setCognitoPatient(input);
                                     _patients_.push(pdata);

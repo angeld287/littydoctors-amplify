@@ -16,6 +16,7 @@ const INITIAL_STATE = {
   email: "",
   password: "",
   error: null,
+  errorC: null,
   loading: false,
   modal: false,
   code: "",
@@ -58,25 +59,29 @@ class CustomSignIn extends Component {
           birthdate: user.attributes['custom:_birthdate'],
           code: user.attributes['custom:code'],
         };
-      
-        API.graphql(graphqlOperation(createPatient, { input: input }))
-        .then((r) => {  
-          Auth.updateUserAttributes(user, {'custom:isondb': 'true'}).then( u => {
-              window.location.reload()
-          }).catch( e => {
-            this.setState({
-              loadingConfirmation: false,
-              error: e
+        
+        if (user.attributes['custom:isondb'] !== true) {
+          API.graphql(graphqlOperation(createPatient, { input: input }))
+          .then((r) => {  
+            Auth.updateUserAttributes(user, {'custom:isondb': 'true'}).then( u => {
+                window.location.reload()
+            }).catch( e => {
+              this.setState({
+                loadingConfirmation: false,
+                errorC: e
+              });
+              console.log(e);
             });
-            console.log(e);
-          });
-        }).catch((err) => { 
-            this.setState({
-              loadingConfirmation: false,
-              error: err
-            });
-            console.log(err);
-        })
+          }).catch((err) => { 
+              this.setState({
+                loadingConfirmation: false,
+                errorC: err
+              });
+              console.log(err);
+          })
+        }else{
+          window.location.reload()
+        }
     });
   }
 
@@ -116,12 +121,12 @@ class CustomSignIn extends Component {
       .then( r => {
           this.insertPatientInfo();
       }).catch((err) => { // Error response
-          this.setState({ error: err, loadingConfirmation:false });
+          this.setState({ errorC: err, loadingConfirmation:false });
           console.log(err);
       });      
     })
     .catch(err => {
-      this.setState({ error: err, loadingConfirmation: false });
+      this.setState({ errorC: err, loadingConfirmation: false });
     });
   };
 
@@ -158,7 +163,7 @@ class CustomSignIn extends Component {
   };
 
   render() {
-    const { email, password, error, loading, code, successm, loadingConfirmation, loadingResendCode } = this.state;
+    const { email, password, error, errorC, loading, code, successm, loadingConfirmation, loadingResendCode } = this.state;
 
     const isInvalid = password === "" || email === "";
     const smallStyle = { fontSize: '0.8rem'}
@@ -208,8 +213,8 @@ class CustomSignIn extends Component {
                 {(loadingResendCode || loadingConfirmation )&& <MDBSpinner small />}
                 {(!loadingResendCode && !loadingConfirmation )&& <div><MDBBtn color="secondary" onClick={this.handleResendCode}>Reenviar Codigo</MDBBtn> <MDBBtn color="primary" onClick={this.handleConfirmCode}>Confirmar</MDBBtn></div>}
               </MDBModalFooter>
-              {(!(error === null) || (error === '')) &&
-              <MDBAlert color="danger">{error && <p>{error.message}</p>}</MDBAlert>}
+              {(!(errorC === null) || (errorC === '')) &&
+              <MDBAlert color="danger">{errorC && <p>{errorC.message}</p>}</MDBAlert>}
               {(!(successm === null) || (successm === '')) &&
               <MDBAlert color="success"><p>{successm}</p></MDBAlert>}
             </MDBModal>

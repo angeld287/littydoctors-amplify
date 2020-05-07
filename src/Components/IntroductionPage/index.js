@@ -90,9 +90,9 @@ class IntroductionPage extends Component {
                   <h6 className="mb-4">
                     Aplicación Web para manejar el Registro Electrónico de Salud (EHR) de los paciente y el proceso de consultas médicas. Este es un software portable, esto quiere decir que se puede acceder desde laptops, desktops, tablets o mobiles. Es un sistema que genera datos estadísticos de todas las formas gráficas posibles (gráficos de línea, pastel, radar, barras, etc..)
                   </h6>
-                  <MDBBtn color="white" onClick={ e => {e.preventDefault(); this.redirectTo("/patients")}} >
-                    <a /* href="https://play.google.com/store/apps/details?id=com.aangelesmdconsultations" */>Ver Mas</a>
-                  </MDBBtn>
+                  {/* <MDBBtn color="white" onClick={ e => {e.preventDefault(); this.redirectTo("/patients")}} >
+                    <a href="https://play.google.com/store/apps/details?id=com.aangelesmdconsultations">Ver Mas</a>
+                  </MDBBtn> */}
                   <MDBBtn color="white" onClick={ e => {e.preventDefault(); this.redirectTo("/signin")}}>
                     <a>Iniciar Sesion</a>
                   </MDBBtn>

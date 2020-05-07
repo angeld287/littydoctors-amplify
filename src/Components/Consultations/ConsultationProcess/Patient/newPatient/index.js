@@ -49,7 +49,7 @@ const NewPatient = (
   const adult = (age > 17);
 
   const onSubmit = async (input) => {
-        //_setLoading(true);
+        _setLoading(true);
         var date = moment(new Date()).format('YYYY-MM-DD');
         var bdate = moment(birthdate).format('YYYY-MM-DD');
         

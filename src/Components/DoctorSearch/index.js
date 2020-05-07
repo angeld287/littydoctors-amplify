@@ -95,7 +95,6 @@ class DoctorSearch extends Component {
               <MDBCardBody>
                 <MDBCardTitle>{doctorDetails.name}</MDBCardTitle>
                 <MDBCardText>
-                  {doctorDetails.speciality}
                 </MDBCardText>
                 <MDBBtn disabled={noDoctorSelected}><Link to={"/consultingroom/"+doctorDetails.consultingroom.id}>Go to Doctor's Consulting Room</Link></MDBBtn>
                 {/* <MDBNavLink to="/profile">{this.props.childProps.state.username}</MDBNavLink> */}
