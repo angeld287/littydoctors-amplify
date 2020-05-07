@@ -54,40 +54,52 @@ const useNewPatient = () => {
       };
 
       const Exist = async (username, email) => {
-
-        const apiOptions = {};
-        apiOptions['headers'] = {
-            'Content-Type': 'application/json'
-        };
-        apiOptions['body'] = {
-          UserPoolId: awsmobile.aws_user_pools_id,
-          email: email,
-          Username: username
-        };
-    
-        const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
-    
-        return (resultP);
+        try {
+            const apiOptions = {};
+            apiOptions['headers'] = {
+                'Content-Type': 'application/json'
+            };
+            apiOptions['body'] = {
+                UserPoolId: awsmobile.aws_user_pools_id,
+                email: email,
+                Username: username
+            };
+        
+            const resultP = await API.post('ApiForLambda', '/verifyIfUserExist', apiOptions);
+        
+            return (resultP);
+        } catch (error) {
+            return error;
+        }        
       }
 
       const CognitoCreateUser = async (data) => {
+        try {
+            const apiOptions = {};
+            apiOptions['headers'] = {
+                'Content-Type': 'application/json'
+            };
+            apiOptions['body'] = {
+              UserPoolId: awsmobile.aws_user_pools_id,
+              email: data.email,
+              Username: data.username,
+              name: data.name,
+              phone_number: data.phone,
+              Password: data.temporary_password,
+              gender: data.sex,
+              approvedtc: 'false',
+              birthdate: data.birthdate,
+              code: data.code,
+              isondb: 'true'
+            };
+        
+            const resultP = await API.post('ApiForLambda', '/createUser', apiOptions); 
+            
+            return resultP;
 
-        const apiOptions = {};
-        apiOptions['headers'] = {
-            'Content-Type': 'application/json'
-        };
-        apiOptions['body'] = {
-          UserPoolId: awsmobile.aws_user_pools_id,
-          email: data.email,
-          Username: data.username,
-          name: data.name,
-          phone_number: data.phone,
-          Password: data.temporary_password,
-        };
-    
-        const resultP = await API.post('ApiForLambda', '/createUser', apiOptions); 
-    
-        return resultP;
+        } catch (error) {
+            return error;
+        }
       }
 
       const handleSelect = location => {

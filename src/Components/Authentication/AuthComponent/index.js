@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
 
-import { /* withAuthenticator , */Authenticator, SignIn, SignUp/* , RequireNewPassword */ } from 'aws-amplify-react';
-import aws_exports from '../../../aws-exports.js'; 
+import { Authenticator, SignIn, SignUp } from 'aws-amplify-react';
 import CustomSignIn from '../SignIn';
 import CustomSignUp from '../SignUp';
 
@@ -27,6 +26,8 @@ export default class AuthComponent extends Component {
       }
     }else if (state === 'signIn') {
       this.props.onUserLogOut();
+    }else if (state === 'confirmSignUp') {
+      console.log("confirmSignUp");
     }
   };
 

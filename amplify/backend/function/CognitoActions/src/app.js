@@ -103,6 +103,46 @@ app.post('/verifyIfUserExist', async function(req, res) {
 
 });
 
+app.post('/findUser', async function(req, res) {
+
+  try {
+    var origin = req.get('origin');
+    const origins = origin === origins_dev ? origins_dev : origins_prod;
+    
+    AWS.config.update({region: 'us-east-1'});
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+    //COGNITO
+    var params = {
+      UserPoolId: req.body.UserPoolId,
+      AttributesToGet: [
+        'email',
+        'phone_number',
+        'name',
+        'gender',
+        'custom:approvedtc',
+        'custom:_birthdate',
+        'custom:code',
+        'custom:isondb'
+      ]
+    };
+
+    if (req.body.filterBy === 'email') { params.Filter = 'email^=\"'+req.body.value+'\"';}
+    if (req.body.filterBy === 'name') { params.Filter = 'name^=\"'+req.body.value+'\"';}
+    if (req.body.filterBy === 'phone_number') { params.Filter = 'phone_number^=\"'+req.body.value+'\"';}
+    if (req.body.filterBy === 'code') { params.Filter = 'custom:code^=\"'+req.body.value+'\"';}
+
+    const result = await cognitoidentityserviceprovider.listUsers(params).promise();
+
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": origins }, body: result })
+
+  } catch (error) {
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": origins }, body: error })
+  }
+
+});
+
 app.post('/createUser', async function(req, res) {
   try {
     var origin = req.get('origin');
@@ -136,6 +176,26 @@ app.post('/createUser', async function(req, res) {
             {
                 Name: 'phone_number', /* required */
                 Value: req.body.phone_number
+            },
+            {
+                Name: 'gender', /* required */
+                Value: req.body.gender
+            },
+            {
+                Name: 'custom:approvedtc', /* required */
+                Value: req.body.approvedtc
+            },
+            {
+                Name: 'custom:_birthdate', /* required */
+                Value: req.body.birthdate
+            },
+            {
+                Name: 'custom:code', /* required */
+                Value: req.body.code
+            },
+            {
+                Name: 'custom:isondb', /* required */
+                Value: req.body.isondb
             }
             /* more items */
         ]
@@ -158,6 +218,35 @@ app.post('/createUser', async function(req, res) {
     res.json({ statusCode: 200, headers: {  "Access-Control-Allow-Origin": origins }, body: error })
   }
   
+});
+
+//updateUserAttribute
+app.post('/updateUserAttribute', async function(req, res) {
+  try {
+    var origin = req.get('origin');
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    const _response = null;
+    var params = {
+      UserAttributes: [
+        {
+          Name: req.body.attribute,
+          Value: req.body.value,
+        },
+      ],
+      UserPoolId: req.body.UserPoolId,
+      Username: req.body.Username,
+    };
+
+    _response = await cognitoidentityserviceprovider.adminUpdateUserAttributes(params).promise();
+
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": (origin === origins_dev ? origins_dev : origins_prod) }, body: _response })
+
+  } catch (error) {
+
+    res.json({ statusCode: 200, headers: { "Access-Control-Allow-Origin": (origin === origins_dev ? origins_dev : origins_prod) }, body: error })
+
+  }
 });
 
 app.post('/addUserToGroup/*', function(req, res) {

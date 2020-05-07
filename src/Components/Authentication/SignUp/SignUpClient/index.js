@@ -109,13 +109,19 @@ class ClientSignUp extends Component {
         };
 
         API.graphql(graphqlOperation(createPatient, { input: input }))
-        .then((r) => {  
-          
-          Auth.signOut().then(r => {
-            this.setState({...INITIAL_STATE})
-            this.props.gotoSignIn();
-          }).catch(err => {this.setState({loadingConfirmation: false, error: err}); console.log(err);});
-
+        .then( (r) => {
+          Auth.updateUserAttributes(user, {'custom:isondb': 'true'}).then( u => {
+              Auth.signOut().then(r => {
+                this.setState({...INITIAL_STATE})
+                this.props.gotoSignIn();
+              }).catch(err => {this.setState({loadingConfirmation: false, error: err}); console.log(err);});
+          }).catch( e => {
+            this.setState({
+              loadingConfirmation: false,
+              error: e
+            });
+            console.log(e);
+          });
         }).catch((err) => { 
             this.setState({
               loadingConfirmation: false,
@@ -209,9 +215,14 @@ class ClientSignUp extends Component {
       username,
       password,
       attributes: {
-          email,          // optional
-          phone_number,   // optional - E.164 number convention daniel_1234@hotmail.es   +18292130970
-          name,
+          email: email,          // optional
+          phone_number: phone_number,   // optional - E.164 number convention daniel_1234@hotmail.es   +18292130970
+          name: name,
+          gender: sex,
+          'custom:approvedtc': 'true',
+          'custom:_birthdate': birthdate,
+          'custom:code': moment(new Date()).format('YYYYMMDDHHmmSSssss')+"_"+username,
+          'custom:isondb': 'false',
           // other custom attributes 
       },
       //validationData: []  //optional

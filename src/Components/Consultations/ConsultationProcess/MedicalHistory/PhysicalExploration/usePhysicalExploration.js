@@ -98,10 +98,20 @@ const usePhysicalExploration = (childProps, patientData, global, setGlobalData) 
 
         const fetch = async () => {
             try {
+                
+                const ss = childProps.state.subspecialities.length > 0 ? childProps.state.subspecialities[0].subspeciality.id : "none";
+                const sss = childProps.state.sssec.length > 0 ? childProps.state.sssec[0].subspecialitysec.id : "none";
+                
                 const filter = {
                     filter: {
                         and:[
-                            {modules: {contains: childProps.state.specialityid}},
+                            {
+                                or: [
+                                    {modules: {contains: childProps.state.specialities[0].speciality.id}},
+                                    {modules: {contains: ss}},
+                                    {modules: {contains: sss}},
+                                ]
+                            },
                             {deleted: {eq: false}}
                         ]
                     },

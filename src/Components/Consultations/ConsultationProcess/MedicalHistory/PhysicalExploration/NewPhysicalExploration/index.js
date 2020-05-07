@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBIcon, MDBSpinner, MDBBox,
-         MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBDatePicker, MDBDataTable } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBSpinner, MDBBox,
+         MDBCard} from "mdbreact";
 
 import usePhysicalExploration from '../usePhysicalExploration';
 

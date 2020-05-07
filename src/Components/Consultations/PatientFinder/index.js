@@ -4,17 +4,19 @@ import { API, graphqlOperation } from 'aws-amplify';
 import Link from '@material-ui/core/Link';
 import Select from 'react-select'
 
+import AsyncSelect from 'react-select/async'
+
 import useConsultations from '../useConsultations';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
 const PatientFinder = ({childProps: childProps}) => { 
-    const { createConsultation, loading, error, patients, setPatient, patient,
-    loadingButton, newPatientName,  setNewPatientName, setReason, reason} = useConsultations();
+    const { createConsultation, loading, error, patients, setPatient, patient, setInputValue, loadOptions, inputValue,
+    loadingButton, setReason, reason} = useConsultations();
     const classes = useStyles();
 
     const setReasonAll = (r) => {
@@ -38,7 +40,6 @@ const PatientFinder = ({childProps: childProps}) => {
                       </MDBPopover>);
 
     const btn = !isActionValid ? Validbtn : Poperbtn;
-//"/consultations/"+ childProps.state.speciality +"/null/"+newPatientName
     return (
       <MDBContainer>
         <MDBRow>
@@ -47,13 +48,13 @@ const PatientFinder = ({childProps: childProps}) => {
             <br/>
             <h2>Buscar Paciente para Consulta</h2>
             <br/>
-              <Select 
-                options={patients}
-                onChange={(newValue) => {setPatient(newValue);}}
-                onInputChange={v => setNewPatientName(v)}
-                noOptionsMessage={() => {
-                  return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
-                }}
+              <AsyncSelect
+                cacheOptions
+                onChange={(newValue) => setPatient(newValue)}
+                loadOptions={loadOptions}
+                defaultOptions={patients}
+                onInputChange={ v => setInputValue(v)}
+                noOptionsMessage={() => { return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+inputValue}>Desea crear un paciente nuevo?</Link></p>}}
               />
             <br/>
             <br/>

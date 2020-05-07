@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 
-import { MDBBox, MDBSpinner, MDBContainer } from "mdbreact";
-
-import {
-  BrowserRouter as Router,
-  Route
-} from 'react-router-dom';
+import { MDBBox, MDBSpinner } from "mdbreact";
 
 import HeaderLinks from '../HeaderLinks';
 
-import {Routes, ProppedRoute, ProtectedRoute, ProtectedRouteCompany} from '../Routes';
+import {Routes} from '../Routes';
 
 import { listConsultingRoomsSecretary, listConsultingRooms, listPatientsForAppjs } from '../../graphql/custom-queries';
 
@@ -52,7 +47,9 @@ export default class App extends Component {
                 doctorid: result.data.listConsultingRooms.items[0].doctor.id,
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
-                speciality: result.data.listConsultingRooms.items[0].doctor.specialities,
+                specialities: result.data.listConsultingRooms.items[0].doctor.specialities.items,
+                subspecialities: result.data.listConsultingRooms.items[0].doctor.subspecialities.items,
+                sssec: result.data.listConsultingRooms.items[0].doctor.subspecialitiessec.items,
                 image: result.data.listConsultingRooms.items[0].doctor.image,
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
@@ -93,7 +90,9 @@ export default class App extends Component {
                 doctorid: result.data.listConsultingRooms.items[0].doctor.id,
                 doctorname: result.data.listConsultingRooms.items[0].doctor.name,
                 doctorusername: result.data.listConsultingRooms.items[0].doctor.username,
-                speciality: result.data.listConsultingRooms.items[0].doctor.speciality.name,
+                specialities: result.data.listConsultingRooms.items[0].doctor.specialities.items,
+                subspecialities: result.data.listConsultingRooms.items[0].doctor.subspecialities.items,
+                sssec: result.data.listConsultingRooms.items[0].doctor.subspecialitiessec.items,
                 image: result.data.listConsultingRooms.items[0].doctor.image,
                 email: result.data.listConsultingRooms.items[0].doctor.email,
                 location: result.data.listConsultingRooms.items[0].location.name,
@@ -131,6 +130,7 @@ export default class App extends Component {
       else if(roll === 'admin'){
         this.setState({
             loading: false,
+            error: false,
         });
       }
     }).catch(err => {
