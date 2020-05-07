@@ -34,6 +34,20 @@
                     "/DELETE"
                 ]
             }
+        },
+        {
+            "name": "/updateUserAttribute",
+            "lambdaFunction": "CognitoActions",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
         }
     ],
     "resourceName": "ApiForLambda",
@@ -44,7 +58,7 @@
         }
     ],
     "privacy": {
-        "auth": 1,
+        "auth": 2,
         "unauth": 0,
         "authRoleName": "amplify-littydoctors-dev-115546-authRole",
         "unAuthRoleName": "amplify-littydoctors-dev-115546-unauthRole"
@@ -59,5 +73,5 @@
             ]
         }
     ],
-    "uuid": "85ae83b1"
+    "uuid": "ee51bf1f"
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {listPatients} from './../../graphql/queries';
-import { createMedicalConsultation, createMedicalHistory } from '../../graphql/mutations';
+import { createMedicalConsultation, createMedicalHistory, createPatient } from '../../graphql/mutations';
 import { API, graphqlOperation } from 'aws-amplify';
 import { filterByValue } from '../../Functions/filterArray';
 import moment from 'moment';
@@ -17,8 +17,10 @@ const useConsultations = () => {
     const [ patients, setPatients ] = useState([]);
     const [ patient, setPatient ] = useState({});
     const [ autoCompleteLoading, setAutoCompleteLoading ] = useState(false);
-    const [ newPatient, setNewPatient ] = useState(false);
     const [ newPatientName, setNewPatientName ] = useState("");
+    const [ inputValue, setInputValue ] = useState("");
+    const [ newPatient, setNewPatient ] = useState(false);
+    const [ noCognitoOptions, setNoCognitoOptions ] = useState(false);
     const [ reason, setReason ] = useState("");
     const [ name, setName ] = useState("");
 
@@ -43,7 +45,7 @@ const useConsultations = () => {
 
             try {
                 
-                var patientsApi = await API.graphql(graphqlOperation(listPatients, {limit: 500}));
+                var patientsApi = await API.graphql(graphqlOperation(listPatients));
                 
                 if(patientsApi.data.listPatients.items.length > 0){
                     patientsApi.data.listPatients.items.forEach(element => {
@@ -142,30 +144,187 @@ const useConsultations = () => {
         return resultP;
     }
 
-    const noOptionsActions = () => {
-        setLoadingSearch(true);
-        
-        apiOptions.body.filterBy = 'name';
-        apiOptions.body.value = newPatientName;
-
-        API.post('ApiForLambda', '/findUser', apiOptions).then( r => {
-            console.log(r);
+    const firstList = (inputValue) => {
+        return patients.filter(i => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+            /* console.log("busqueda en db");
             
-            setLoadingSearch(false);
-            if (r.body.Users.length > 0) {
+            API.graphql(graphqlOperation(listPatients, {filter: {name: { contains: inputValue}}})).then(r => {
+                const list = r.data.listPatients.items;
+                const _patients = [];
+                list.forEach(e => {
+                    const pdata = {value: e.id, label: e.name, id: e.id, name: e.name, age: e.age, image: "https://asociaciondenutriologia.org/img/default_user.png", email: e.email, phone: e.phone, username: e.username};
+                    _patients.push(pdata);
+                });
+                return _patients;
+            })
+            .catch(r => {
                 console.log(r);
+                return null;
+            }); */  
+    };
+
+    const loadOptions = async (inputValue, callback) => {  
+        try {
+            const firstQuery = await firstList(inputValue);
+            if (firstQuery.length > 0) {
+                callback(firstQuery);
             }else{
-                return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
-            }
-        }).catch( e => {
-            console.log(e);
-            setLoadingSearch(false);
-        });
-        //setLoadingSearch(false);
-        return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+                const _patients = await API.graphql(graphqlOperation(listPatients, {limit: 1000, filter: {name: { contains: inputValue}}}));
+                
+                const list = _patients.data.listPatients.items
+                
+                const secondQuery = [];
+                if (list.length > 0) {
+                    list.forEach(e => {
+                        const pdata = {value: e.id, label: e.name, id: e.id, name: e.name, age: e.age, image: "https://asociaciondenutriologia.org/img/default_user.png", email: e.email, phone: e.phone, username: e.username};
+                        secondQuery.push(pdata);
+                    });
+                    callback(secondQuery);
+                }else{
+                    apiOptions.body.filterBy = 'name';
+                    apiOptions.body.value = inputValue;
+                    const _cognitos = await API.post('ApiForLambda', '/findUser', apiOptions);
+                    if (_cognitos.body.Users.length > 0) {
+                        const users = _cognitos.body.Users;
+                        const _patients_ = [];
+                        const created = {result: false};
+
+                        await users.forEach(async u => {
+                            if (u.UserStatus === "UNCONFIRMED") {
+                                const isondb = u.Attributes.find(e => e.Name === 'custom:isondb');
+                                if (isondb.Value === 'false') {
+                                    apiOptions.body.Username = u.Username;
+                                    apiOptions.body.attribute = 'custom:isondb';
+                                    apiOptions.body.value = 'true'; 
+                                    const inputFromCognito = {};
+                                    const input = {};
+    
+                                    u.Attributes.forEach(e => {
+                                        inputFromCognito[e.Name] = e.Value;
+                                    });
+    
+                                    input.name = inputFromCognito.name;
+                                    input.username = u.Username;
+                                    input.email = inputFromCognito.email;
+                                    input.phone = inputFromCognito.phone_number;
+                                    input.birthdate = inputFromCognito['custom:_birthdate'];
+                                    input.sex = inputFromCognito.gender;
+                                    input.approved_terms_conditions = false;
+                                    input.code = inputFromCognito['custom:code'];
+                                    const pdata = {value: '', label: input.name, id: '', name: input.name, age: null, email: input.email, phone: input.phone, username: u.Username, image: "https://asociaciondenutriologia.org/img/default_user.png"};
+                                    //_patients_.push(pdata);
+
+                                    const cpatient = await API.graphql(graphqlOperation(createPatient, { input: input }));
+    
+                                    if(cpatient.data.createPatient !== undefined){
+                                        pdata.value = cpatient.data.createPatient.id;
+                                        pdata.id = cpatient.data.createPatient.id;
+                                        
+                                        //console.log(cpatient);
+                                        _patients_.push(pdata);
+                                        created.result = true;
+
+                                        //const cpatient = await API.post('ApiForLambda', '/updateUserAttribute', apiOptions)
+                                    }
+                                }
+                            }
+                        });
+
+                        while (!created.result) {
+                            console.log(_patients_);
+                            
+                            if (created.result) {
+                                callback(_patients_);  
+                            }
+                        }
+
+                    }else{
+                        callback(null);
+                    }
+                }
+            }   
+        } catch (error) {
+            console.log(error);
+            callback(null);
+        }
+    };
+
+    const noOptionsActions = () => {
+        if (!noCognitoOptions) {
+            setNoCognitoOptions(true);
+            setLoadingSearch(true);
+            apiOptions.body.filterBy = 'name';
+            apiOptions.body.value = newPatientName;
+
+            API.post('ApiForLambda', '/findUser', apiOptions).then( r => {
+                
+                if (r.body.Users.length > 0) {
+                    
+                    const users = r.body.Users;
+                    users.forEach(u => {
+                        if (u.UserStatus === "UNCONFIRMED") {
+                            console.log(u);
+                            
+                            const isondb = u.Attributes.find(e => e.Name === 'custom:isondb');
+                            if (isondb.Value === 'false') {                                
+                                apiOptions.body.Username = u.Username;
+                                apiOptions.body.attribute = 'custom:isondb';
+                                apiOptions.body.value = 'true';
+
+                                const inputFromCognito = {};
+                                const input = {};
+                                const _patients = [];
+                                u.Attributes.forEach(e => {
+                                    inputFromCognito[e.Name] = e.Value;
+                                });
+
+
+
+                                input.name = inputFromCognito.name;
+                                input.username = u.Username;
+                                input.email = inputFromCognito.email;
+                                input.phone = inputFromCognito.phone_number;
+                                input.birthdate = inputFromCognito['custom:_birthdate'];
+                                input.sex = inputFromCognito.gender;
+                                input.approved_terms_conditions = false;
+                                input.code = inputFromCognito['custom:code'];
+                                const pdata = {value: 'u.id', label: input.name, id: 'u.id', name: input.name, age: null, email: input.email, phone: input.phone, username: u.Username, image: "https://asociaciondenutriologia.org/img/default_user.png"};
+                                _patients.push(pdata);
+                                setPatients(_patients);
+
+                                //console.log(input);
+                                setLoadingSearch(false);
+                                /* 
+                                API.graphql(graphqlOperation(createPatient, { input: input }))
+                                .then((r) => {
+                                    createConsultation(childProps.state, r.data.createPatient, reason);
+                                })
+                                .catch((err) => { 
+                                    console.log(err);
+                                    _setLoading(false);
+                                }) */
+
+                                //API.post('ApiForLambda', '/updateUserAttribute', apiOptions).then(r => console.log(r) ).catch( e => console.log(e));
+                            }
+                            return "hay opciones"
+                        }
+                    });
+                }else{
+                    setLoadingSearch(false);
+                    setNoCognitoOptions(true);
+                    return "no hay opciones"
+                }
+            }).catch( e => {
+                console.log(e);
+                setLoadingSearch(false);
+                return <p>Ha ocurrido un error</p>
+            });
+        }else{
+            return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
+        }
     }
 
-    return { loadingSearch, noOptionsActions, findPatientByName, name, setName, createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName, setReason, reason};
+    return { inputValue, setInputValue, loadOptions, setNoCognitoOptions, loadingSearch, noOptionsActions, findPatientByName, name, setName, createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName, setReason, reason};
 };
 
 export default useConsultations;

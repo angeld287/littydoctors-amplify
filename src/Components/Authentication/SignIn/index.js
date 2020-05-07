@@ -61,7 +61,15 @@ class CustomSignIn extends Component {
       
         API.graphql(graphqlOperation(createPatient, { input: input }))
         .then((r) => {  
-            window.location.reload()
+          Auth.updateUserAttributes(user, {'custom:isondb': 'true'}).then( u => {
+              window.location.reload()
+          }).catch( e => {
+            this.setState({
+              loadingConfirmation: false,
+              error: e
+            });
+            console.log(e);
+          });
         }).catch((err) => { 
             this.setState({
               loadingConfirmation: false,
@@ -101,7 +109,7 @@ class CustomSignIn extends Component {
       
       apiOptions['body'] = {
         UserPoolId: awsmobile.aws_user_pools_id,
-        Username: this.state.username
+        Username: email
       };
 
       API.post('ApiForLambda', '/addUserToGroup', apiOptions)

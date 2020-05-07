@@ -4,6 +4,8 @@ import { API, graphqlOperation } from 'aws-amplify';
 import Link from '@material-ui/core/Link';
 import Select from 'react-select'
 
+import AsyncSelect from 'react-select/async'
+
 import useConsultations from '../useConsultations';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -13,7 +15,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
 const PatientFinder = ({childProps: childProps}) => { 
-    const { createConsultation, loading, error, patients, setPatient, patient, loadingSearch,
+    const { createConsultation, loading, error, patients, setPatient, patient, loadingSearch, setNoCognitoOptions, setInputValue, loadOptions, inputValue,
     loadingButton, newPatientName,  setNewPatientName, setReason, reason, name, setName, findPatientByName, noOptionsActions} = useConsultations();
     const classes = useStyles();
 
@@ -50,11 +52,24 @@ const PatientFinder = ({childProps: childProps}) => {
               <Select 
                 options={patients}
                 onChange={(newValue) => setPatient(newValue)}
-                onInputChange={v => setNewPatientName(v)}
+                onInputChange={v => {setNewPatientName(v); setNoCognitoOptions(false);}}
                 isLoading={loadingSearch}
                 noOptionsMessage={() => {
                   return noOptionsActions()
                 }}
+              />
+            <br/>
+              <AsyncSelect
+                cacheOptions
+                onChange={(newValue) => {
+                  setPatient(newValue);
+                  console.log(newValue);
+                  
+                }}
+                loadOptions={loadOptions}
+                defaultOptions={patients}
+                onInputChange={ v => setInputValue(v)}
+                noOptionsMessage={() => { return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+inputValue}>Desea crear un paciente nuevo?</Link></p>}}
               />
             <br/>
             <input type="text" value={name} onChange={e => {e.preventDefault(); setName(e.target.value)}}></input>

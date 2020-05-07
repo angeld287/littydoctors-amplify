@@ -90,6 +90,7 @@ const useNewPatient = () => {
               approvedtc: 'false',
               birthdate: data.birthdate,
               code: data.code,
+              isondb: 'true'
             };
         
             const resultP = await API.post('ApiForLambda', '/createUser', apiOptions); 
