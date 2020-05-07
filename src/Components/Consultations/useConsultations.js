@@ -16,11 +16,11 @@ const useConsultations = () => {
     const [ error, setError ] = useState(false);
     const [ patients, setPatients ] = useState([]);
     const [ patient, setPatient ] = useState({});
+    const [ cognitoPatient, setCognitoPatient ] = useState({});
     const [ autoCompleteLoading, setAutoCompleteLoading ] = useState(false);
     const [ newPatientName, setNewPatientName ] = useState("");
     const [ inputValue, setInputValue ] = useState("");
     const [ newPatient, setNewPatient ] = useState(false);
-    const [ noCognitoOptions, setNoCognitoOptions ] = useState(false);
     const [ reason, setReason ] = useState("");
     const [ name, setName ] = useState("");
 
@@ -28,7 +28,6 @@ const useConsultations = () => {
         headers: {'Content-Type': 'application/json' },
         body: { UserPoolId: awsmobile.aws_user_pools_id }
     };
-
 
     useEffect(() => {
         let didCancel = false;
@@ -102,8 +101,27 @@ const useConsultations = () => {
         }
     }
 
+    const _createPatient = async () => {
+        const cpatient = await API.graphql(graphqlOperation(createPatient, { input: cognitoPatient }));
+        
+        const _patient = patient;
+        _patient.value = cpatient.data.createPatient.id;
+        _patient.id = cpatient.data.createPatient.id;
+        apiOptions.body.Username = _patient.username;
+        apiOptions.body.attribute = 'custom:isondb';
+        apiOptions.body.value = 'true'; 
+        setPatient(_patient);
+        const updateAttribite = await API.post('ApiForLambda', '/updateUserAttribute', apiOptions)
+
+        return cpatient.data.createPatient;
+    }
+
     const createConsultation = async (state, _patient, _reason) => {       
         setLoadingButton(true);
+        if (_patient.id === 'to_create') {
+            const patient = await _createPatient();
+            _patient.id = patient.id;
+        }
         const mhinput = {};
         mhinput.reason = reason === null || reason === "" ? "N/A" : reason;
         mhinput.medicalHistoryPatientId = _patient.id;
@@ -134,33 +152,8 @@ const useConsultations = () => {
         });
     }
 
-    const findPatientByName = async () => {
-        apiOptions.body.filterBy = 'name';
-        apiOptions.body.value = name;
-        
-        const resultP = await API.post('ApiForLambda', '/findUser', apiOptions); 
-        console.log(resultP);
-        
-        return resultP;
-    }
-
     const firstList = (inputValue) => {
         return patients.filter(i => i.label.toLowerCase().includes(inputValue.toLowerCase()));
-            /* console.log("busqueda en db");
-            
-            API.graphql(graphqlOperation(listPatients, {filter: {name: { contains: inputValue}}})).then(r => {
-                const list = r.data.listPatients.items;
-                const _patients = [];
-                list.forEach(e => {
-                    const pdata = {value: e.id, label: e.name, id: e.id, name: e.name, age: e.age, image: "https://asociaciondenutriologia.org/img/default_user.png", email: e.email, phone: e.phone, username: e.username};
-                    _patients.push(pdata);
-                });
-                return _patients;
-            })
-            .catch(r => {
-                console.log(r);
-                return null;
-            }); */  
     };
 
     const loadOptions = async (inputValue, callback) => {  
@@ -187,15 +180,11 @@ const useConsultations = () => {
                     if (_cognitos.body.Users.length > 0) {
                         const users = _cognitos.body.Users;
                         const _patients_ = [];
-                        const created = {result: false};
 
                         await users.forEach(async u => {
                             if (u.UserStatus === "UNCONFIRMED") {
                                 const isondb = u.Attributes.find(e => e.Name === 'custom:isondb');
                                 if (isondb.Value === 'false') {
-                                    apiOptions.body.Username = u.Username;
-                                    apiOptions.body.attribute = 'custom:isondb';
-                                    apiOptions.body.value = 'true'; 
                                     const inputFromCognito = {};
                                     const input = {};
     
@@ -211,32 +200,13 @@ const useConsultations = () => {
                                     input.sex = inputFromCognito.gender;
                                     input.approved_terms_conditions = false;
                                     input.code = inputFromCognito['custom:code'];
-                                    const pdata = {value: '', label: input.name, id: '', name: input.name, age: null, email: input.email, phone: input.phone, username: u.Username, image: "https://asociaciondenutriologia.org/img/default_user.png"};
-                                    //_patients_.push(pdata);
-
-                                    const cpatient = await API.graphql(graphqlOperation(createPatient, { input: input }));
-    
-                                    if(cpatient.data.createPatient !== undefined){
-                                        pdata.value = cpatient.data.createPatient.id;
-                                        pdata.id = cpatient.data.createPatient.id;
-                                        
-                                        //console.log(cpatient);
-                                        _patients_.push(pdata);
-                                        created.result = true;
-
-                                        //const cpatient = await API.post('ApiForLambda', '/updateUserAttribute', apiOptions)
-                                    }
+                                    const pdata = {value: 'to_create', label: input.name, id: 'to_create', name: input.name, age: null, email: input.email, phone: input.phone, username: u.Username, image: "https://asociaciondenutriologia.org/img/default_user.png"};
+                                    setCognitoPatient(input);
+                                    _patients_.push(pdata);
                                 }
                             }
                         });
-
-                        while (!created.result) {
-                            console.log(_patients_);
-                            
-                            if (created.result) {
-                                callback(_patients_);  
-                            }
-                        }
+                        callback(_patients_);  
 
                     }else{
                         callback(null);
@@ -249,82 +219,7 @@ const useConsultations = () => {
         }
     };
 
-    const noOptionsActions = () => {
-        if (!noCognitoOptions) {
-            setNoCognitoOptions(true);
-            setLoadingSearch(true);
-            apiOptions.body.filterBy = 'name';
-            apiOptions.body.value = newPatientName;
-
-            API.post('ApiForLambda', '/findUser', apiOptions).then( r => {
-                
-                if (r.body.Users.length > 0) {
-                    
-                    const users = r.body.Users;
-                    users.forEach(u => {
-                        if (u.UserStatus === "UNCONFIRMED") {
-                            console.log(u);
-                            
-                            const isondb = u.Attributes.find(e => e.Name === 'custom:isondb');
-                            if (isondb.Value === 'false') {                                
-                                apiOptions.body.Username = u.Username;
-                                apiOptions.body.attribute = 'custom:isondb';
-                                apiOptions.body.value = 'true';
-
-                                const inputFromCognito = {};
-                                const input = {};
-                                const _patients = [];
-                                u.Attributes.forEach(e => {
-                                    inputFromCognito[e.Name] = e.Value;
-                                });
-
-
-
-                                input.name = inputFromCognito.name;
-                                input.username = u.Username;
-                                input.email = inputFromCognito.email;
-                                input.phone = inputFromCognito.phone_number;
-                                input.birthdate = inputFromCognito['custom:_birthdate'];
-                                input.sex = inputFromCognito.gender;
-                                input.approved_terms_conditions = false;
-                                input.code = inputFromCognito['custom:code'];
-                                const pdata = {value: 'u.id', label: input.name, id: 'u.id', name: input.name, age: null, email: input.email, phone: input.phone, username: u.Username, image: "https://asociaciondenutriologia.org/img/default_user.png"};
-                                _patients.push(pdata);
-                                setPatients(_patients);
-
-                                //console.log(input);
-                                setLoadingSearch(false);
-                                /* 
-                                API.graphql(graphqlOperation(createPatient, { input: input }))
-                                .then((r) => {
-                                    createConsultation(childProps.state, r.data.createPatient, reason);
-                                })
-                                .catch((err) => { 
-                                    console.log(err);
-                                    _setLoading(false);
-                                }) */
-
-                                //API.post('ApiForLambda', '/updateUserAttribute', apiOptions).then(r => console.log(r) ).catch( e => console.log(e));
-                            }
-                            return "hay opciones"
-                        }
-                    });
-                }else{
-                    setLoadingSearch(false);
-                    setNoCognitoOptions(true);
-                    return "no hay opciones"
-                }
-            }).catch( e => {
-                console.log(e);
-                setLoadingSearch(false);
-                return <p>Ha ocurrido un error</p>
-            });
-        }else{
-            return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+newPatientName}>Desea crear un paciente nuevo?</Link></p>
-        }
-    }
-
-    return { inputValue, setInputValue, loadOptions, setNoCognitoOptions, loadingSearch, noOptionsActions, findPatientByName, name, setName, createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName, setReason, reason};
+    return { inputValue, setInputValue, loadOptions, createConsultation, loadingButton, patients, error, loading, setPatients, patient, setPatient, autoCompleteLoading, searchPatient, newPatientName, setNewPatientName, setReason, reason};
 };
 
 export default useConsultations;

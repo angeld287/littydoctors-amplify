@@ -8,15 +8,15 @@ import AsyncSelect from 'react-select/async'
 
 import useConsultations from '../useConsultations';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
 const PatientFinder = ({childProps: childProps}) => { 
-    const { createConsultation, loading, error, patients, setPatient, patient, loadingSearch, setNoCognitoOptions, setInputValue, loadOptions, inputValue,
-    loadingButton, newPatientName,  setNewPatientName, setReason, reason, name, setName, findPatientByName, noOptionsActions} = useConsultations();
+    const { createConsultation, loading, error, patients, setPatient, patient, setInputValue, loadOptions, inputValue,
+    loadingButton, setReason, reason} = useConsultations();
     const classes = useStyles();
 
     const setReasonAll = (r) => {
@@ -49,31 +49,15 @@ const PatientFinder = ({childProps: childProps}) => {
             <br/>
             <h2>Buscar Paciente para Consulta</h2>
             <br/>
-              <Select 
-                options={patients}
-                onChange={(newValue) => setPatient(newValue)}
-                onInputChange={v => {setNewPatientName(v); setNoCognitoOptions(false);}}
-                isLoading={loadingSearch}
-                noOptionsMessage={() => {
-                  return noOptionsActions()
-                }}
-              />
-            <br/>
               <AsyncSelect
                 cacheOptions
-                onChange={(newValue) => {
-                  setPatient(newValue);
-                  console.log(newValue);
-                  
-                }}
+                onChange={(newValue) => setPatient(newValue)}
                 loadOptions={loadOptions}
                 defaultOptions={patients}
                 onInputChange={ v => setInputValue(v)}
                 noOptionsMessage={() => { return <p>El paciente no existe...  <Link href={"/consultations/process/null/"+inputValue}>Desea crear un paciente nuevo?</Link></p>}}
               />
             <br/>
-            <input type="text" value={name} onChange={e => {e.preventDefault(); setName(e.target.value)}}></input>
-            <button onClick={findPatientByName}>find</button>
             <br/>
           </MDBCol>
         </MDBRow>
