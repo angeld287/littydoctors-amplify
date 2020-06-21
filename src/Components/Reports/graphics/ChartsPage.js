@@ -55,7 +55,7 @@ const ChartsPage = ({state: state, title: title, options: options}) => {
 
   return (
     <MDBContainer>
-      {(title === undefined || title !== null) && <h3 className="mt-5">{title}</h3>}
+      {(title === undefined || title !== null) && <h3 className="text-center mt-3 mb-2">{title}</h3>}
       <Line data={state === undefined || state === null ? _state.dataLine : state.dataLine} options={options === null || undefined ? { responsive: true } : options} />
     </MDBContainer>
   );

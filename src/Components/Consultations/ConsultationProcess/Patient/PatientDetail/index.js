@@ -202,16 +202,15 @@ const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
       <br/>
       <MDBRow>
         <MDBCol md="8">
-          <div id="map-container" className="rounded z-depth-1-half map-container" style={{ height: "400px" }}>
-            <iframe
-              src={mapUrl}
-              title="This is a unique title"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              style={{ border: 0 }}
-            />
-          </div>
+          <MDBCard style={{ width: '100%' }}>
+            <MDBContainer style={{marginBottom: 20 }}>
+              <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Analisis pendientes</strong> {(loadingPDF || loadingAnal) &&  <MDBSpinner small/>} </h4>
+              <MDBTable scrollY maxHeight="300px">
+                <MDBTableHead columns={analysis.columns} />
+                <MDBTableBody rows={analysis.rows} />
+              </MDBTable>
+            </MDBContainer>
+          </MDBCard>
         </MDBCol>
         <MDBCol md="3" className="m-1">
           {shared && patientDataList}
@@ -243,15 +242,16 @@ const addPDF = (<MDBModal isOpen={PDFModal} toggle={togglePDF}>
       </MDBRow>
       <MDBRow className="mt-4">
           <MDBCol md="12">
-            <MDBCard style={{ width: '100%' }}>
-                <MDBContainer style={{marginBottom: 20}}>
-                  <h4 className="text-center font-weight-bold pt-4 pb-2 mb-2"><strong>Analisis pendientes</strong> {(loadingPDF || loadingAnal) &&  <MDBSpinner small/>} </h4>
-                  <MDBTable /* scrollY */>
-                    <MDBTableHead columns={analysis.columns} />
-                    <MDBTableBody rows={analysis.rows} />
-                  </MDBTable>
-                </MDBContainer>
-            </MDBCard>
+            <div id="map-container" className="rounded z-depth-1-half map-container" style={{ height: "400px" }}>
+              <iframe
+                src={mapUrl}
+                title="This is a unique title"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                style={{ border: 0 }}
+              />
+            </div>
           </MDBCol>
       </MDBRow>
     </div>

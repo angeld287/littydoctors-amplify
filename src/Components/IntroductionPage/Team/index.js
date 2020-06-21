@@ -7,7 +7,7 @@ import aws_infraestructure_manager from '../../../images/manuel-santana.png';
 
 const TeamPage = () => {
   return (
-    <MDBCard className="my-5 px-1 pb-5 text-center">
+    <div className="my-5 px-1 pb-5 text-center">
         <MDBCardBody>
           <h2 className="h1-responsive font-weight-bold my-5">
             Nuestro Equipo
@@ -75,7 +75,7 @@ const TeamPage = () => {
             </MDBCol>
           </MDBRow>
         </MDBCardBody>
-      </MDBCard>
+      </div>
   );
 }
 

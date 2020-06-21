@@ -3,7 +3,7 @@ import {  MDBCard, MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput } fro
 
 const ContactPage = () => {
   return (
-    <MDBCard className="my-5 px-5 pb-1 text-center">
+    <div className="my-5 px-5 pb-1 text-center">
         <MDBContainer>
         <h2 className="h1-responsive font-weight-bold text-center my-5">
             Contactenos
@@ -33,7 +33,7 @@ const ContactPage = () => {
         </MDBRow>
         <br/>
         </MDBContainer>
-    </MDBCard>
+    </div>
   );
 }
 
