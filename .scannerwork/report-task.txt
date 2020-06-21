@@ -1,0 +1,6 @@
+projectKey=littydoctors
+serverUrl=http://127.0.0.1:9000
+serverVersion=8.3.1.34397
+dashboardUrl=http://127.0.0.1:9000/dashboard?id=littydoctors
+ceTaskId=AXIpGGbE-zaI939FeJ_R
+ceTaskUrl=http://127.0.0.1:9000/api/ce/task?id=AXIpGGbE-zaI939FeJ_R

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 
 
-import logo from '../../images/logo-blanco.png';
+import logo from '../../images/logo_svg.svg';
 
 import {
   MDBNavbar, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBCollapse,
@@ -24,8 +24,8 @@ const HeaderLinks = ({childProps: childProps}) => {
       <MDBNavbar color="indigo" dark expand="md">
             <MDBCollapse id="navbarCollapse3" /* isOpen={this.state.isOpen} */ navbar>
               <MDBNavbarNav left>
-                <MDBNavItem active>
-                  <MDBNavLink to="/"><img className="card-img-top" src={logo} style={{height: 20, width: 25}} alt="" />  Litty Doctors</MDBNavLink>
+                <MDBNavItem>
+                  <MDBNavLink to="/"><img className="card-img-top" src={logo} style={{ width: 25}} alt="" /> <span style={{fontSize: '18px'}}>Litty Doctors</span></MDBNavLink>
                 </MDBNavItem>
                 {(childProps.state.user_roll === 'doctor') && <MDBNavItem><MDBNavLink to="/consultations">Consultas Medicas</MDBNavLink></MDBNavItem>}
                 {/* {(this.props.childProps.state.user_roll === 'secretary' || this.props.childProps.state.user_roll === 'doctor') && <MDBNavItem ><MDBNavLink to="/medicalappointmentsmanagement">Citas</MDBNavLink></MDBNavItem>} */}

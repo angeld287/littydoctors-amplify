@@ -10,7 +10,7 @@ import {
 const ChartsPagePro = ({title: title}) => {
     return (
       <MDBContainer>
-        {(title === undefined || title !== null) && <h3 className="mt-5">{title}</h3>}
+        {(title === undefined || title !== null) && <h3 className="text-center mt-3">{title}</h3>}
         <div style={{ marginTop: "100px" }}>
           <MDBContainer>
             <MDBRow className="text-center">

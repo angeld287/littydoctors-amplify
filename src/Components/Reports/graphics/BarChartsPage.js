@@ -2,8 +2,8 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 
-class BarChartsPage extends React.Component {
-  state = {
+const BarChartsPage = ({title: title}) => {
+  const state = {
     dataBar: {
       labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
       datasets: [
@@ -58,15 +58,12 @@ class BarChartsPage extends React.Component {
     }
   }
 
-
-  render() {
     return (
       <MDBContainer>
-        <h3 className="mt-5">Bar chart</h3>
-        <Bar data={this.state.dataBar} options={this.state.barChartOptions} />
+        {(title === undefined || title !== null) && <h3 className="text-center mt-3 mb-2">{title}</h3>}
+        <Bar data={state.dataBar} options={state.barChartOptions} />
       </MDBContainer>
     );
-  }
 }
 
 export default BarChartsPage;

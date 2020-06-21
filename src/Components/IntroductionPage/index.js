@@ -10,7 +10,7 @@ import MissionVisionValues from './MissionVisionValues';
 import Features from './Features';
 
 import iphones from './../../images/iphones.png';
-import laptop from './../../images/laptop.png';
+import laptop from './../../images/intro-image.png';
 
 class IntroductionPage extends Component {
   state = {
@@ -29,6 +29,7 @@ class IntroductionPage extends Component {
 
   render() {
     return (
+      <div>
       <div id="apppage">
         {/* <Router>
           <div>
@@ -88,7 +89,9 @@ class IntroductionPage extends Component {
                   </h1>
                   <hr className="hr-light" />
                   <h6 className="mb-4">
-                    Aplicación Web para manejar el Registro Electrónico de Salud (EHR) de los paciente y el proceso de consultas médicas. Este es un software portable, esto quiere decir que se puede acceder desde laptops, desktops, tablets o mobiles. Es un sistema que genera datos estadísticos de todas las formas gráficas posibles (gráficos de línea, pastel, radar, barras, etc..)
+                    Aplicación Web para manejar el Registro Electrónico de Salud (EHR) de los paciente y el proceso de consultas médicas. 
+                    Este es un software fácil de utilizar y fácil de aprender. Su información está asegurada por el mismo suplidor que le ha dado servicios al pentágono durante los últimos años.  
+                    Usted podrá generar datos estadísticos de todas las formas gráficas posibles (gráficos de línea, pastel, radar, barras, etc..)
                   </h6>
                   {/* <MDBBtn color="white" onClick={ e => {e.preventDefault(); this.redirectTo("/patients")}} >
                     <a href="https://play.google.com/store/apps/details?id=com.aangelesmdconsultations">Ver Mas</a>
@@ -108,7 +111,7 @@ class IntroductionPage extends Component {
             </MDBContainer>
           </MDBMask>
         </MDBView>
-
+        </div>
         <MDBContainer>
           <MDBRow className="py-5">
             <MDBCol md="12" className="text-center">
@@ -121,21 +124,13 @@ class IntroductionPage extends Component {
             </MDBCol>
           </MDBRow>
         </MDBContainer>
-        <MDBContainer>
           <Features/>
-        </MDBContainer>
-        <MDBContainer>
+        {/* <MDBContainer>
           <MissionVisionValues/>
-        </MDBContainer>
-        <MDBContainer>
+        </MDBContainer> */}
           <EcommercePage/>
-        </MDBContainer>
-        <MDBContainer>
-          <TeamPage/>
-        </MDBContainer>
-        <MDBContainer>
+          <MDBContainer><TeamPage/></MDBContainer>
           <ContactPage/>
-        </MDBContainer>
       </div>
     );
   }
