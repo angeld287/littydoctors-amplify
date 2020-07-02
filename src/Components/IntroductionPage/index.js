@@ -128,9 +128,7 @@ class IntroductionPage extends Component {
         {/* <MDBContainer>
           <MissionVisionValues/>
         </MDBContainer> */}
-          <EcommercePage/>
           <MDBContainer><TeamPage/></MDBContainer>
-          <ContactPage/>
       </div>
     );
   }
