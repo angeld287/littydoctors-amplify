@@ -55,6 +55,14 @@ const NewPatient = (
         
         const exist = await Exist(input.username, input.email);
 
+        console.log(exist);
+
+        if(exist.body === undefined){
+            Swal.fire('Error', 'Hay un error con el servicio integrado', 'error');
+            _setLoading(false);
+            return
+        }
+
         if(exist.body.cognito.username){
             Swal.fire('Nombre de Usuario Existente', 'Favor agregar otro nombre de usuario, dado que este ya existe', 'error');
             _setLoading(false);
