@@ -25,10 +25,11 @@ const EcommercePage = () => {
                 <strong>Precio de Plan Básico</strong>
               </h3>
               <p className='pb-3'>
-                LittyDoctors provee los servicios de Soporte Técnico, Reportería, Mantenimiento y Capacitación para la aplicación web. El costo por estos servicios es de 40 dólares mensuales que son un total de 2,176.60 pesos dominicanos. Contáctenos para más información sobre el proceso de pago.
+                El costo del servicios va a depender del numero de consultas realizadas en el mes, cada consulta creada por el doctor tiene un costo de 7 pesos dominicanos. 
+                Ejemplo, si el doctor realiza 300 consultas en el mes entonses el costo sera igual a 300 * 7, 2100 pesos dominicanos.
               </p>
               <MDBBtn color='primary' disabled rounded size='md'>
-                <MDBRow><MDBIcon icon='dollar-sign' size="4x" className='left' /><h1>40/mes</h1></MDBRow>
+                <MDBRow><MDBIcon icon='dollar-sign' size="4x" className='left' /><h1> 7 pesos por Consulta</h1></MDBRow>
               </MDBBtn>
             </div>
           </MDBCard>

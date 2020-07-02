@@ -1,20 +1,81 @@
 import React from "react";
-import {  MDBRow, MDBCol, MDBCardBody, MDBIcon, MDBBtn, MDBView, MDBMask } from "mdbreact";
+import {  MDBRow, MDBCol, MDBCardBody, MDBNavLink, MDBBtn, MDBView, MDBMask } from "mdbreact";
 import ft1 from '../../../images/features/ft1.png';
 import ft2 from '../../../images/features/ft2.png';
 import ft3 from '../../../images/features/ft3.png';
+import ana from '../../../images/features/FRONT-RESULTADOS.png';
+import reg from '../../../images/features/FRONT-REGISTRO.png';
+import pre from '../../../images/features/FRONT-PRESCIPCIONES.png';
+import exp from '../../../images/features/FRONT-EXPLORACION.png';
+import dia from '../../../images/features/FRONT-DIAGNISTICO.png';
+import ant from '../../../images/features/FRONT-ANTECEDENTES.png';
 
 
 const Features = () => {
   return (
-    <section className="text-center my-5">
+    <section className="text-center my-5 m-4">
       <h2 className="h1-responsive font-weight-bold my-5">
         Caracteristicas
       </h2>
 
       <MDBRow className="text-center">
         <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
-          <MDBView className="overlay rounded z-depth-1" waves>
+          <MDBNavLink to="/features/pendinganalysis">
+            <MDBView className="overlay rounded primary-color-dark" waves>
+              <img src={ana} alt="" className="img-fluid"/>
+              <MDBMask overlay="white-slight" />
+            </MDBView>
+          </MDBNavLink>
+        </MDBCol>
+        <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
+          <MDBNavLink to="/features/patienthistory">
+            <MDBView className="overlay rounded primary-color-dark" waves>
+              <img src={ant} alt="" className="img-fluid"/>
+              <MDBMask overlay="white-slight" />
+            </MDBView>
+          </MDBNavLink>
+        </MDBCol>
+        <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
+          <MDBNavLink to="/features/diagnosis">
+            <MDBView className="overlay rounded primary-color-dark" waves>
+              <img src={dia} alt="" className="img-fluid"/>
+              <MDBMask overlay="white-slight" />
+            </MDBView>
+          </MDBNavLink>
+        </MDBCol>
+        <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
+          <MDBNavLink to="/features/physicalexploration">
+            <MDBView className="overlay rounded primary-color-dark" waves>
+              <img src={exp} alt="" className="img-fluid"/>
+              <MDBMask overlay="white-slight" />
+            </MDBView>
+          </MDBNavLink>
+        </MDBCol>
+        <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
+          <MDBNavLink to="/features/prescriptions">
+            <MDBView className="overlay rounded primary-color-dark" waves>
+              <img src={pre} alt="" className="img-fluid"/>
+              <MDBMask overlay="white-slight" />
+            </MDBView>
+          </MDBNavLink>
+        </MDBCol>
+        <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
+          <MDBNavLink to="/features/registerpatients">
+            <MDBView className="overlay rounded primary-color-dark" waves>
+              <img src={reg} alt="" className="img-fluid"/>
+              <MDBMask overlay="white-slight" />
+            </MDBView>
+          </MDBNavLink>
+        </MDBCol>
+      </MDBRow>
+
+
+      <h2 className="h1-responsive font-weight-bold my-5 ">
+        Caracteristicas Tecnológicas
+      </h2>
+      <MDBRow className="text-center">
+        <MDBCol lg="4" md="12" className="mb-lg-0 mb-4">
+          <MDBView className="overlay rounded primary-color-dark" waves>
             <img
               src={ft1}
               alt=""

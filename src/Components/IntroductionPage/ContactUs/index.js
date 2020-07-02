@@ -9,6 +9,9 @@ const ContactPage = () => {
             Contactenos
         </h2>
         <p className="text-center w-responsive mx-auto pb-5">
+          Si desea conocer más sobre nuestros servicios y las características del software puede contactarse con nosotros por las vías especificadas debajo.
+        </p>
+        <p className="text-center w-responsive mx-auto pb-5">
           Para poder iniciar sesión con rol de doctor en el sistema, debe solicitar los accesos con nosotros. Si esta interesado en adquirir nuestros servicios, estaremos en la disposicion de recibir su comunicado por las siguientes vias:
         </p>
         <MDBRow className="text-center">

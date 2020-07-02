@@ -216,7 +216,7 @@ const ViewPhysicalExploration = ({
             </MDBCol>
           </MDBRow>
           <div className="form-group">
-            <label htmlFor="others">Exploracion Fisica por Especialidad</label>
+            <label htmlFor="others">Exploracion Regional por Especialidad</label>
             <MDBCard>
               <MDBContainer className="m-1">{fieldsForm}</MDBContainer>
             </MDBCard>

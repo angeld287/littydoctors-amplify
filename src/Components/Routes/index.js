@@ -13,6 +13,17 @@ import MedicalAppointmentsManagement from '../MedicalAppointmentsManagement';
 import Reports from '../Reports';
 import Error from '../Error'
 import IntroductionPage from '../IntroductionPage';
+import ContactPage from '../IntroductionPage/ContactUs';
+import Features from '../IntroductionPage/Features';
+
+import Diagnosis from '../IntroductionPage/Features/diagnosis';
+import PatientHistory from '../IntroductionPage/Features/patient_history';
+import PendingAnalysis from '../IntroductionPage/Features/pending_analysis';
+import PhysicalExploration from '../IntroductionPage/Features/physical_exploration';
+import Prescriptions from '../IntroductionPage/Features/prescriptions';
+import RegisterPatients from '../IntroductionPage/Features/register_patients';
+
+import EcommercePage from '../IntroductionPage/PricingPlans/index2';
 import ConsultationProcess from '../Consultations/ConsultationProcess';
 import Consultations from '../Consultations/index';
 import Patients from '../Patients';
@@ -22,6 +33,17 @@ import {Template} from '../Reports/Prescriptions/Template_1';
 export const Routes = ({ childProps }) => (
   <Switch>
     <Route exact path="/" render={() => <IntroductionPage/>} />
+    <Route exact path="/features" render={() => <Features/>} />
+    
+    <Route exact path="/features/diagnosis" render={() => <Diagnosis/>} />
+    <Route exact path="/features/patienthistory" render={() => <PatientHistory/>} />
+    <Route exact path="/features/pendinganalysis" render={() => <PendingAnalysis/>} />
+    <Route exact path="/features/physicalexploration" render={() => <PhysicalExploration/>} />
+    <Route exact path="/features/prescriptions" render={() => <Prescriptions/>} />
+    <Route exact path="/features/registerpatients" render={() => <RegisterPatients/>} />
+
+    <Route exact path="/pricing" render={() => <EcommercePage/>} />
+    <Route exact path="/contactus" render={() => <ContactPage/>} />
     {/* <Route exact path="/patients" render={() => <Patients/>} />
     <Route exact path="/reports" render={() => <Reports/>} /> */}
     <ProppedRoute exact path="/signin" render={AuthComponent} props={childProps} />
